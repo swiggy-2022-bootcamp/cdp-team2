@@ -1,0 +1,39 @@
+{
+  "cart": [
+    {
+      "product_id": 100,
+      "quantity": 20,
+      "id": 3
+    },
+    {
+      "product_id": 20,
+      "quantity": 5,
+      "id": 4
+    },
+    {
+      "product_id": 50,
+      "quantity": 100,
+      "id": 5
+    }
+  ],
+  "reward": [
+    {
+      "user_id": 100,
+      "description": "Reward points for shopping over Silver limit.",
+      "points": 5,
+      "id": 3
+    },
+    {
+      "user_id": 10,
+      "description": "Reward points for shopping as Premium User",
+      "points": 100,
+      "id": 5
+    },
+    {
+      "user_id": 100,
+      "description": "Reward points for shopping over Silver limit.",
+      "points": 5,
+      "id": 6
+    }
+  ]
+}
