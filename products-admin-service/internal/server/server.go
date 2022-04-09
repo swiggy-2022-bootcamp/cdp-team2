@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
+	"github.com/products-admin-service/config"
 	"github.com/products-admin-service/internal/core/ports"
 )
 
@@ -23,5 +24,5 @@ func (s *Server) Initialize() {
 	productsRoutes := server.Group("/products/")
 	productsRoutes.GET("/", s.Handlers.Health)
 
-	log.Fatal(server.Run(":8000"))
+	log.Fatal(server.Run(config.Config["PORT"]))
 }
