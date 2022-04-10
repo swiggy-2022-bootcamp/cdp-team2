@@ -4,6 +4,9 @@
 
 #### Using Docker
 ```
+# Command to pull image from DockerHub - [Optional]
+docker pull sachinsom93/products-frontstore-service
+
 # Build docker Image
 > docker build -t cdp-team2/products-frontstore-service .
 
