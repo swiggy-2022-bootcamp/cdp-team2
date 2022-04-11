@@ -1,0 +1,217 @@
+{"comments": "product"}
+{
+    "$id": "id",
+    "title": "product",
+    "type": "object",
+    "properties": {
+        "model": {
+            "type": "string",
+            "description": "Model name of a specific product."
+        },
+        "quantity": {
+            "type": "string",
+            "description": "Available quantity of a product."
+        },
+        "price": {
+            "type": "string",
+            "description": "Estimated price of a product."
+        },
+        "manufacturer_id": {
+            "type": "string",
+            "description": "Unique id of manufacturer who adds the product."
+        },
+        "sku": {
+            "type": "string",
+            "description": "sku of a product."
+        },
+        "product_seo_url": {
+            "type": "object",
+            "properties": {
+                "keyword": {
+                    "type": "string",
+                    "description": "keywords related to a product."
+                },
+                "language_id": {
+                    "type": "string",
+                    "description": "Unique id of a specific language."
+                },
+                "store_id": {
+                    "type": "string",
+                    "description": "Unique id of store."
+                }
+            },
+            "points": {
+                "type": "integer",
+                "description": "Points associated with a product, once checkout customer will get the points."
+            },
+            "reward": {
+                "type": "integer",
+                "description": "Rewards associated with a products, customer will get this rewards on successfull checkout."
+            },
+            "image": {
+                "type": "string",
+                "description": "Image urls for demonstrating a product."
+            },
+            "shipping": {
+                "type": "string",
+                "description": "Shipping address id of product store."
+            },
+            "weight": {
+                "type": "integer",
+                "description": "Weight of a product."
+            },
+            "length": {
+                "type": "integer",
+                "description": "Length of a product."
+            },
+            "width": {
+                "type": "integer",
+                "description": "width of a product."
+            },
+            "height": {
+                "type": "integer",
+                "description": "Height of a product."
+            },
+            "minimum": {
+                "type": "integer",
+                "description": "Minimum allowable number of product to buy at once."
+            },
+            "product_related": {
+                "type": "array(Related)",
+                "description": "Product relation. (TODO)"
+            },
+            "product_description": {
+                "type": "array(PRODUCT_DESCRIPTION)",
+                "properties": {
+                    "language_id": {
+                        "type": "string",
+                        "description": "Unique id of a specific language."
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Name of a specific product."
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Description about a product."
+                    },
+                    "meta_title": {
+                        "type": "string",
+                        "description": "Meta title of a product."
+                    },
+                    "meta_description": {
+                        "type": "string",
+                        "descripton": "Meta description of a product."
+                    },
+                    "meta_keyword": {
+                        "type": "string",
+                        "description": "Keywords related to meta description of a product."
+                    },
+                    "tag": {
+                        "type": "string",
+                        "description": "Comma separated meta tags of a product."
+                    }
+                }
+            },
+            "product_category": {
+                "type": "array(PRODUCT_CATEGORY)",
+                "properites": {
+                    "category_id": {
+                        "type": "string",
+                        "description": "category a product belongs to."
+                    }
+                }
+            }
+        }
+    }
+}
+
+EXAMPLE:
+
+product: {
+    {
+        "model": "HP 14s",
+        "quantity": "400",
+        "price": "50,000",
+        "manaufacturer_id": "10",
+        "sku": "",
+        "product_seo_url": {
+            "keyword": "windows, laptop, electronics device.",
+            "language_id": "1",
+            "store_id": "1",
+        },
+        "points": "500",
+        "reward": "1000",
+        "image": "https://examplestore.com/HP14s.jpg",
+        "weight": 1.46,
+        "length": 10,
+        "width": 14,
+        "height": 2,
+        "minimum": 1,
+        "products_related": [
+            "34",
+            "32",
+            ...
+        ],
+        "product_description": [
+            {
+                "language_id": "1",
+                "name": "HP Laptop 14s",
+                "description": "HP 14s, ryzen 5 5500U Win 11, 14 inch, Micro Edge display Laptop(8GB RAM/512GB SSD, 1.46kg).",
+                "meta_title": "HP 14s, ryzen 5 5500U Win 11",
+                "meta_description": "HP 14s, ryzen 5 5500U Win 11, 14 inch, Micro Edge display Laptop(8GB RAM/512GB SSD, 1.46kg).",
+                "meta_keyword": "HP, Window11, Ryzen 5, Laptop",
+                "tag": "Window, HP, Ryzen"
+            },
+            ...
+        ],
+        "product_category": [
+            "23",
+            "43",
+            ...
+        ]
+    },
+    {
+        "model": "samsung galaxy M33 5G",
+        "quantity": "100",
+        "price": "20,000",
+        "manaufacturer_id": "10",
+        "sku": "",
+        "product_seo_url": {
+            "keyword": "Mobile Phone, Samsung, electronics device.",
+            "language_id": "1",
+            "store_id": "1",
+        },
+        "points": "200",
+        "reward": "500",
+        "image": "https://examplestore.com/samsunggalaxym33.jpg",
+        "weight": 0.5,
+        "length": 5,
+        "width": 4,
+        "height": 8,
+        "minimum": 1,
+        "products_related": [
+            "34",
+            "32",
+            ...
+        ],
+        "product_description": [
+            {
+                "language_id": "1",
+                "name": "Samsung galaxy M33",
+                "description": "samsung galaxy M33 5G(Mystique Green, 6GB, 128GB storage), 5nm processor, 6000mAh battery, Voice focus, upto 12GB RAM with RAM plus.",
+                "meta_title": "",
+                "meta_description": "samsung galaxy M33 5G(Mystique Green, 6GB, 128GB storage), 5nm processor, 6000mAh battery, Voice focus, upto 12GB RAM with RAM plus.",
+                "meta_keyword": "Android, Samsung, Galaxy M33",
+                "tag": "Android, Samsung, Galaxy M33",
+            },
+            ...
+        ],
+        "product_category": [
+            "23",
+            "43",
+            ...
+        ]
+    },
+    ...
+}
