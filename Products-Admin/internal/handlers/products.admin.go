@@ -4,12 +4,15 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/products-admin-service/internal/core/ports"
 	"github.com/products-admin-service/internal/literals"
 )
 
 type HandlersImpl struct {
 	// TODO: Need to inject product services
 }
+
+var _ ports.IHandlers = (*HandlersImpl)(nil)
 
 func NewHandlers() *HandlersImpl {
 	return &HandlersImpl{}

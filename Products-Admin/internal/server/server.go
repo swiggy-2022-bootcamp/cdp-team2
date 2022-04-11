@@ -15,6 +15,8 @@ type Server struct {
 	Handlers ports.IHandlers
 }
 
+var _ ports.IServer = (*Server)(nil)
+
 func NewServer(handlers ports.IHandlers) *Server {
 	return &Server{
 		Handlers: handlers,
