@@ -3,12 +3,12 @@ package services
 import (
 	"sync"
 
-	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/internal/errors"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/internal/dao/models"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/util"
 )
 
 type HealthCheckService interface {
-	ProcessRequest() *errors.ServerError
+	ProcessRequest() models.HealthCheck
 }
 
 var healthCheckServiceStruct HealthCheckService
@@ -36,7 +36,6 @@ func GetHealthCheckService() HealthCheckService {
 	return healthCheckServiceStruct
 }
 
-func (s *healthCheckService) ProcessRequest() *errors.ServerError {
-
-	return nil
+func (s *healthCheckService) ProcessRequest() models.HealthCheck {
+	return models.HealthCheck{Status: "UP"}
 }
