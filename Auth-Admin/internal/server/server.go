@@ -38,9 +38,10 @@ func NewServer(handlers ports.IHandlers) *Server {
 func (s *Server) Initialize() {
 	server := gin.Default()
 
-	productsRoutes := server.Group("/products/")
+	productsRoutes := server.Group("/auth/")
 	productsRoutes.GET("/", s.Handlers.Health)
 	productsRoutes.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	productsRoutes.GET("/login", s.Handlers.Login)
 
 	log.Fatal(server.Run(config.Config["PORT"]))
 }

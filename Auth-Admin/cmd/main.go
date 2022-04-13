@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/products-admin-service/internal/core/ports"
-	"github.com/products-admin-service/internal/handlers"
-	"github.com/products-admin-service/internal/server"
+	"github.com/auth-admin-service/internal/core/ports"
+	"github.com/auth-admin-service/internal/handlers"
+	"github.com/auth-admin-service/internal/server"
 )
 
 var (

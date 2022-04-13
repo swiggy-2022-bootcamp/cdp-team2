@@ -27,3 +27,8 @@ func (h *HandlersImpl) Health(gctx *gin.Context) {
 	contentType := "text/plain; charset=utf-8"
 	gctx.Data(http.StatusOK, contentType, []byte(literals.HEALTH_MESSAGE))
 }
+
+func (h *HandlersImpl) Login(gctx *gin.Context) {
+	contentType := "text/plain; charset=utf-8"
+	gctx.Data(http.StatusOK, contentType, []byte(literals.HEALTH_MESSAGE))
+}
