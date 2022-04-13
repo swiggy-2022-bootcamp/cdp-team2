@@ -39,9 +39,9 @@ func (s *Server) Initialize() {
 	server := gin.Default()
 
 	productsRoutes := server.Group("/auth/")
+	productsRoutes.POST("/login", s.Handlers.Login)
 	productsRoutes.GET("/", s.Handlers.Health)
 	productsRoutes.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	productsRoutes.GET("/login", s.Handlers.Login)
 
 	log.Fatal(server.Run(config.Config["PORT"]))
 }

@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 
+	authsrv "github.com/auth-admin-service/internal/core/services/authsrv"
 	"github.com/auth-admin-service/internal/literals"
 	"github.com/gin-gonic/gin"
 )
@@ -29,6 +30,12 @@ func (h *HandlersImpl) Health(gctx *gin.Context) {
 }
 
 func (h *HandlersImpl) Login(gctx *gin.Context) {
-	contentType := "text/plain; charset=utf-8"
-	gctx.Data(http.StatusOK, contentType, []byte(literals.HEALTH_MESSAGE))
+	code, msg, err := authsrv.Login(gctx)
+	if err != nil {
+		gctx.AbortWithError(code, err)
+		return
+	} else {
+		gctx.IndentedJSON(code, msg)
+		return
+	}
 }

@@ -25,7 +25,7 @@ type SignUpBody struct {
 	Role     string `json:"role"`
 }
 
-func Login(c *gin.Context) {
+func Login(c *gin.Context) (int, gin.H, error) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -33,31 +33,26 @@ func Login(c *gin.Context) {
 	body := LoginBody{}
 
 	if err := c.BindJSON(&body); err != nil {
-		c.AbortWithError(http.StatusBadRequest, err)
-		return
+		return http.StatusBadRequest, nil, err
 	}
 
 	user := &domain.User{}
 	userService := usersrv.New()
 	db := repo.ConnectDB().DataStore
 	if err := db.Collection("user").FindOne(ctx, bson.M{"username": body.Username}).Decode(&user); err != nil {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "User Not found"})
-		return
+		return http.StatusNotFound, gin.H{"message": "User Not found"}, nil
 	}
 
 	if user == nil || !userService.IsCorrectPassword(user, body.Password) {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "Password Incorrect"})
-		return
+		return http.StatusNotFound, gin.H{"message": "Password Incorrect"}, nil
 	}
 
 	token, err := repo.JWTManager.Generate(user)
 	if err != nil {
-		fmt.Println(err)
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Error while creating token"})
-		return
+		return http.StatusInternalServerError, gin.H{"message": "Error while creating token"}, nil
 	}
 
-	c.IndentedJSON(http.StatusOK, gin.H{"user": user, "token": token})
+	return http.StatusOK, gin.H{"user": user, "token": token}, nil
 }
 
 func Signup(c *gin.Context) {
