@@ -45,7 +45,6 @@ func (s *Server) Initialize() {
 	adminAuthRoutes.POST("/oAuth", s.Middlewares.CheckAuthMiddleware, s.Middlewares.CheckAdminRole, s.Handlers.OAuth)
 	adminAuthRoutes.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	adminAuthRoutes.GET("/", s.Handlers.Health)
-	adminAuthRoutes.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	log.Fatal(server.Run(config.Config["PORT"]))
 }

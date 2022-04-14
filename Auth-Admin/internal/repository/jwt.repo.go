@@ -81,6 +81,31 @@ func (manager *jwtManager) Generate(user *domain.User) (string, error) {
 
 }
 
+func (manager *jwtManager) VerifyBasicToken(accessToken string) (*userClaims, error) {
+
+	token, err := jwt.ParseWithClaims(
+		accessToken,
+		&userClaims{},
+		func(jwtToken *jwt.Token) (interface{}, error) {
+			if _, ok := jwtToken.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, fmt.Errorf("unexpected method: %s", jwtToken.Header["alg"])
+			}
+			return []byte(manager.secretKey), nil
+		},
+	)
+
+	if err != nil {
+		return nil, fmt.Errorf("invalid token: %w", err)
+	}
+
+	claims, ok := token.Claims.(*userClaims)
+	if !ok {
+		return nil, fmt.Errorf("invalid token claims")
+	}
+
+	return claims, nil
+}
+
 func (manager *jwtManager) Verify(accessToken string) (*userClaims, error) {
 
 	key, err := jwt.ParseRSAPublicKeyFromPEM(manager.publicKey)

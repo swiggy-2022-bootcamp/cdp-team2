@@ -28,7 +28,7 @@ func NewMiddlewares() *MiddlewaresImpl {
 func (h *MiddlewaresImpl) CheckAuthMiddleware(c *gin.Context) {
 	token := c.Request.Header["Authorization"]
 	if len(token) > 0 {
-		ok, err := repo.JWTManager.Verify(strings.Split(token[0], "Basic ")[1])
+		ok, err := repo.JWTManager.VerifyBasicToken(strings.Split(token[0], "Basic ")[1])
 		if err != nil {
 			c.AbortWithError(http.StatusUnauthorized, err)
 			return
@@ -37,9 +37,9 @@ func (h *MiddlewaresImpl) CheckAuthMiddleware(c *gin.Context) {
 			c.Set("Role", ok.Role)
 			c.Next()
 		}
+	} else {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "Auth Token Not supplied"})
 	}
-	c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "Auth Token Not supplied"})
-	return
 }
 
 func (h *MiddlewaresImpl) CheckAdminRole(c *gin.Context) {

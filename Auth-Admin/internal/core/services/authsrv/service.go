@@ -94,7 +94,11 @@ func OAuth(c *gin.Context) (int, gin.H, error) {
 	defer cancel()
 	user := &domain.User{}
 	db := repo.ConnectDB().DataStore
-	if err := db.Collection("user").FindOne(ctx, bson.M{"_id": c.GetString("User")}).Decode(&user); err != nil {
+	id, err := primitive.ObjectIDFromHex(c.GetString("User"))
+	if err != nil {
+		return http.StatusInternalServerError, gin.H{"message": "Error while getting User Id"}, nil
+	}
+	if err := db.Collection("user").FindOne(ctx, bson.M{"_id": id}).Decode(&user); err != nil {
 		return http.StatusNotFound, gin.H{"message": "User Not found"}, nil
 	}
 
@@ -103,5 +107,5 @@ func OAuth(c *gin.Context) (int, gin.H, error) {
 		return http.StatusInternalServerError, gin.H{"message": "Error while creating token"}, nil
 	}
 
-	return http.StatusOK, gin.H{"user": user, "token": token}, nil
+	return http.StatusOK, gin.H{"token": token}, nil
 }
