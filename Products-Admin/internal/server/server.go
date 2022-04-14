@@ -12,12 +12,12 @@ import (
 )
 
 type Server struct {
-	Handlers ports.IHandlers
+	Handlers ports.IProdcutsHandlers
 }
 
 var _ ports.IServer = (*Server)(nil)
 
-func NewServer(handlers ports.IHandlers) *Server {
+func NewServer(handlers ports.IProdcutsHandlers) *Server {
 	return &Server{
 		Handlers: handlers,
 	}
@@ -40,8 +40,12 @@ func NewServer(handlers ports.IHandlers) *Server {
 func (s *Server) Initialize() {
 	server := gin.Default()
 
-	productsRoutes := server.Group("/products/")
+	productsRoutes := server.Group("/api/rest_admin/products/")
 	productsRoutes.GET("/", s.Handlers.Health)
+	productsRoutes.POST("/", s.Handlers.AddProduct)
+	productsRoutes.GET("/all", s.Handlers.GetProducts)
+	productsRoutes.PUT("/:id", s.Handlers.UpdateProduct)
+	productsRoutes.DELETE("/:id", s.Handlers.DeleteProduct)
 	productsRoutes.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	log.Fatal(server.Run(config.Config["PORT"]))
