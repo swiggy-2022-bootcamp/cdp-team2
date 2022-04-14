@@ -4,18 +4,22 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/products-admin-service/internal/core/domain"
 	"github.com/products-admin-service/internal/core/ports"
 	"github.com/products-admin-service/internal/literals"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type HandlersImpl struct {
-	// TODO: Need to inject product services
+type ProductsHandlers struct {
+	ProductsServices ports.IProductsServices
 }
 
-var _ ports.IHandlers = (*HandlersImpl)(nil)
+var _ ports.IProdcutsHandlers = (*ProductsHandlers)(nil)
 
-func NewHandlers() *HandlersImpl {
-	return &HandlersImpl{}
+func NewHandlers(productsServices ports.IProductsServices) *ProductsHandlers {
+	return &ProductsHandlers{
+		ProductsServices: productsServices,
+	}
 }
 
 // Health godoc
@@ -26,7 +30,63 @@ func NewHandlers() *HandlersImpl {
 // @Produce      plain/text
 // @Success      200  {object} 	string
 // @Router       / [get]
-func (h *HandlersImpl) Health(gctx *gin.Context) {
+func (h *ProductsHandlers) Health(gctx *gin.Context) {
 	contentType := "text/plain; charset=utf-8"
 	gctx.Data(http.StatusOK, contentType, []byte(literals.HEALTH_MESSAGE))
+}
+
+func (h *ProductsHandlers) GetProducts(gctx *gin.Context) {
+	_products, err := h.ProductsServices.GetProducts()
+	if err != nil {
+		gctx.JSON(err.GetErrCode(), gin.H{"message": err.Error()})
+		return
+	}
+	gctx.JSON(http.StatusOK, gin.H{"message": _products})
+}
+
+func (h *ProductsHandlers) AddProduct(gctx *gin.Context) {
+	var _product domain.Product
+	if err := gctx.ShouldBindJSON(&_product); err != nil {
+		gctx.JSON(http.StatusBadRequest, gin.H{"message": "Please provide valid product information."})
+		return
+	}
+	productID, err := h.ProductsServices.AddProduct(&_product)
+	if err != nil {
+		gctx.JSON(err.GetErrCode(), gin.H{"message": err.Error()})
+		return
+	}
+	gctx.JSON(http.StatusCreated, gin.H{"message": productID + " Product Added."})
+}
+
+func (h *ProductsHandlers) UpdateProduct(gctx *gin.Context) {
+	productIDStr := gctx.Param("id")
+	productID, err := primitive.ObjectIDFromHex(productIDStr)
+	if err != nil {
+		gctx.JSON(http.StatusBadRequest, gin.H{"message": "Please provide valid product id."})
+		return
+	}
+	var _product domain.Product
+	if err := gctx.ShouldBindJSON(&_product); err != nil {
+		gctx.JSON(http.StatusBadRequest, gin.H{"message": "Please provide valid product information."})
+		return
+	}
+	if err := h.ProductsServices.UpdateProduct(productID, &_product); err != nil {
+		gctx.JSON(err.GetErrCode(), gin.H{"message": err.Error()})
+		return
+	}
+	gctx.JSON(http.StatusCreated, gin.H{"message": "Product Updated."})
+}
+
+func (h *ProductsHandlers) DeleteProduct(gctx *gin.Context) {
+	productIDStr := gctx.Param("id")
+	productID, err := primitive.ObjectIDFromHex(productIDStr)
+	if err != nil {
+		gctx.JSON(http.StatusBadRequest, gin.H{"message": "Please provide valid product id."})
+		return
+	}
+	if err := h.ProductsServices.DeleteProduct(productID); err != nil {
+		gctx.JSON(err.GetErrCode(), gin.H{"message": err.Error()})
+		return
+	}
+	gctx.JSON(http.StatusAccepted, gin.H{"message": "Product deleted."})
 }
