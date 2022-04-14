@@ -6,7 +6,7 @@ import (
 )
 
 type IProductsRepository interface {
-	AddProduct(*domain.Product) error
+	AddProduct(*domain.Product) (string, error)
 	UpdateProduct(*domain.Product) error
 	DeleteProduct(primitive.ObjectID) error
 }
