@@ -3,7 +3,6 @@ package errors
 
 import (
 	"errors"
-	"strings"
 )
 
 // Application errors
@@ -16,6 +15,11 @@ var (
 	ErrTemporaryDisabled = errors.New("temporary disabled")
 	ErrTimeout           = errors.New("timeout")
 )
+
+type AppError struct {
+	err       error
+	errorCode int
+}
 
 // New returns new app error that formats as the given text.
 func New(message string) *AppError {
@@ -38,34 +42,16 @@ func newAppError(err error) *AppError {
 	}
 }
 
-type AppError struct {
-	trace string
-	err   error
-}
-
 // Error returns the string representation of the error message.
 func (e *AppError) Error() string {
 	return e.err.Error()
 }
 
+// UnWraps returns the actual err of type error
 func (e *AppError) Unwrap() error {
 	return e.err
 }
 
-// StackTrace returns the string slice of the error stack traces
-func (e *AppError) StackTrace() string {
-	var stack []string
-
-	if e.trace != "" {
-		stack = append(stack, e.trace)
-	}
-
-	if e.err != nil {
-		var next *AppError
-		if errors.As(e.err, &next) {
-			stack = append(stack, next.StackTrace())
-		}
-	}
-
-	return strings.Join(stack, "\n")
+func (e *AppError) GetErrCode() int {
+	return e.errorCode
 }
