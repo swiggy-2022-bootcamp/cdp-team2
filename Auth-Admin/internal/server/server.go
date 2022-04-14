@@ -12,18 +12,20 @@ import (
 )
 
 type Server struct {
-	Handlers ports.IHandlers
+	Handlers    ports.IHandlers
+	Middlewares ports.IMiddlewares
 }
 
-func NewServer(handlers ports.IHandlers) *Server {
+func NewServer(handlers ports.IHandlers, middlewares ports.IMiddlewares) *Server {
 	return &Server{
-		Handlers: handlers,
+		Handlers:    handlers,
+		Middlewares: middlewares,
 	}
 }
 
-// @title Swagger Products Admin Microservice
+// @title Swagger adminAuth Admin Microservice
 // @version 1.0
-// @description Micorservice for handling admin products.
+// @description Micorservice for handling admin adminAuth.
 // @termsOfService http://swagger.io/terms/
 
 // @contact.name API Support
@@ -34,14 +36,16 @@ func NewServer(handlers ports.IHandlers) *Server {
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
 // @host localhost:8000
-// @BasePath /products
+// @BasePath /adminAuth
 func (s *Server) Initialize() {
 	server := gin.Default()
 
-	productsRoutes := server.Group("/auth/")
-	productsRoutes.POST("/login", s.Handlers.Login)
-	productsRoutes.GET("/", s.Handlers.Health)
-	productsRoutes.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	adminAuthRoutes := server.Group("/auth/")
+	adminAuthRoutes.POST("/login", s.Handlers.Login)
+	adminAuthRoutes.POST("/oAuth", s.Middlewares.CheckAuthMiddleware, s.Middlewares.CheckAdminRole, s.Handlers.OAuth)
+	adminAuthRoutes.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	adminAuthRoutes.GET("/", s.Handlers.Health)
+	adminAuthRoutes.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	log.Fatal(server.Run(config.Config["PORT"]))
 }

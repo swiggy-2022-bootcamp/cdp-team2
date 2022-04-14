@@ -7,4 +7,5 @@ import (
 type IHandlers interface {
 	Health(*gin.Context)
 	Login(*gin.Context)
+	OAuth(*gin.Context)
 }

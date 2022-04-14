@@ -3,19 +3,22 @@ package main
 import (
 	"github.com/auth-admin-service/internal/core/ports"
 	"github.com/auth-admin-service/internal/handlers"
+	"github.com/auth-admin-service/internal/middlewares"
 	"github.com/auth-admin-service/internal/server"
 )
 
 var (
-	productsServer   ports.IServer
-	productsHandlers ports.IHandlers
+	adminAuthServer      ports.IServer
+	adminAuthHandlers    ports.IHandlers
+	adminAuthMiddlewares ports.IMiddlewares
 )
 
 func init() {
-	productsHandlers = handlers.NewHandlers()
-	productsServer = server.NewServer(productsHandlers)
+	adminAuthHandlers = handlers.NewHandlers()
+	adminAuthMiddlewares = middlewares.NewMiddlewares()
+	adminAuthServer = server.NewServer(adminAuthHandlers, adminAuthMiddlewares)
 }
 
 func main() {
-	productsServer.Initialize()
+	adminAuthServer.Initialize()
 }

@@ -4,15 +4,18 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"time"
 
+	config "github.com/auth-admin-service/config"
 	domain "github.com/auth-admin-service/internal/core/domain"
-
 	"github.com/golang-jwt/jwt"
 )
 
 type jwtManager struct {
-	publicKey  []byte
-	privateKey []byte
+	publicKey     []byte
+	privateKey    []byte
+	secretKey     string
+	tokenDuration time.Duration
 }
 
 type userClaims struct {
@@ -34,9 +37,29 @@ func init() {
 		log.Fatalln(err)
 	}
 	JWTManager = &jwtManager{
-		privateKey: prvKey,
-		publicKey:  pubKey,
+		privateKey:    prvKey,
+		publicKey:     pubKey,
+		secretKey:     config.SecretKey,
+		tokenDuration: time.Minute * 5,
 	}
+}
+
+func (manager *jwtManager) GenerateBasicToken(user *domain.User) (string, error) {
+	claims := userClaims{
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(manager.tokenDuration).Unix(),
+		},
+		Username: user.Username,
+		Role:     user.Role,
+		ID:       user.ID.Hex(),
+	}
+
+	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(manager.secretKey))
+	if err != nil {
+		return "", fmt.Errorf("create: sign token: %w", err)
+	}
+
+	return token, nil
 }
 
 func (manager *jwtManager) Generate(user *domain.User) (string, error) {

@@ -47,7 +47,7 @@ func Login(c *gin.Context) (int, gin.H, error) {
 		return http.StatusNotFound, gin.H{"message": "Password Incorrect"}, nil
 	}
 
-	token, err := repo.JWTManager.Generate(user)
+	token, err := repo.JWTManager.GenerateBasicToken(user)
 	if err != nil {
 		return http.StatusInternalServerError, gin.H{"message": "Error while creating token"}, nil
 	}
@@ -89,8 +89,19 @@ func Signup(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, gin.H{"username": body.Username, "Id": oid.Hex()})
 }
 
-func CheckAuth(c *gin.Context) {
-	user := c.GetString("User")
+func OAuth(c *gin.Context) (int, gin.H, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	user := &domain.User{}
+	db := repo.ConnectDB().DataStore
+	if err := db.Collection("user").FindOne(ctx, bson.M{"_id": c.GetString("User")}).Decode(&user); err != nil {
+		return http.StatusNotFound, gin.H{"message": "User Not found"}, nil
+	}
 
-	c.IndentedJSON(http.StatusOK, gin.H{"message": "Auth Working", "user": user})
+	token, err := repo.JWTManager.Generate(user)
+	if err != nil {
+		return http.StatusInternalServerError, gin.H{"message": "Error while creating token"}, nil
+	}
+
+	return http.StatusOK, gin.H{"user": user, "token": token}, nil
 }

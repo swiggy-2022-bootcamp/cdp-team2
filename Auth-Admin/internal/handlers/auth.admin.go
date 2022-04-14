@@ -16,6 +16,17 @@ func NewHandlers() *HandlersImpl {
 	return &HandlersImpl{}
 }
 
+func HandlerWrapper(handler func(*gin.Context) (int, gin.H, error), gctx *gin.Context) {
+	code, msg, err := handler(gctx)
+	if err != nil {
+		gctx.AbortWithError(code, err)
+		return
+	} else {
+		gctx.IndentedJSON(code, msg)
+		return
+	}
+}
+
 // Health godoc
 // @Summary      Health Check Route
 // @Description  API to check products-admin health
@@ -30,12 +41,9 @@ func (h *HandlersImpl) Health(gctx *gin.Context) {
 }
 
 func (h *HandlersImpl) Login(gctx *gin.Context) {
-	code, msg, err := authsrv.Login(gctx)
-	if err != nil {
-		gctx.AbortWithError(code, err)
-		return
-	} else {
-		gctx.IndentedJSON(code, msg)
-		return
-	}
+	HandlerWrapper(authsrv.Login, gctx)
+}
+
+func (h *HandlersImpl) OAuth(gctx *gin.Context) {
+	HandlerWrapper(authsrv.OAuth, gctx)
 }
