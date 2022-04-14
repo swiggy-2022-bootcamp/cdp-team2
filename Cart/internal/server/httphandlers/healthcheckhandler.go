@@ -16,7 +16,7 @@ import (
 // @Produce  json
 // @Success 200 {object} models.HealthCheck
 // @Failure 500
-// @Router /reward/v1/healthcheck [get]
+// @Router /cart/v1/healthcheck [get]
 func HealthCheckHandler(config *util.RouterConfig) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 

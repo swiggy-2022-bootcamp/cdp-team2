@@ -11,13 +11,13 @@ import (
 
 type WebServerConfig struct {
 	Port         string `required:"true" split_words:"true"`
-	RoutePrefix  string `required:"false" split_words:"true" default:"/reward"`
+	RoutePrefix  string `required:"false" split_words:"true" default:"/cart"`
 	Db           string `required:"false" split_words:"true"`
 	DbCollection string `required:"false" split_words:"true"`
 }
 
 func FromEnv() (*WebServerConfig, error) {
-	cfgFilename := "../../etc/localhost.env"
+	cfgFilename := "../../etc/config.localhost.env"
 	if err := godotenv.Load(cfgFilename); err != nil {
 		fmt.Println("No config files found to load to env.")
 	}
