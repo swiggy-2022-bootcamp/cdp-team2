@@ -47,3 +47,6 @@ func (h *HandlersImpl) Login(gctx *gin.Context) {
 func (h *HandlersImpl) OAuth(gctx *gin.Context) {
 	HandlerWrapper(authsrv.OAuth, gctx)
 }
+func (h *HandlersImpl) Logout(gctx *gin.Context) {
+	HandlerWrapper(authsrv.Logout, gctx)
+}

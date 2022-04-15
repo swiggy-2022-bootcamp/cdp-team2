@@ -12,6 +12,8 @@ import (
 
 type DataBaseRepository struct {
 	DataStore *mongo.Database
+	Context   *context.Context
+	Client    *mongo.Client
 }
 
 var db *DataBaseRepository
@@ -26,6 +28,8 @@ func ConnectDB() *DataBaseRepository {
 	if db == nil {
 		db = &DataBaseRepository{
 			DataStore: client.Database("swiggy"),
+			Context:   &ctx,
+			Client:    client,
 		}
 	}
 	return db

@@ -42,7 +42,8 @@ func (s *Server) Initialize() {
 
 	adminAuthRoutes := server.Group("/auth/")
 	adminAuthRoutes.POST("/login", s.Handlers.Login)
-	adminAuthRoutes.POST("/oAuth", s.Middlewares.CheckAuthMiddleware, s.Middlewares.CheckAdminRole, s.Handlers.OAuth)
+	adminAuthRoutes.POST("/oAuth", s.Middlewares.CheckBasicAuthMiddleware, s.Middlewares.CheckAdminRole, s.Handlers.OAuth)
+	adminAuthRoutes.GET("/logout", s.Middlewares.CheckAuthMiddleware, s.Handlers.Logout)
 	adminAuthRoutes.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	adminAuthRoutes.GET("/", s.Handlers.Health)
 

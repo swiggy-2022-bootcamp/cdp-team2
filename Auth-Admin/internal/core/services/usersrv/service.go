@@ -1,9 +1,13 @@
 package usersrv
 
 import (
+	"context"
 	"fmt"
+	"time"
 
 	domain "github.com/auth-admin-service/internal/core/domain"
+	repo "github.com/auth-admin-service/internal/repository"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -33,4 +37,24 @@ func (srv *service) NewUser(username string, password string, role string) (*dom
 func (srv *service) IsCorrectPassword(user *domain.User, password string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(user.HashedPassword), []byte(password))
 	return err == nil
+}
+
+func (srv *service) FetchUser(condition *bson.M, user *domain.User) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	db := repo.ConnectDB().DataStore
+	if err := db.Collection("user").FindOne(ctx, condition).Decode(&user); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (srv *service) UpdateUser(condition *bson.M, update *bson.M) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	db := repo.ConnectDB().DataStore
+	if _, err := db.Collection("user").UpdateOne(ctx, condition, update); err != nil {
+		return err
+	}
+	return nil
 }

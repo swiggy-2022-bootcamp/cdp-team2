@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	domain "github.com/auth-admin-service/internal/core/domain"
@@ -27,9 +28,6 @@ type SignUpBody struct {
 
 func Login(c *gin.Context) (int, gin.H, error) {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
 	body := LoginBody{}
 
 	if err := c.BindJSON(&body); err != nil {
@@ -38,8 +36,7 @@ func Login(c *gin.Context) (int, gin.H, error) {
 
 	user := &domain.User{}
 	userService := usersrv.New()
-	db := repo.ConnectDB().DataStore
-	if err := db.Collection("user").FindOne(ctx, bson.M{"username": body.Username}).Decode(&user); err != nil {
+	if err := userService.FetchUser(&bson.M{"username": body.Username}, user); err != nil {
 		return http.StatusNotFound, gin.H{"message": "User Not found"}, nil
 	}
 
@@ -52,7 +49,7 @@ func Login(c *gin.Context) (int, gin.H, error) {
 		return http.StatusInternalServerError, gin.H{"message": "Error while creating token"}, nil
 	}
 
-	return http.StatusOK, gin.H{"user": user, "token": token}, nil
+	return http.StatusOK, gin.H{"token": token}, nil
 }
 
 func Signup(c *gin.Context) {
@@ -90,15 +87,13 @@ func Signup(c *gin.Context) {
 }
 
 func OAuth(c *gin.Context) (int, gin.H, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
+	userService := usersrv.New()
 	user := &domain.User{}
-	db := repo.ConnectDB().DataStore
 	id, err := primitive.ObjectIDFromHex(c.GetString("User"))
 	if err != nil {
 		return http.StatusInternalServerError, gin.H{"message": "Error while getting User Id"}, nil
 	}
-	if err := db.Collection("user").FindOne(ctx, bson.M{"_id": id}).Decode(&user); err != nil {
+	if err := userService.FetchUser(&bson.M{"_id": id}, user); err != nil {
 		return http.StatusNotFound, gin.H{"message": "User Not found"}, nil
 	}
 
@@ -107,5 +102,25 @@ func OAuth(c *gin.Context) (int, gin.H, error) {
 		return http.StatusInternalServerError, gin.H{"message": "Error while creating token"}, nil
 	}
 
+	if err := userService.UpdateUser(&bson.M{"_id": user.ID}, &bson.M{"$push": bson.M{"tokens": token}}); err != nil {
+		return http.StatusNotFound, gin.H{"message": "Unable To Push Token"}, nil
+	}
+
 	return http.StatusOK, gin.H{"token": token}, nil
+}
+
+func Logout(c *gin.Context) (int, gin.H, error) {
+	userService := usersrv.New()
+	token := strings.Split(c.Request.Header["Authorization"][0], "Bearer ")[1]
+	id, err := primitive.ObjectIDFromHex(c.GetString("User"))
+
+	if err != nil {
+		return http.StatusInternalServerError, gin.H{"message": "Error while getting User Id"}, nil
+	}
+
+	if err := userService.UpdateUser(&bson.M{"_id": id}, &bson.M{"$pull": bson.M{"tokens": token}}); err != nil {
+		return http.StatusNotFound, gin.H{"message": "Unable To Push Token"}, nil
+	}
+
+	return http.StatusOK, gin.H{"message": "Logout Successfull"}, nil
 }

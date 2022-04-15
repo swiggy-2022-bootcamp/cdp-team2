@@ -9,6 +9,7 @@ type User struct {
 	Username       string             `bson:"username"`
 	HashedPassword string             `bson:"password"`
 	Role           string             `bson:"role"`
+	Tokens         []string           `bson:"tokens"`
 }
 
 type UserPublic struct {
