@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	// "os"
 
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/joho/godotenv"
@@ -33,13 +32,10 @@ func init() {
 	dynamodbClient = instance.GetDynamoDBClient()
 
 	// InitialiZe Repository
-	// TODO: Need to load .env file via config.
-	// productsRepository, err = repository.NewProductsRepository(os.Getenv("MONGO_URI"))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// productsRepository, _ = repository.NewProductsRepository("dummy")
 	productsRepository = adaptor.NewProductsRepository(dynamodbClient, "team-2-products")
 	productsServices = services.NewProductsServices(productsRepository)
 	productsHandlers = handlers.NewHandlers(productsServices)
