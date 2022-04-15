@@ -4,7 +4,6 @@ import (
 	"log"
 
 	"github.com/aws/aws-sdk-go/service/dynamodb"
-	"github.com/joho/godotenv"
 	"github.com/products-admin-service/internal/core/ports"
 	"github.com/products-admin-service/internal/core/services"
 	"github.com/products-admin-service/internal/handlers"
@@ -23,11 +22,6 @@ var (
 )
 
 func init() {
-	// Load Dotenv file
-	if err = godotenv.Load(); err != nil {
-		log.Fatal("Error Loading in .env file: ", err.Error())
-	}
-
 	// Initialize dynamodb client
 	dynamodbClient = instance.GetDynamoDBClient()
 

@@ -1,5 +1,5 @@
 package config
 
 var Config = map[string]string{
-	"PORT": ":8000",
+	"PORT": ":8001",
 }
