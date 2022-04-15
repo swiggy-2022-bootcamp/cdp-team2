@@ -1,6 +1,8 @@
 package adaptor
 
 import (
+	"fmt"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
@@ -63,6 +65,7 @@ func (pr *ProductsRepository) AddProduct(product *domain.Product) (*domain.Produ
 	if dErr != nil {
 		return nil, errors.Wrap(dErr)
 	}
+	fmt.Println(entityParsed)
 	input := &dynamodb.PutItemInput{
 		Item:      entityParsed,
 		TableName: aws.String(pr.TableName),

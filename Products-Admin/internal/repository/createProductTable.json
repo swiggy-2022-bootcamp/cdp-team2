@@ -1,0 +1,20 @@
+
+{
+    "TableName": "team-2-products",
+    "AttributeDefinitions": [
+      {
+        "AttributeName": "_id",
+        "AttributeType": "N"
+      }
+    ],
+    "KeySchema": [
+      {
+        "AttributeName": "_id",
+        "KeyType": "HASH"
+      }
+    ],
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 5,
+      "WriteCapacityUnits": 5
+    }
+  }
