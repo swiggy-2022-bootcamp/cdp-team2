@@ -1,6 +1,8 @@
 package domain
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
+import (
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
 
 type Product struct {
 	ID                 primitive.ObjectID    `json:"_id"                 bson:"_id"`
@@ -22,4 +24,27 @@ type Product struct {
 	ProductRelated     []primitive.ObjectID  `json:"product_related"     bson:"product_related"`
 	ProductDescription []*ProductDescription `json:"product_description" bson:"product_description"`
 	ProductCategory    []primitive.ObjectID  `json:"product_category"    bson:"product_category"`
+}
+
+func (p *Product) GetMap() map[string]interface{} {
+	return map[string]interface{}{
+		"_id":                 p.ID,
+		"model":               p.Model,
+		"quantity":            p.Quantity,
+		"manafacturer_id":     p.ManufacturerID,
+		"sku":                 p.Sku,
+		"product_seo_url":     p.ProductSeoUrl,
+		"points":              p.Points,
+		"rewards":             p.Rewards,
+		"image":               p.Image,
+		"shipping_id":         p.ShippingID,
+		"weight":              p.Weight,
+		"length":              p.Length,
+		"width":               p.Width,
+		"height":              p.Height,
+		"minimum":             p.Minimum,
+		"product_related":     p.ProductRelated,
+		"product_category":    p.ProductCategory,
+		"product_description": p.ProductDescription,
+	}
 }

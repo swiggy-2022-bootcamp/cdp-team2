@@ -3,6 +3,7 @@ package errors
 
 import (
 	"errors"
+	"net/http"
 )
 
 // Application errors
@@ -22,23 +23,24 @@ type AppError struct {
 }
 
 // New returns new app error that formats as the given text.
-func New(message string) *AppError {
-	return newAppError(errors.New(message))
+func New(message string, errCode int) *AppError {
+	return newAppError(errors.New(message), errCode)
 }
 
 // Wrap returns new app error wrapping target error.
 // If passed value is nil will fallback to internal
 func Wrap(err error) *AppError {
-	return newAppError(err)
+	return newAppError(err, http.StatusInternalServerError)
 }
 
-func newAppError(err error) *AppError {
+func newAppError(err error, errCode int) *AppError {
 	if err == nil {
 		err = ErrInternal
 	}
 
 	return &AppError{
-		err: err,
+		err:       err,
+		errorCode: errCode,
 	}
 }
 

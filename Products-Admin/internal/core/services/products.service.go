@@ -1,6 +1,8 @@
 package services
 
 import (
+	"net/http"
+
 	"github.com/products-admin-service/internal/core/domain"
 	"github.com/products-admin-service/internal/core/ports"
 	"github.com/products-admin-service/pkg/errors"
@@ -20,17 +22,17 @@ func NewProductsServices(productsRepository ports.IProductsRepository) *Products
 }
 
 func (ps *ProductsServices) AddProduct(*domain.Product) (string, *errors.AppError) {
-	return "", errors.New("")
+	return "", errors.New("", http.StatusInternalServerError)
 }
 
 func (ps *ProductsServices) UpdateProduct(primitive.ObjectID, *domain.Product) *errors.AppError {
-	return errors.New("")
+	return errors.New("", http.StatusInternalServerError)
 }
 
 func (ps *ProductsServices) DeleteProduct(primitive.ObjectID) *errors.AppError {
-	return errors.New("")
+	return errors.New("", http.StatusInternalServerError)
 }
 
 func (ps *ProductsServices) GetProducts() ([]*domain.Product, *errors.AppError) {
-	return nil, errors.New("")
+	return nil, errors.New("", http.StatusInternalServerError)
 }
