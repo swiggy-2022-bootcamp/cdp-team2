@@ -6,5 +6,5 @@ var Server = map[string]string{
 
 var AWS = map[string]string{
 	"region":   "us-west-2",
-	"endpoint": "",
+	"endpoint": "http://localhost:8000",
 }

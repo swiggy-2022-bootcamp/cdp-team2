@@ -1,0 +1,19 @@
+{
+    "TableName": "team-2-categories",
+    "AttributeDefinitions": [
+      {
+        "AttributeName": "category_id",
+        "AttributeType": "N"
+      }
+    ],
+    "KeySchema": [
+      {
+        "AttributeName": "category_id",
+        "KeyType": "HASH"
+      }
+    ],
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 5,
+      "WriteCapacityUnits": 5
+    }
+  }
