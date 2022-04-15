@@ -90,7 +90,7 @@ func (pr *ProductsRepository) UpdateProduct(product *domain.Product) (*domain.Pr
 	return product, nil
 }
 
-func (pr *ProductsRepository) DeleteProduct(condition map[string]interface{}) (response *dynamodb.DeleteItemOutput, err *errors.AppError) {
+func (pr *ProductsRepository) DeleteProduct(condition map[string]*dynamodb.AttributeValue) (response *dynamodb.DeleteItemOutput, err *errors.AppError) {
 	conditionParsed, dErr := dynamodbattribute.MarshalMap(condition)
 	if dErr != nil {
 		return nil, errors.Wrap(dErr)

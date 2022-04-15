@@ -12,5 +12,5 @@ type IProductsRepository interface {
 	GetAll(condition expression.Expression) (products []*domain.Product, err *errors.AppError)
 	AddProduct(product *domain.Product) (*domain.Product, *errors.AppError)
 	UpdateProduct(product *domain.Product) (*domain.Product, *errors.AppError)
-	DeleteProduct(condition map[string]interface{}) (response *dynamodb.DeleteItemOutput, err *errors.AppError)
+	DeleteProduct(condition map[string]*dynamodb.AttributeValue) (response *dynamodb.DeleteItemOutput, err *errors.AppError)
 }
