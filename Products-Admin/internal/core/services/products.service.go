@@ -1,7 +1,9 @@
 package services
 
 import (
+	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
@@ -9,7 +11,6 @@ import (
 	"github.com/products-admin-service/internal/core/domain"
 	"github.com/products-admin-service/internal/core/ports"
 	"github.com/products-admin-service/pkg/errors"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type ProductsServices struct {
@@ -18,21 +19,29 @@ type ProductsServices struct {
 
 var _ ports.IProductsServices = (*ProductsServices)(nil)
 
+const (
+	customEpoch = 1300000000
+)
+
+func getRandomKey() int {
+	return int(time.Now().Unix() - customEpoch)
+}
+
 func NewProductsServices(productsRepository ports.IProductsRepository) *ProductsServices {
 	return &ProductsServices{
 		ProductsRepository: productsRepository,
 	}
 }
 
-func (ps *ProductsServices) AddProduct(product *domain.Product) (string, *errors.AppError) {
-	product.ID = primitive.NewObjectID()
+func (ps *ProductsServices) AddProduct(product *domain.Product) (int, *errors.AppError) {
+	product.ID = getRandomKey()
 	if _, err := ps.ProductsRepository.AddProduct(product); err != nil {
-		return "", err
+		return 0, err
 	}
-	return product.ID.Hex(), nil
+	return product.ID, nil
 }
 
-func (ps *ProductsServices) UpdateProduct(productID primitive.ObjectID, product *domain.Product) *errors.AppError {
+func (ps *ProductsServices) UpdateProduct(productID int, product *domain.Product) *errors.AppError {
 	product.ID = productID
 	if _, err := ps.ProductsRepository.UpdateProduct(product); err != nil {
 		return err
@@ -40,10 +49,10 @@ func (ps *ProductsServices) UpdateProduct(productID primitive.ObjectID, product 
 	return nil
 }
 
-func (ps *ProductsServices) DeleteProduct(productID primitive.ObjectID) *errors.AppError {
+func (ps *ProductsServices) DeleteProduct(productID int) *errors.AppError {
 	condition := map[string]*dynamodb.AttributeValue{
 		"_id": {
-			N: aws.String(productID.Hex()),
+			N: aws.String(fmt.Sprint(productID)),
 		},
 	}
 	if _, err := ps.ProductsRepository.DeleteProduct(condition); err != nil {
