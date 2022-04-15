@@ -4,9 +4,12 @@ import (
 	"net/http"
 
 	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/config"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/internal/dao"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/internal/services"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/util"
 
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -37,8 +40,12 @@ func RunServer() error {
 		WebServerConfig: webServerConfig,
 	}
 
+	dynamoClient := createDynamoDbSession()
+	dynamodao := dao.InitDynamoDAO(dynamoClient, webServerConfig)
+
 	// Initialize services
 	services.InithHealthCheckService(&routerConfigs)
+	services.InitAddRewardService(&routerConfigs, dynamodao)
 
 	server := NewServer(webServerConfig)
 	server.Router.InitializeRouter(&routerConfigs)
@@ -50,4 +57,17 @@ func RunServer() error {
 	}
 
 	return nil
+}
+
+func createDynamoDbSession() *dynamodb.DynamoDB {
+	// Initialize a session that the SDK will use to load
+	// credentials from the shared credentials file ~/.aws/credentials
+	// and region from the shared configuration file ~/.aws/config.
+	sess := session.Must(session.NewSessionWithOptions(session.Options{
+		SharedConfigState: session.SharedConfigEnable,
+	}))
+
+	// Create DynamoDB client
+	svc := dynamodb.New(sess)
+	return svc
 }

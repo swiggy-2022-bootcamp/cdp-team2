@@ -32,4 +32,9 @@ func (r *Router) InitializeRoutes(routerConfig *util.RouterConfig) {
 		httphandlers.HealthCheckHandler(routerConfig)).
 		Methods(http.MethodGet).
 		Name(literals.HealthCheckAPIName)
+
+	s.HandleFunc(literals.AddRewardEndpoint,
+		httphandlers.AddRewardHandler(routerConfig)).
+		Methods(http.MethodPost).
+		Name(literals.AddRewardAPIName)
 }
