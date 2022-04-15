@@ -1,13 +1,14 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/products-admin-service/internal/core/domain"
 	"github.com/products-admin-service/internal/core/ports"
 	"github.com/products-admin-service/internal/literals"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type ProductsHandlers struct {
@@ -47,7 +48,8 @@ func (h *ProductsHandlers) GetProducts(gctx *gin.Context) {
 func (h *ProductsHandlers) AddProduct(gctx *gin.Context) {
 	var _product domain.Product
 	if err := gctx.ShouldBindJSON(&_product); err != nil {
-		gctx.JSON(http.StatusBadRequest, gin.H{"message": "Please provide valid product information."})
+		// gctx.JSON(http.StatusBadRequest, gin.H{"message": "Please provide valid product information."})
+		gctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 	productID, err := h.ProductsServices.AddProduct(&_product)
@@ -55,12 +57,12 @@ func (h *ProductsHandlers) AddProduct(gctx *gin.Context) {
 		gctx.JSON(err.GetErrCode(), gin.H{"message": err.Error()})
 		return
 	}
-	gctx.JSON(http.StatusCreated, gin.H{"message": productID + " Product Added."})
+	gctx.JSON(http.StatusCreated, gin.H{"message": fmt.Sprint(productID) + " Product Added."})
 }
 
 func (h *ProductsHandlers) UpdateProduct(gctx *gin.Context) {
 	productIDStr := gctx.Param("id")
-	productID, err := primitive.ObjectIDFromHex(productIDStr)
+	productID, err := strconv.Atoi(productIDStr)
 	if err != nil {
 		gctx.JSON(http.StatusBadRequest, gin.H{"message": "Please provide valid product id."})
 		return
@@ -79,7 +81,7 @@ func (h *ProductsHandlers) UpdateProduct(gctx *gin.Context) {
 
 func (h *ProductsHandlers) DeleteProduct(gctx *gin.Context) {
 	productIDStr := gctx.Param("id")
-	productID, err := primitive.ObjectIDFromHex(productIDStr)
+	productID, err := strconv.Atoi(productIDStr)
 	if err != nil {
 		gctx.JSON(http.StatusBadRequest, gin.H{"message": "Please provide valid product id."})
 		return
