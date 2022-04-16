@@ -1,8 +1,6 @@
 package dao
 
 import (
-	"fmt"
-	"log"
 	"sync"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -11,6 +9,8 @@ import (
 	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/config"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/internal/dao/models"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/internal/errors"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type DynamoDAO interface {
@@ -49,16 +49,16 @@ func GetDynamoDAO() DynamoDAO {
 func (dao *dynamoDAO) AddReward(reward models.Reward) *errors.ServerError {
 	rewardRecord, err := dao.GetReward(reward.CustomerId)
 	if err != nil {
-		log.Fatal(err)
-		return nil
+		log.Info("Record not found for customer ", reward.CustomerId)
+	} else {
+		totalPoints := rewardRecord.Points + reward.Points
+		reward.Points = totalPoints
 	}
-
-	totalPoints := rewardRecord.Points + reward.Points
-	reward.Points = totalPoints
 
 	av, goErr := dynamodbattribute.MarshalMap(reward)
 	if goErr != nil {
-		log.Fatalf("Got error marshalling new movie item: %s", goErr)
+		log.WithError(goErr).Error("an error occurred while marshalling reward to dynamo attribute")
+		return &errors.MarshalToAttributesError
 	}
 
 	input := &dynamodb.PutItemInput{
@@ -68,10 +68,11 @@ func (dao *dynamoDAO) AddReward(reward models.Reward) *errors.ServerError {
 
 	_, goErr = dao.client.PutItem(input)
 	if goErr != nil {
-		log.Fatalf("Got error calling PutItem: %s", goErr)
+		log.WithField("Error: ", goErr).Error("got error while calling GetItem API of dynamo db")
+		return &errors.DatabaseQueryFailed
 	}
 
-	fmt.Println("Successfully added ")
+	log.Info("successfully added the reward points to the customer: ", reward.CustomerId)
 	return nil
 }
 
@@ -82,28 +83,27 @@ func (dao *dynamoDAO) GetReward(customerId string) (models.Reward, *errors.Serve
 		TableName: aws.String("reward"),
 		Key: map[string]*dynamodb.AttributeValue{
 			"customerId": {
-				N: aws.String(customerId),
+				S: aws.String(customerId),
 			},
 		},
 	})
 	if err != nil {
-		log.Fatalf("Got error calling GetItem: %s", err)
+		log.WithField("Error: ", err).Error("got error while calling GetItem API of dynamo db")
+		return reward, &errors.DatabaseQueryFailed
 	}
 
 	if result.Item == nil {
-		msg := "Could not find '" + customerId + "'"
-		log.Fatal(msg)
-		return reward, nil
+		errMsg := "Could not find '" + customerId + "'"
+		log.WithField("Error: ", errMsg).Error("record not found")
+		return reward, &errors.RecordNotFound
 	}
 
 	err = dynamodbattribute.UnmarshalMap(result.Item, &reward)
 	if err != nil {
-		panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
+		log.WithError(err).Error("an error occurred while unmarshalling dynamo attributes to reward struct")
+		return reward, &errors.UnmarshalAttributesError
 	}
 
-	fmt.Println("Customer Id:  ", reward.CustomerId)
-	fmt.Println("Description: ", reward.Description)
-	fmt.Println("Points:  ", reward.Points)
-
+	log.Info("Successfully got the reward for the customer: ", customerId, " reward points: ", reward.Points)
 	return reward, nil
 }
