@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/internal/errors"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/internal/services"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/util"
 )
@@ -21,17 +22,21 @@ func GetCartHandler(config *util.RouterConfig) http.HandlerFunc {
 		service := services.GetGetCartService()
 
 		// Process the request
-		response := service.ProcessRequest()
-
-		respBytes, err := json.Marshal(response)
+		response, err := service.ProcessRequest()
 		if err != nil {
-			writeResponse(w, http.StatusInternalServerError)
+			http.Error(w, err.ErrorMessage, err.HttpResponseCode)
 			return
 		}
 
-		_, err = w.Write(respBytes)
-		if err != nil {
-			writeResponse(w, http.StatusInternalServerError)
+		respBytes, goErr := json.Marshal(response)
+		if goErr != nil {
+			http.Error(w, errors.InternalError.ErrorMessage, errors.InternalError.HttpResponseCode)
+			return
+		}
+
+		_, goErr = w.Write(respBytes)
+		if goErr != nil {
+			http.Error(w, errors.InternalError.ErrorMessage, errors.InternalError.HttpResponseCode)
 			return
 		}
 	}

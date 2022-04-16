@@ -4,13 +4,13 @@ import (
 	"sync"
 
 	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/internal/dao"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/internal/dao/models"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/internal/errors"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/util"
 )
 
 type GetCartService interface {
-	ValidateRequest() *errors.ServerError
-	ProcessRequest() *errors.ServerError
+	ProcessRequest() (models.Cart, *errors.ServerError)
 }
 
 var getCartServiceStruct GetCartService
@@ -40,10 +40,6 @@ func GetGetCartService() GetCartService {
 	return getCartServiceStruct
 }
 
-func (s *getCartService) ValidateRequest() *errors.ServerError {
-	return nil
-}
-
-func (s *getCartService) ProcessRequest() *errors.ServerError {
-	return nil
+func (s *getCartService) ProcessRequest() (models.Cart, *errors.ServerError) {
+	return s.dao.GetCart("12233")
 }

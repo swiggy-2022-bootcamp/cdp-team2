@@ -1,9 +1,13 @@
 package dao
 
 import (
+	"fmt"
+	"log"
 	"sync"
 
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/config"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/internal/dao/models"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/internal/errors"
@@ -47,5 +51,32 @@ func (dao *dynamoDAO) AddCartItem(product models.Product) *errors.ServerError {
 }
 
 func (dao *dynamoDAO) GetCart(customerId string) (models.Cart, *errors.ServerError) {
-	return models.Cart{}, nil
+	cart := models.Cart{}
+
+	result, err := dao.client.GetItem(&dynamodb.GetItemInput{
+		TableName: aws.String("cart"),
+		Key: map[string]*dynamodb.AttributeValue{
+			"id": {
+				N: aws.String(customerId),
+			},
+		},
+	})
+
+	if err != nil {
+		log.Fatalf("Got error calling GetItem: %s", err)
+	}
+
+	if result.Item == nil {
+		//msg := "Could not find '" + customerId + "'"
+		return cart, nil
+	}
+
+	err = dynamodbattribute.UnmarshalMap(result.Item, &cart)
+	if err != nil {
+		panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
+	}
+
+	fmt.Println(cart)
+
+	return cart, nil
 }
