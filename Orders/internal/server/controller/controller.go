@@ -26,6 +26,18 @@ func BindId(c *gin.Context) {
 	c.Next()
 }
 
+func BindStatus(c *gin.Context) {
+	status := c.Param(literals.StatusKey)
+	fmt.Println(status)
+	if status == "" {
+		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.CatIDNotFound})
+		return
+	}
+
+	c.Set(literals.StatusKey, status)
+	c.Next()
+}
+
 func BindOrder(c *gin.Context) {
 	cat := models.Order{}
 	if err := c.BindJSON(&cat); err != nil {

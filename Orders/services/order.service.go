@@ -19,9 +19,14 @@ func (cs *OrderService) GetByID(id int) (*models.Order, error) {
 	return cs.Dao.GetByID(id)
 }
 
-//func (cs *OrderService) GetAll() ([]models.Order, error) {
-//	return cs.Dao.GetAll()
-//}
+func (cs *OrderService) GetByStatus(status string) ([]models.Order, error) {
+	return cs.Dao.GetByStatus(status)
+}
+
+func (cs *OrderService) GetAll() ([]models.Order, error) {
+	return cs.Dao.GetAll()
+}
+
 //
 func (cs *OrderService) Create(cat models.Order) (*models.Order, error) {
 	return cs.Dao.Create(cat)

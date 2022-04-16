@@ -43,20 +43,24 @@ func getKeyFilter(id int) map[string]*dynamodb.AttributeValue {
 	}
 }
 
+func getKeyFilterStatus(status string) map[string]*dynamodb.AttributeValue {
+	return map[string]*dynamodb.AttributeValue{
+		"status": {
+			S: aws.String(status),
+		},
+	}
+}
+
 func getRandomKey() int {
 	return int(time.Now().Unix() - customEpoch)
 }
 
 func (cd *OrderDao) GetByID(id int) (*models.Order, error) {
 
-	fmt.Println("getById", id, getKeyFilter(id))
-
 	res, err := cd.db.GetItem(&dynamodb.GetItemInput{
 		TableName: ordersTableName(),
 		Key:       getKeyFilter(id),
 	})
-
-	log.Printf("res-id ", id, res)
 
 	if err != nil {
 		log.Printf("Error Fetching Category: %s", err)
@@ -77,31 +81,84 @@ func (cd *OrderDao) GetByID(id int) (*models.Order, error) {
 	return &cat, nil
 }
 
-//func (cd *CategoryDao) GetAll() ([]models.Category, error) {
-//
-//	var results []models.Category
-//
-//	res, err := cd.db.Scan(&dynamodb.ScanInput{
-//		TableName: categoriesTableName(),
-//	})
-//
-//	if err != nil {
-//		log.Printf("Error Fetching Categories %s", err.Error())
-//		return nil, err
-//	}
-//
-//	if res.Items == nil {
-//		return results, errors.New(literals.NoCategoriesFound)
-//	}
-//
-//	err = dynamodbattribute.UnmarshalListOfMaps(res.Items, &results)
-//	if err != nil {
-//		log.Printf("Failed to unmarshal categories, %v", err)
-//		return nil, err
-//	}
-//
-//	return results, nil
-//}
+func (cd *OrderDao) GetByStatus(status string) ([]models.Order, error) {
+
+	//res, err := cd.db.Query(&dynamodb.QueryInput{
+	//	TableName:     ordersTableName(),
+	//	KeyConditionExpression:*("status = :status")
+	//
+	//})
+
+	//keyCond := expression.Key(
+	//	expression.Key("status").Equal(expression.Value("INVOICE#" + invoiceID)),
+	//)
+
+	filt := expression.Name("status").Equal(expression.Value(status))
+
+	expr, err := expression.NewBuilder().
+		WithFilter(filt).
+		Build()
+	if err != nil {
+		return nil, err
+	}
+
+	input := &dynamodb.ScanInput{
+		TableName:                 ordersTableName(),
+		ExpressionAttributeNames:  expr.Names(),
+		ExpressionAttributeValues: expr.Values(),
+		FilterExpression:          expr.Filter(),
+	}
+
+	fmt.Println("here", status, input)
+
+	res, err := cd.db.Scan(input)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var results []models.Order
+
+	if res.Items == nil {
+		return nil, errors.New(literals.CategoryNotFound)
+	}
+
+	fmt.Println(res, "-----------------")
+
+	if err = dynamodbattribute.UnmarshalListOfMaps(res.Items, &results); err != nil {
+		log.Printf("Error unMarshalling Category: %s", err)
+		return nil, err
+	}
+
+	return results, nil
+}
+
+func (cd *OrderDao) GetAll() ([]models.Order, error) {
+
+	var results []models.Order
+
+	res, err := cd.db.Scan(&dynamodb.ScanInput{
+		TableName: ordersTableName(),
+	})
+
+	if err != nil {
+		log.Printf("Error Fetching Categories %s", err.Error())
+		return nil, err
+	}
+
+	if res.Items == nil {
+		return results, errors.New(literals.NoCategoriesFound)
+	}
+
+	err = dynamodbattribute.UnmarshalListOfMaps(res.Items, &results)
+	if err != nil {
+		log.Printf("Failed to unmarshal categories, %v", err)
+		return nil, err
+	}
+
+	return results, nil
+}
+
 //
 func (cd *OrderDao) Create(order models.Order) (*models.Order, error) {
 

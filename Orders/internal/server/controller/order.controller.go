@@ -37,20 +37,30 @@ func (cc *OrderController) GetByID(c *gin.Context) {
 	c.JSON(http.StatusOK, cat)
 }
 
+func (cc *OrderController) GetByStatus(c *gin.Context) {
+	status := c.GetString(literals.StatusKey)
+	cat, err := cc.service.GetByStatus(status)
+	if err != nil {
+		c.AbortWithStatusJSON(api.ServerErr(err))
+		return
+	}
+	c.JSON(http.StatusOK, cat)
+}
+
 // Get All Categories
 // @Summary Get All Categories
 // @Tags Category
 // @Success 200 {array} models.Category
 // @Failure 500 {object} api.ApiResponseWithErr
 // @Router /categories [get]
-//func (cc *CategoryController) GetAll(c *gin.Context) {
-//	res, err := cc.service.GetAll()
-//	if err != nil {
-//		c.AbortWithStatusJSON(api.ServerErr(err))
-//		return
-//	}
-//	c.JSON(http.StatusOK, res)
-//}
+func (cc *OrderController) GetAll(c *gin.Context) {
+	res, err := cc.service.GetAll()
+	if err != nil {
+		c.AbortWithStatusJSON(api.ServerErr(err))
+		return
+	}
+	c.JSON(http.StatusOK, res)
+}
 
 // Create Category
 // @Summary Create new Category, id is auto-assigned based on timestamp.

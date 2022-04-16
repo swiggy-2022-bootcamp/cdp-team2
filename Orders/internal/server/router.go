@@ -16,9 +16,10 @@ func InitRouter() *gin.Engine {
 
 	catGrp := r.Group("/orders")
 	{
-		//catGrp.GET("/", controller.GetAll)
+		catGrp.GET("/", cont.GetAll)
 		catGrp.GET("/:id", controller.BindId, cont.GetByID)
 		catGrp.POST("/", controller.BindOrder, cont.Create)
+		catGrp.GET("/status/:status", controller.BindStatus, cont.GetByStatus)
 		//catGrp.PUT("/:_id", controller.BindId, controller.BindCategory, cont.Update)
 		//catGrp.DELETE("/:_id", controller.BindId, cont.Delete)
 		//catGrp.DELETE("/", controller.DeleteMultiple)
