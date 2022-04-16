@@ -1,3 +1,7 @@
 package literals
 
-var Health_OK = "health OK"
+const (
+	Health_OK    = "health OK"
+	OrderIdKey   = "id"
+	OrderBodyKey = "order"
+)

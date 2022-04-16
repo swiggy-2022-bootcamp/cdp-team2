@@ -23,7 +23,7 @@ import (
 func Start() {
 	router := InitRouter()
 
-	endPoint := fmt.Sprintf(":%s", config.Config["PORT"])
+	endPoint := fmt.Sprintf(":%s", config.Server["PORT"])
 
 	server := &http.Server{
 		Addr:    endPoint,
