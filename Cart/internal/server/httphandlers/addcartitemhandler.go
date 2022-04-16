@@ -1,7 +1,6 @@
 package httphandlers
 
 import (
-	"encoding/json"
 	"net/http"
 
 	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/internal/services"
@@ -22,18 +21,12 @@ func AddCartItemHandler(config *util.RouterConfig) http.HandlerFunc {
 		service := services.GetAddCartItemService()
 
 		// Process the request
-		response := service.ProcessRequest()
-
-		respBytes, err := json.Marshal(response)
+		err := service.ProcessRequest()
 		if err != nil {
-			writeResponse(w, http.StatusInternalServerError)
+			http.Error(w, err.ErrorMessage, err.HttpResponseCode)
 			return
 		}
 
-		_, err = w.Write(respBytes)
-		if err != nil {
-			writeResponse(w, http.StatusInternalServerError)
-			return
-		}
+		w.WriteHeader(http.StatusOK)
 	}
 }
