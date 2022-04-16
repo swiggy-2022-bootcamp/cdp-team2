@@ -15,7 +15,7 @@ type ProductsHandlers struct {
 	ProductsServices ports.IProductsServices
 }
 
-var _ ports.IProdcutsHandlers = (*ProductsHandlers)(nil)
+var _ ports.IProductsHandlers = (*ProductsHandlers)(nil)
 
 func NewHandlers(productsServices ports.IProductsServices) *ProductsHandlers {
 	return &ProductsHandlers{

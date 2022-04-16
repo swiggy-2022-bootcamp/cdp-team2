@@ -15,7 +15,7 @@ import (
 var (
 	err                error
 	productsServer     ports.IServer
-	productsHandlers   ports.IProdcutsHandlers
+	productsHandlers   ports.IProductsHandlers
 	productsServices   ports.IProductsServices
 	productsRepository ports.IProductsRepository
 	dynamodbClient     *dynamodb.DynamoDB

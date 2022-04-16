@@ -12,12 +12,12 @@ import (
 )
 
 type Server struct {
-	Handlers ports.IProdcutsHandlers
+	Handlers ports.IProductsHandlers
 }
 
 var _ ports.IServer = (*Server)(nil)
 
-func NewServer(handlers ports.IProdcutsHandlers) *Server {
+func NewServer(handlers ports.IProductsHandlers) *Server {
 	return &Server{
 		Handlers: handlers,
 	}

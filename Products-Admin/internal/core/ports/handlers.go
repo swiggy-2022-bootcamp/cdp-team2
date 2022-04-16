@@ -2,7 +2,7 @@ package ports
 
 import "github.com/gin-gonic/gin"
 
-type IProdcutsHandlers interface {
+type IProductsHandlers interface {
 	Health(*gin.Context)
 	AddProduct(*gin.Context)
 	UpdateProduct(*gin.Context)
