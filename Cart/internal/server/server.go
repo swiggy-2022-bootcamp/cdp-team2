@@ -46,6 +46,7 @@ func RunServer() error {
 	// Initialize services
 	services.InithHealthCheckService(&routerConfigs)
 	services.InitAddCartItemService(&routerConfigs, dynamodao)
+	services.InitGetCartService(&routerConfigs, dynamodao)
 
 	server := NewServer(webServerConfig)
 	server.Router.InitializeRouter(&routerConfigs)

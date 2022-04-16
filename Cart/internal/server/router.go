@@ -32,4 +32,14 @@ func (r *Router) InitializeRoutes(routerConfig *util.RouterConfig) {
 		httphandlers.HealthCheckHandler(routerConfig)).
 		Methods(http.MethodGet).
 		Name(literals.HealthCheckAPIName)
+
+	s.HandleFunc(literals.GetCartEndpoint,
+		httphandlers.GetCartHandler(routerConfig)).
+		Methods(http.MethodGet).
+		Name(literals.GetCartAPIName)
+
+	s.HandleFunc(literals.AddCartItemEndpoint,
+		httphandlers.AddCartItemHandler(routerConfig)).
+		Methods(http.MethodPost).
+		Name(literals.AddCartAPIName)
 }

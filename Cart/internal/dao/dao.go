@@ -47,6 +47,27 @@ func GetDynamoDAO() DynamoDAO {
 
 // AddProduct add product details to the cart of the user
 func (dao *dynamoDAO) AddCartItem(product models.Product) *errors.ServerError {
+	cart := models.Cart{
+		CustomerId: "133",
+		Products:   []models.Product{product},
+	}
+
+	av, err := dynamodbattribute.MarshalMap(cart)
+	if err != nil {
+		log.Fatalf("Got error marshalling new movie item: %s", err)
+	}
+
+	input := &dynamodb.PutItemInput{
+		Item:      av,
+		TableName: aws.String("cart"),
+	}
+
+	_, err = dao.client.PutItem(input)
+	if err != nil {
+		log.Fatalf("Got error calling PutItem: %s", err)
+	}
+
+	fmt.Println("Successfully, added the item")
 	return nil
 }
 
@@ -56,7 +77,7 @@ func (dao *dynamoDAO) GetCart(customerId string) (models.Cart, *errors.ServerErr
 	result, err := dao.client.GetItem(&dynamodb.GetItemInput{
 		TableName: aws.String("cart"),
 		Key: map[string]*dynamodb.AttributeValue{
-			"id": {
+			"customerId": {
 				N: aws.String(customerId),
 			},
 		},
