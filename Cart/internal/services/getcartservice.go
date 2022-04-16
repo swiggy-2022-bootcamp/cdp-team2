@@ -3,6 +3,7 @@ package services
 import (
 	"sync"
 
+	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/internal/dao"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/internal/errors"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/util"
 )
@@ -17,13 +18,14 @@ var getCartServiceOnce sync.Once
 
 type getCartService struct {
 	config *util.RouterConfig
-	//dao    mongodao.MongoDAO
+	dao    dao.DynamoDAO
 }
 
-func InitGetCartService(config *util.RouterConfig) GetCartService {
+func InitGetCartService(config *util.RouterConfig, dao dao.DynamoDAO) GetCartService {
 	getCartServiceOnce.Do(func() {
 		getCartServiceStruct = &getCartService{
 			config: config,
+			dao:    dao,
 		}
 	})
 

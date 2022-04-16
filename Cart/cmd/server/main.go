@@ -6,7 +6,6 @@ import (
 	"runtime"
 	"strings"
 
-	_ "github.com/swiggy-2022-bootcamp/cdp-team2/cart/cmd/server/docs"
 	_ "github.com/swiggy-2022-bootcamp/cdp-team2/cart/internal/server/httphandlers"
 
 	"github.com/dgrijalva/jwt-go"
