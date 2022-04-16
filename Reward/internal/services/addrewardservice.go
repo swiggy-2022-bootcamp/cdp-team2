@@ -4,11 +4,13 @@ import (
 	"sync"
 
 	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/internal/dao"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/internal/dao/models"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/internal/errors"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/util"
 )
 
 type AddRewardService interface {
-	ProcessRequest()
+	ProcessRequest(reward models.Reward) *errors.ServerError
 }
 
 var addRewardServiceStruct AddRewardService
@@ -38,5 +40,12 @@ func GetAddRewardService() AddRewardService {
 	return addRewardServiceStruct
 }
 
-func (s *addRewardService) ProcessRequest() {
+func (s *addRewardService) ProcessRequest(reward models.Reward) *errors.ServerError {
+
+	err := s.dao.AddReward(reward)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

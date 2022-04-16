@@ -2,6 +2,22 @@ syntax = "proto3";
 
 package rewardpb;
 
+message Reward {
+    string customerId = 1;
+    string description = 2;
+    int32 points = 3;
+}
+
+message RewardRequest {
+    string customerId = 1;
+}
+
+message RewardResponse {
+    Reward reward = 1;
+}
+
+/********* To be refactored ***********/
+
 message Product {
     // product id associated with a particular product
     string productId = 1;
@@ -12,6 +28,7 @@ message Product {
     // count is the total number of product item with same product id in the cart
     int32 count = 4;
 }
+
 
 message CalculateRewardRequest {
     // total price of the current order on which reward is to be calculated
@@ -28,6 +45,9 @@ message CalculateRewardResponse {
 }
 
 service Reward {
+    // Get the total reward currently associated with a customer with given customerId
+    rpc GetReward(RewardRequest) returns (RewardResponse);
+
     // Calculates the final pricing after deducting the reward/points from the total price for the user
     rpc CalculateReward (CalculateRewardRequest) returns (CalculateRewardResponse);
 }
