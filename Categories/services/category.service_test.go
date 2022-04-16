@@ -10,12 +10,6 @@ import (
 	mock_dao "github.com/swiggy-2022-bootcamp/cdp-team2/Categories/mocks/mock_dao"
 )
 
-// func NewCatTestService(ctrl *gomock.Controller) (*CategoryService) {
-// 	return &CategoryService{
-// 		,
-// 	}
-// }
-
 func getDummycat() *models.Category {
 	return &models.Category{1, models.CategoryDesc{"test", "test", "test", "test", "test"}}
 }
