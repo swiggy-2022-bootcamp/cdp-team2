@@ -48,7 +48,6 @@ func (h *ProductsHandlers) GetProducts(gctx *gin.Context) {
 func (h *ProductsHandlers) AddProduct(gctx *gin.Context) {
 	var _product domain.Product
 	if err := gctx.ShouldBindJSON(&_product); err != nil {
-		// gctx.JSON(http.StatusBadRequest, gin.H{"message": "Please provide valid product information."})
 		gctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
