@@ -1,6 +1,7 @@
 syntax = "proto3";
 
-package rewardpb;
+package reward;
+option go_package = "./";
 
 message Reward {
     string customerId = 1;
@@ -32,19 +33,19 @@ message Product {
 
 message CalculateRewardRequest {
     // total price of the current order on which reward is to be calculated
-    float32 totalPrice = 1;
+    int32 totalPrice = 1;
     // array of products with information related to Product
-    repeated Product = 2;
+    repeated Product products = 2;
 }
 
 message CalculateRewardResponse {
     // final price is the total price of the order after deducting the reward/points
-    float32 finalPrice = 1;
+    int32 finalPrice = 1;
     // error represents the error occurred while creating the response
     string error = 2;
 }
 
-service Reward {
+service RewardService {
     // Get the total reward currently associated with a customer with given customerId
     rpc GetReward(RewardRequest) returns (RewardResponse);
 
