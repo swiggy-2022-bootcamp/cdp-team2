@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package ProductsProto;
+
+option go_package = "https://github.com/swiggy-2022-bootcamp/cdp-team2/Protos/ProductsProto;ProductsProto";
+
+message ProductDescription {
+    int64 LanguageID = 1;
+    string Name = 2;
+    string Description = 3;
+    string MetaTitle = 4;
+    string MetaDescriptio = 5;
+    string MetaKeyword = 6;
+    string Tag = 7;
+}
+
+message ProductSeoUrl {
+    string Keyword = 1;
+    int64 LanguageID = 2;
+    int64 StoreID = 3;
+}
+
+message Product {
+    int64 ID = 1;
+    string Model = 2;
+    int64 Quantity = 3;
+    string Price = 4;
+    int64 ManufacturerID = 5;
+    string Sku = 6;
+    ProductSeoUrl ProductSeoUrl = 7;
+    int64 Points = 8;
+    int64 Rewards = 9;
+    string Image = 10;
+    int64 ShippingID = 11;
+    int64 Weight = 12;
+    int64 Langth = 13;
+    int64 Width = 14;
+    int64 Height = 15;
+    int64 Minimum = 16;
+    repeated int64 ProductRelated = 17;
+    repeated ProductDescription ProductDescription = 18;
+    repeated int64 ProductCategory = 19;
+}
+
+message ProductsResponse {
+    repeated Product Products = 1;
+}
+
+message EmptyRequest {
+
+}
+
+message CategoryIDRequest {
+    int64 categoryID = 1;
+}
+
+message BoolResponse {
+    bool exists = 1;
+}
+
+service ProductsServices {
+    rpc GetAvailableProducts(EmptyRequest) returns (ProductsResponse);
+    rpc CheckProductsWithCategory(CategoryIDRequest) returns (BoolResponse);
+}
