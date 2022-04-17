@@ -10,6 +10,7 @@ import (
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/repository/adaptor"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/repository/instance"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/server"
+	"google.golang.org/grpc"
 )
 
 var (
@@ -19,6 +20,7 @@ var (
 	productsServices   ports.IProductsServices
 	productsRepository ports.IProductsRepository
 	dynamodbClient     *dynamodb.DynamoDB
+	gRPCServer         *grpc.Server
 )
 
 func init() {
