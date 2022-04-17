@@ -17,6 +17,7 @@ import (
 type DynamoDAO interface {
 	AddCartItem(product models.Product) *errors.ServerError
 	GetCart(customerId string) (models.Cart, *errors.ServerError)
+	DeleteCartItem(customerId string, productId string) *errors.ServerError
 }
 
 type dynamoDAO struct {
@@ -56,27 +57,91 @@ func (dao *dynamoDAO) AddCartItem(product models.Product) *errors.ServerError {
 
 	cart.Products = append(cart.Products, product)
 
-	av, goErr := dynamodbattribute.MarshalMap(cart)
-	if goErr != nil {
-		log.WithError(goErr).Error("an error occurred while marshalling reward to dynamo attribute")
-		return &errors.MarshalToAttributesError
-	}
-
-	input := &dynamodb.PutItemInput{
-		Item:      av,
-		TableName: aws.String("cart"),
-	}
-
-	_, goErr = dao.client.PutItem(input)
-	if goErr != nil {
-		log.WithField("Error: ", goErr).Error("got error while calling GetItem API of dynamo db")
-		return &errors.DatabaseQueryFailed
+	err = dao.addCartDetails(cart)
+	if err != nil {
+		log.Error("an error occurred while adding the cart item")
+		return err
 	}
 
 	log.Info("successfully added the cart item to the customer")
 	return nil
 }
 
+// DeleteCartItem deletes the cart item with given productId for the given customer using customerId
+func (dao *dynamoDAO) DeleteCartItem(customerId string, productId string) *errors.ServerError {
+	cart, err := dao.GetCart(customerId)
+	if err != nil {
+		log.Error("cart not found for customer")
+		return &errors.CartEmptyError
+	}
+
+	products := cart.Products
+	deleteItemIdx, err := dao.getItemIndex(products, productId)
+	if err != nil {
+		log.Error("product with given product ID: ", productId, "does not exist in cart")
+		return nil
+	}
+
+	products[deleteItemIdx] = products[len(products)-1]
+
+	cart.Products = products
+
+	err = dao.addCartDetails(cart)
+	if err != nil {
+		log.Error("an error occurred while deleting the cart item")
+		return err
+	}
+
+	log.Info("successfully deleted the cart item from cart for customer ", customerId)
+	return nil
+}
+
+// UpdateCartItem updates the cart item quantity using productId for the given customer
+func (dao *dynamoDAO) UpdateCartItem(customerId string, productId string, newQuantity int32) *errors.ServerError {
+	cart, err := dao.GetCart(customerId)
+	if err != nil {
+		log.Error("cart not found for customer")
+		return &errors.CartEmptyError
+	}
+
+	updateItemIdx, err := dao.getItemIndex(cart.Products, productId)
+	if err != nil {
+		log.Error("product with given product ID: ", productId, "does not exist in cart")
+		return nil
+	}
+
+	cart.Products[updateItemIdx].Quantity = newQuantity
+	err = dao.addCartDetails(cart)
+	if err != nil {
+		log.Error("an error occurred while updating the cart item count for customer: ", customerId)
+		return err
+	}
+
+	return nil
+}
+
+// EmptyCart deletes the cart for the customer using customerId
+func (dao *dynamoDAO) EmptyCart(customerId string) *errors.ServerError {
+	input := &dynamodb.DeleteItemInput{
+		Key: map[string]*dynamodb.AttributeValue{
+			"customerId": {
+				S: aws.String(customerId),
+			},
+		},
+		TableName: aws.String("cart"),
+	}
+
+	_, err := dao.client.DeleteItem(input)
+	if err != nil {
+		log.WithError(err).Error("an error occurred while deleting the cart for the customer: ", customerId)
+		return &errors.EmptyCartFailedError
+	}
+
+	log.Info("successfully delete the cart for the customer: ", customerId)
+	return nil
+}
+
+// GetCart fetches all the cart details for the given customer id
 func (dao *dynamoDAO) GetCart(customerId string) (models.Cart, *errors.ServerError) {
 	cart := models.Cart{}
 
@@ -108,6 +173,37 @@ func (dao *dynamoDAO) GetCart(customerId string) (models.Cart, *errors.ServerErr
 
 	fmt.Println(cart)
 
-	log.Info("Successfully got the cart for the customer: ", customerId)
+	log.Info("successfully got the cart for the customer: ", customerId)
 	return cart, nil
+}
+
+func (dao *dynamoDAO) getItemIndex(products []models.Product, productId string) (int, *errors.ServerError) {
+	for idx, product := range products {
+		if product.ProductId == productId {
+			return idx, nil
+		}
+	}
+
+	return -1, &errors.ProductNotFoundInCart
+}
+
+func (dao *dynamoDAO) addCartDetails(cart models.Cart) *errors.ServerError {
+	av, goErr := dynamodbattribute.MarshalMap(cart)
+	if goErr != nil {
+		log.WithError(goErr).Error("an error occurred while marshalling reward to dynamo attribute")
+		return &errors.MarshalToAttributesError
+	}
+
+	input := &dynamodb.PutItemInput{
+		Item:      av,
+		TableName: aws.String("cart"),
+	}
+
+	_, goErr = dao.client.PutItem(input)
+	if goErr != nil {
+		log.WithField("Error: ", goErr).Error("got error while calling GetItem API of dynamo db")
+		return &errors.DatabaseQueryFailed
+	}
+
+	return nil
 }
