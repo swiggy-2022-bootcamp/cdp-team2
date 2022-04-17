@@ -3,6 +3,7 @@ package httphandlers
 import (
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/internal/services"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/util"
 )
@@ -17,14 +18,16 @@ import (
 // @Router /cart/{key} [delete]
 func DeleteCartItemHandler(config *util.RouterConfig) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
+		params := mux.Vars(req)
+		productId := params["key"]
 
 		service := services.GetDeleteCartItemService()
 
 		// Process the request
-		err := service.ProcessRequest()
+		err := service.ProcessRequest("123", productId)
 		if err != nil {
 			http.Error(w, err.ErrorMessage, err.HttpResponseCode)
-			return
+
 		}
 
 		w.WriteHeader(http.StatusOK)
