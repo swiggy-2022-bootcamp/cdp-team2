@@ -6,7 +6,9 @@ import (
 
 	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/config"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/internal/dao"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/internal/server/grpchandlers"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/internal/services"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/protos"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/util"
 	"google.golang.org/grpc"
 
@@ -71,7 +73,7 @@ func startGrpcServer() {
 	}
 
 	grpcServer := grpc.NewServer()
-
+	protos.RegisterRewardServiceServer(grpcServer, &grpchandlers.Server{})
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %s", err)
 	}

@@ -10,3 +10,7 @@ func (s *Server) RedeemReward(ctx context.Context, reward *pb.CalculateRewardReq
 
 	return nil, nil
 }
+
+func (s *Server) CalculateReward(ctx context.Context, reward *pb.CalculateRewardRequest) (*pb.CalculateRewardResponse, error) {
+	return nil, nil
+}

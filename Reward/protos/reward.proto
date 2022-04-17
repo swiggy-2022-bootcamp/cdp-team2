@@ -1,7 +1,6 @@
 syntax = "proto3";
 
-package reward;
-option go_package = "./";
+option go_package = "./;protos";
 
 message Reward {
     string customerId = 1;
