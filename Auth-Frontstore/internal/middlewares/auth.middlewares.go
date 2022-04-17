@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -39,7 +38,6 @@ func (h *MiddlewaresImpl) CheckBasicAuthMiddleware(c *gin.Context) {
 			return
 		} else {
 			c.Set("User", ok.ID)
-			c.Set("Role", ok.Role)
 			c.Next()
 		}
 	} else {
@@ -71,13 +69,12 @@ func (h *MiddlewaresImpl) CheckAuthMiddleware(c *gin.Context) {
 				c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Error while getting User Id"})
 				return
 			}
-			fmt.Println(id, access_token)
-			if err := usersrv.New().FetchUser(&bson.M{"_id": id, "tokens": access_token}, user); err != nil {
+			//	fmt.Println(id, access_token)
+			if err := usersrv.New().FetchUser(&bson.M{"customerId": id, "tokens": access_token}, user); err != nil {
 				c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "Token Invalid"})
 				return
 			} else {
 				c.Set("User", ok.ID)
-				c.Set("Role", ok.Role)
 				c.Next()
 			}
 		}

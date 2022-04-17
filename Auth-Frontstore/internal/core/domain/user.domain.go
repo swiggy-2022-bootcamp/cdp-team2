@@ -5,7 +5,8 @@ import (
 )
 
 type User struct {
-	ID     primitive.ObjectID `bson:"_id",omitempty`
-	Role   string             `bson:"role"`
-	Tokens []string           `bson:"tokens"`
+	ID         primitive.ObjectID `bson:"_id",omitempty`
+	CustomerId primitive.ObjectID `bson:"customerId",omitempty`
+	Role       string             `bson:"role"`
+	Tokens     []string           `bson:"tokens"`
 }

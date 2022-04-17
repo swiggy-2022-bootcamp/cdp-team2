@@ -1,6 +1,7 @@
 package authsrv
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -23,10 +24,6 @@ type SignUpBody struct {
 	Role     string `json:"role"`
 }
 
-func VerifyCustomerCredentials(email string, password string) bool {
-	return true
-}
-
 func Login(c *gin.Context) (int, gin.H, error) {
 
 	body := LoginBody{}
@@ -35,11 +32,20 @@ func Login(c *gin.Context) (int, gin.H, error) {
 		return http.StatusBadRequest, nil, err
 	}
 
-	user := &domain.User{}
-
-	isCorrectCredentials := usersrv.New().VerifyCustomerCredentials(body.Username, body.Password)
+	isCorrectCredentials, customerId := usersrv.New().VerifyCustomerCredentials(body.Username, body.Password)
 	if !isCorrectCredentials {
 		return http.StatusNotFound, gin.H{"message": "User Not found"}, nil
+	}
+
+	id, err := primitive.ObjectIDFromHex(customerId)
+	if err != nil {
+		return http.StatusInternalServerError, gin.H{"message": "Error while getting User Id"}, nil
+	}
+
+	user := &domain.User{
+		CustomerId: id,
+		Role:       "Customer",
+		ID:         primitive.NewObjectID(),
 	}
 
 	token, err := repo.JWTManager.GenerateBasicToken(user)
@@ -52,21 +58,23 @@ func Login(c *gin.Context) (int, gin.H, error) {
 
 func OAuth(c *gin.Context) (int, gin.H, error) {
 	userService := usersrv.New()
-	user := &domain.User{}
+
 	id, err := primitive.ObjectIDFromHex(c.GetString("User"))
 	if err != nil {
 		return http.StatusInternalServerError, gin.H{"message": "Error while getting User Id"}, nil
 	}
-	if err := userService.FetchUser(&bson.M{"_id": id}, user); err != nil {
-		return http.StatusNotFound, gin.H{"message": "User Not found"}, nil
+	user := &domain.User{
+		CustomerId: id,
+		Role:       "Customer",
 	}
-
+	//	fmt.Println("Id in OAuth", id)
 	token, err := repo.JWTManager.Generate(user)
 	if err != nil {
 		return http.StatusInternalServerError, gin.H{"message": "Error while creating token"}, nil
 	}
 
-	if err := userService.UpdateUser(&bson.M{"_id": user.ID}, &bson.M{"$push": bson.M{"tokens": token}}); err != nil {
+	if err := userService.UpdateUser(&bson.M{"customerId": user.CustomerId}, &bson.M{"$push": bson.M{"tokens": token}}, id); err != nil {
+		fmt.Println(err)
 		return http.StatusNotFound, gin.H{"message": "Unable To Push Token"}, nil
 	}
 
@@ -82,7 +90,7 @@ func Logout(c *gin.Context) (int, gin.H, error) {
 		return http.StatusInternalServerError, gin.H{"message": "Error while getting User Id"}, nil
 	}
 
-	if err := userService.UpdateUser(&bson.M{"_id": id}, &bson.M{"$pull": bson.M{"tokens": token}}); err != nil {
+	if err := userService.UpdateUser(&bson.M{"customerId": id}, &bson.M{"$pull": bson.M{"tokens": token}}, id); err != nil {
 		return http.StatusNotFound, gin.H{"message": "Unable To Push Token"}, nil
 	}
 

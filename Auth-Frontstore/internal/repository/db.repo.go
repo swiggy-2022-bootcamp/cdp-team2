@@ -25,12 +25,11 @@ func ConnectDB() *DataBaseRepository {
 		log.Fatal(err)
 	}
 	fmt.Println("Connecting to MonogDB")
-	if db == nil {
-		db = &DataBaseRepository{
-			DataStore: client.Database("swiggy"),
-			Context:   &ctx,
-			Client:    client,
-		}
+	db = &DataBaseRepository{
+		DataStore: client.Database("swiggy"),
+		Context:   &ctx,
+		Client:    client,
 	}
+
 	return db
 }

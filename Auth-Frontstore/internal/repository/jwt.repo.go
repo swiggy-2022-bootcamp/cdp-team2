@@ -20,9 +20,7 @@ type jwtManager struct {
 
 type userClaims struct {
 	jwt.StandardClaims
-	Username string `json:"username"`
-	Role     string `json:"role"`
-	ID       string `json:"_id"`
+	ID string `json:"_id"`
 }
 
 var JWTManager *jwtManager
@@ -49,8 +47,7 @@ func (manager *jwtManager) GenerateBasicToken(user *domain.User) (string, error)
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(manager.tokenDuration).Unix(),
 		},
-		Role: user.Role,
-		ID:   user.ID.Hex(),
+		ID: user.CustomerId.Hex(),
 	}
 
 	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(manager.secretKey))
@@ -63,8 +60,7 @@ func (manager *jwtManager) GenerateBasicToken(user *domain.User) (string, error)
 
 func (manager *jwtManager) Generate(user *domain.User) (string, error) {
 	claims := userClaims{
-		Role: user.Role,
-		ID:   user.ID.Hex(),
+		ID: user.CustomerId.Hex(),
 	}
 	key, err := jwt.ParseRSAPrivateKeyFromPEM(manager.privateKey)
 	if err != nil {
@@ -74,6 +70,8 @@ func (manager *jwtManager) Generate(user *domain.User) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("create: sign token: %w", err)
 	}
+
+	//	fmt.Println("Genrate CLaims", claims.ID)
 
 	return token, nil
 
@@ -101,6 +99,7 @@ func (manager *jwtManager) VerifyBasicToken(accessToken string) (*userClaims, er
 		return nil, fmt.Errorf("invalid token claims")
 	}
 
+	//	fmt.Println("Verify Basic Token", claims.ID)
 	return claims, nil
 }
 
@@ -131,6 +130,8 @@ func (manager *jwtManager) Verify(accessToken string) (*userClaims, error) {
 	if !ok {
 		return nil, fmt.Errorf("invalid token claims")
 	}
+
+	//	fmt.Println("Claims", claims.ID)
 
 	return claims, nil
 }
