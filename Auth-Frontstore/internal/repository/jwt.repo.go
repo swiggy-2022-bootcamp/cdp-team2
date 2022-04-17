@@ -6,8 +6,8 @@ import (
 	"log"
 	"time"
 
-	config "github.com/auth-admin-service/config"
-	domain "github.com/auth-admin-service/internal/core/domain"
+	config "github.com/auth-frontstore-service/config"
+	domain "github.com/auth-frontstore-service/internal/core/domain"
 	"github.com/golang-jwt/jwt"
 )
 
@@ -49,9 +49,8 @@ func (manager *jwtManager) GenerateBasicToken(user *domain.User) (string, error)
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(manager.tokenDuration).Unix(),
 		},
-		Username: user.Username,
-		Role:     user.Role,
-		ID:       user.ID.Hex(),
+		Role: user.Role,
+		ID:   user.ID.Hex(),
 	}
 
 	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(manager.secretKey))
@@ -64,9 +63,8 @@ func (manager *jwtManager) GenerateBasicToken(user *domain.User) (string, error)
 
 func (manager *jwtManager) Generate(user *domain.User) (string, error) {
 	claims := userClaims{
-		Username: user.Username,
-		Role:     user.Role,
-		ID:       user.ID.Hex(),
+		Role: user.Role,
+		ID:   user.ID.Hex(),
 	}
 	key, err := jwt.ParseRSAPrivateKeyFromPEM(manager.privateKey)
 	if err != nil {

@@ -5,14 +5,7 @@ import (
 )
 
 type User struct {
-	ID             primitive.ObjectID `bson:"_id",omitempty`
-	Username       string             `bson:"username"`
-	HashedPassword string             `bson:"password"`
-	Role           string             `bson:"role"`
-	Tokens         []string           `bson:"tokens"`
-}
-
-type UserPublic struct {
-	ID       primitive.ObjectID `bson:"_id",omitempty`
-	Username string             `bson:"username"`
+	ID     primitive.ObjectID `bson:"_id",omitempty`
+	Role   string             `bson:"role"`
+	Tokens []string           `bson:"tokens"`
 }

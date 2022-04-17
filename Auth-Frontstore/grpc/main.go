@@ -1,4 +1,4 @@
-package server
+package main
 
 import (
 	"fmt"
@@ -7,12 +7,12 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/auth-admin-service/internal/handlers"
-	"github.com/auth-admin-service/protos/authpb"
+	"github.com/auth-frontstore-service/internal/handlers"
+	"github.com/auth-frontstore-service/protos/authpb"
 	"google.golang.org/grpc"
 )
 
-func (server *Server) InitializeGrpcServer() {
+func main() {
 
 	lis, err := net.Listen("tcp", "0.0.0.0:50051")
 	if err != nil {

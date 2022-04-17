@@ -3,10 +3,10 @@ package handlers
 import (
 	"context"
 
-	"github.com/auth-admin-service/internal/core/domain"
-	"github.com/auth-admin-service/internal/core/services/usersrv"
-	repo "github.com/auth-admin-service/internal/repository"
-	"github.com/auth-admin-service/protos/authpb"
+	"github.com/auth-frontstore-service/internal/core/domain"
+	"github.com/auth-frontstore-service/internal/core/services/usersrv"
+	repo "github.com/auth-frontstore-service/internal/repository"
+	"github.com/auth-frontstore-service/protos/authpb"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"google.golang.org/grpc/codes"

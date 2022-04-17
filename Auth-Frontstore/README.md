@@ -21,6 +21,8 @@
 
 # Start the CMD server
 > go run cmd/main.go
+# Start the GRPC server
+> go run grpc/main.go
 ```
 
 #### Swagger Docs

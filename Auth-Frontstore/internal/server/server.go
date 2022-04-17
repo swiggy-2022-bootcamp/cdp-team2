@@ -3,9 +3,9 @@ package server
 import (
 	"log"
 
-	"github.com/auth-admin-service/config"
-	_ "github.com/auth-admin-service/docs"
-	"github.com/auth-admin-service/internal/core/ports"
+	"github.com/auth-frontstore-service/config"
+	_ "github.com/auth-frontstore-service/docs"
+	"github.com/auth-frontstore-service/internal/core/ports"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -42,7 +42,7 @@ func (s *Server) Initialize() {
 
 	adminAuthRoutes := server.Group("/auth/")
 	adminAuthRoutes.POST("/login", s.Handlers.Login)
-	adminAuthRoutes.POST("/oAuth", s.Middlewares.CheckBasicAuthMiddleware, s.Middlewares.CheckAdminRole, s.Handlers.OAuth)
+	adminAuthRoutes.POST("/oAuth", s.Middlewares.CheckBasicAuthMiddleware, s.Handlers.OAuth)
 	adminAuthRoutes.GET("/logout", s.Middlewares.CheckAuthMiddleware, s.Handlers.Logout)
 	adminAuthRoutes.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	adminAuthRoutes.GET("/", s.Handlers.Health)

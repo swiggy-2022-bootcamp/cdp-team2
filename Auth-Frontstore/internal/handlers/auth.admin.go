@@ -3,8 +3,8 @@ package handlers
 import (
 	"net/http"
 
-	authsrv "github.com/auth-admin-service/internal/core/services/authsrv"
-	"github.com/auth-admin-service/internal/literals"
+	authsrv "github.com/auth-frontstore-service/internal/core/services/authsrv"
+	"github.com/auth-frontstore-service/internal/literals"
 	"github.com/gin-gonic/gin"
 )
 

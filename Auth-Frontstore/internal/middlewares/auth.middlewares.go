@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/auth-admin-service/internal/core/domain"
-	usersrv "github.com/auth-admin-service/internal/core/services/usersrv"
-	repo "github.com/auth-admin-service/internal/repository"
+	"github.com/auth-frontstore-service/internal/core/domain"
+	usersrv "github.com/auth-frontstore-service/internal/core/services/usersrv"
+	repo "github.com/auth-frontstore-service/internal/repository"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"

@@ -1,15 +1,12 @@
 package authsrv
 
 import (
-	"context"
-	"fmt"
 	"net/http"
 	"strings"
-	"time"
 
-	domain "github.com/auth-admin-service/internal/core/domain"
-	usersrv "github.com/auth-admin-service/internal/core/services/usersrv"
-	repo "github.com/auth-admin-service/internal/repository"
+	domain "github.com/auth-frontstore-service/internal/core/domain"
+	usersrv "github.com/auth-frontstore-service/internal/core/services/usersrv"
+	repo "github.com/auth-frontstore-service/internal/repository"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -26,6 +23,10 @@ type SignUpBody struct {
 	Role     string `json:"role"`
 }
 
+func VerifyCustomerCredentials(email string, password string) bool {
+	return true
+}
+
 func Login(c *gin.Context) (int, gin.H, error) {
 
 	body := LoginBody{}
@@ -35,13 +36,10 @@ func Login(c *gin.Context) (int, gin.H, error) {
 	}
 
 	user := &domain.User{}
-	userService := usersrv.New()
-	if err := userService.FetchUser(&bson.M{"username": body.Username}, user); err != nil {
-		return http.StatusNotFound, gin.H{"message": "User Not found"}, nil
-	}
 
-	if user == nil || !userService.IsCorrectPassword(user, body.Password) {
-		return http.StatusNotFound, gin.H{"message": "Password Incorrect"}, nil
+	isCorrectCredentials := usersrv.New().VerifyCustomerCredentials(body.Username, body.Password)
+	if !isCorrectCredentials {
+		return http.StatusNotFound, gin.H{"message": "User Not found"}, nil
 	}
 
 	token, err := repo.JWTManager.GenerateBasicToken(user)
@@ -50,40 +48,6 @@ func Login(c *gin.Context) (int, gin.H, error) {
 	}
 
 	return http.StatusOK, gin.H{"token": token}, nil
-}
-
-func Signup(c *gin.Context) {
-
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	body := SignUpBody{}
-
-	if err := c.BindJSON(&body); err != nil {
-		c.AbortWithError(http.StatusBadRequest, err)
-		return
-	}
-
-	db := repo.ConnectDB().DataStore
-	userService := usersrv.New()
-	user, err := userService.NewUser(body.Username, body.Password, body.Role)
-	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
-		return
-	}
-
-	res, err := db.Collection("user").InsertOne(ctx, user)
-	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
-		return
-	}
-
-	oid, ok := res.InsertedID.(primitive.ObjectID)
-	if !ok {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": fmt.Sprintf("can not convert to oid %v", err)})
-	}
-
-	c.IndentedJSON(http.StatusOK, gin.H{"username": body.Username, "Id": oid.Hex()})
 }
 
 func OAuth(c *gin.Context) (int, gin.H, error) {

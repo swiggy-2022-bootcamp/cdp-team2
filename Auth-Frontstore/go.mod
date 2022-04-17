@@ -1,4 +1,4 @@
-module github.com/auth-admin-service
+module github.com/auth-frontstore-service
 
 go 1.17
 
