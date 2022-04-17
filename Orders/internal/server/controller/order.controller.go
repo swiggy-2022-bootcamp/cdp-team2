@@ -88,19 +88,19 @@ func (cc *OrderController) Create(c *gin.Context) {
 // @Success 200 {object} models.Category
 // @Failure 500 {object} api.ApiResponseWithErr
 // @Router /categories/{_id} [put]
-//func (cc *CategoryController) Update(c *gin.Context) {
-//
-//	id := c.GetInt(literals.CatIdKey)
-//	nc, _ := c.Get(literals.CatBodyKey)
-//	newCat := nc.(models.Category)
-//
-//	saved, err := cc.service.UpdateByID(id, newCat)
-//	if err != nil {
-//		c.AbortWithStatusJSON(api.ServerErr(err))
-//		return
-//	}
-//	c.JSON(http.StatusOK, saved)
-//}
+func (cc *OrderController) Update(c *gin.Context) {
+
+	id := c.GetInt(literals.OrderIdKey)
+	nc, _ := c.Get(literals.OrderBodyKey)
+	newCat := nc.(models.Order)
+
+	saved, err := cc.service.UpdateByID(id, newCat)
+	if err != nil {
+		c.AbortWithStatusJSON(api.ServerErr(err))
+		return
+	}
+	c.JSON(http.StatusOK, saved)
+}
 
 // Delete Category By ID
 // @Summary Delete Single Category By Id

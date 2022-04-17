@@ -20,7 +20,7 @@ func InitRouter() *gin.Engine {
 		catGrp.GET("/:id", controller.BindId, cont.GetByID)
 		catGrp.POST("/", controller.BindOrder, cont.Create)
 		catGrp.GET("/status/:status", controller.BindStatus, cont.GetByStatus)
-		//catGrp.PUT("/:_id", controller.BindId, controller.BindCategory, cont.Update)
+		catGrp.PUT("/:id", controller.BindId, controller.BindOrder, cont.Update)
 		//catGrp.DELETE("/:_id", controller.BindId, cont.Delete)
 		//catGrp.DELETE("/", controller.DeleteMultiple)
 	}

@@ -33,10 +33,10 @@ func (cs *OrderService) Create(cat models.Order) (*models.Order, error) {
 }
 
 //
-//func (cs *OrderService) UpdateByID(id int, cat models.Order) (*models.Order, error) {
-//	return cs.Dao.UpdateByID(id, cat)
-//}
-//
+func (cs *OrderService) UpdateByID(id int, cat models.Order) (*models.Order, error) {
+	return cs.Dao.UpdateByID(id, cat)
+}
+
 //func (cs *OrderService) DeleteByID(id int) error {
 //	return cs.Dao.DeleteByID(id)
 //}

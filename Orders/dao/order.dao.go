@@ -203,44 +203,45 @@ func (cd *OrderDao) Create(order models.Order) (*models.Order, error) {
 	return &savedCat, nil
 }
 
-//func (cd *CategoryDao) UpdateByID(id int, cat models.Category) (*models.Category, error) {
-//
-//	toUpd, err := getCategoryUpdExp(cat)
-//
-//	if err != nil {
-//		log.Printf("error while creating expression %s", err)
-//		return nil, err
-//	}
-//
-//	updItemIn := dynamodb.UpdateItemInput{
-//		TableName:                 categoriesTableName(),
-//		Key:                       getKeyFilter(id),
-//		ExpressionAttributeNames:  toUpd.Names(),
-//		ExpressionAttributeValues: toUpd.Values(),
-//		UpdateExpression:          toUpd.Update(),
-//		ReturnValues:              aws.String("ALL_NEW"),
-//		ConditionExpression:       toUpd.Condition(),
-//	}
-//
-//	log.Printf("update item input : %+v", updItemIn)
-//
-//	resp, err := cd.db.UpdateItem(&updItemIn)
-//
-//	if err != nil {
-//		log.Printf("error while updating cateogories %s", err.Error())
-//		return nil, err
-//	}
-//
-//	log.Printf("category update resp %v", resp)
-//
-//	updatedAttributes := models.Category{}
-//	if err = dynamodbattribute.UnmarshalMap(resp.Attributes, &updatedAttributes); err != nil {
-//		log.Printf("error while updating cateogories %s", err.Error())
-//		return nil, err
-//	}
-//
-//	return &updatedAttributes, nil
-//}
+func (cd *OrderDao) UpdateByID(id int, cat models.Order) (*models.Order, error) {
+
+	toUpd, err := getOrderUpdExp(cat)
+
+	if err != nil {
+		log.Printf("error while creating expression %s", err)
+		return nil, err
+	}
+
+	updItemIn := dynamodb.UpdateItemInput{
+		TableName:                 ordersTableName(),
+		Key:                       getKeyFilter(id),
+		ExpressionAttributeNames:  toUpd.Names(),
+		ExpressionAttributeValues: toUpd.Values(),
+		UpdateExpression:          toUpd.Update(),
+		ReturnValues:              aws.String("ALL_NEW"),
+		ConditionExpression:       toUpd.Condition(),
+	}
+
+	log.Printf("update item input : %+v", updItemIn)
+
+	resp, err := cd.db.UpdateItem(&updItemIn)
+
+	if err != nil {
+		log.Printf("error while updating cateogories %s", err.Error())
+		return nil, err
+	}
+
+	log.Printf("category update resp %v", resp)
+
+	updatedAttributes := models.Order{}
+	if err = dynamodbattribute.UnmarshalMap(resp.Attributes, &updatedAttributes); err != nil {
+		log.Printf("error while updating cateogories %s", err.Error())
+		return nil, err
+	}
+
+	return &updatedAttributes, nil
+}
+
 //
 //func (cd *CategoryDao) DeleteByID(id int) error {
 //
@@ -260,41 +261,29 @@ func (cd *OrderDao) Create(order models.Order) (*models.Order, error) {
 //
 ////getCategoryUpdExp creates a Expression from CategoryUpdateInput
 ////this iterates through all fields
-//func getCategoryUpdExp(cat models.Category) (expression.Expression, error) {
-//	var updateExp expression.UpdateBuilder
-//
-//	desc := cat.CategoryDesc
-//	// descPrefix := "category_description."
-//	//category description
-//	if desc.Name != "" {
-//		updateExp = updateExp.Set(expression.Name("category_description.name"), expression.Value(desc.Name))
-//	}
-//
-//	if desc.Description != "" {
-//		updateExp = updateExp.Set(expression.Name("category_description.description"), expression.Value(desc.Description))
-//	}
-//
-//	if desc.MetaDescription != "" {
-//		updateExp = updateExp.Set(expression.Name("category_description.meta_description"), expression.Value(desc.MetaDescription))
-//	}
-//
-//	if desc.MetaKeyword != "" {
-//		updateExp = updateExp.Set(expression.Name("category_description.meta_keyword"), expression.Value(desc.MetaKeyword))
-//	}
-//
-//	if desc.MetaTitle != "" {
-//		updateExp = updateExp.Set(expression.Name("category_description.meta_title"), expression.Value(desc.MetaTitle))
-//	}
-//
-//	log.Printf("category update expression %+v", updateExp)
-//	exp, err := expression.
-//		NewBuilder().
-//		WithCondition(expression.AttributeExists(expression.Name("category_id"))).
-//		WithUpdate(updateExp).
-//		Build()
-//
-//	// log.Printf("%+v", exp.Names())
-//	// log.Println(exp.Values())
-//	// log.Println(*exp.Update())
-//	return exp, err
-//}
+func getOrderUpdExp(cat models.Order) (expression.Expression, error) {
+	var updateExp expression.UpdateBuilder
+
+	desc := cat.ProductDesc
+	// descPrefix := "category_description."
+	//category description
+	if len(desc) != 0 {
+		updateExp = updateExp.Set(expression.Name("productDesc"), expression.Value(desc))
+	}
+
+	if cat.Status != "" {
+		updateExp = updateExp.Set(expression.Name("status"), expression.Value(cat.Status))
+	}
+
+	log.Printf("order update expression %+v", updateExp)
+	exp, err := expression.
+		NewBuilder().
+		WithCondition(expression.AttributeExists(expression.Name("orderId"))).
+		WithUpdate(updateExp).
+		Build()
+
+	// log.Printf("%+v", exp.Names())
+	// log.Println(exp.Values())
+	// log.Println(*exp.Update())
+	return exp, err
+}
