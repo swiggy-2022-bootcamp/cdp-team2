@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package products;
+package protos;
 
-option go_package = "github.com/swiggy-2022-bootcamp/cdp-team2/common/protos/products";
+option go_package = "github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/pkg/protos";
 
 message ProductDescription {
     int64 LanguageID = 1;
@@ -33,7 +33,7 @@ message Product {
     string Image = 10;
     int64 ShippingID = 11;
     int64 Weight = 12;
-    int64 Langth = 13;
+    int64 Length = 13;
     int64 Width = 14;
     int64 Height = 15;
     int64 Minimum = 16;
@@ -55,10 +55,15 @@ message CategoryIDRequest {
 }
 
 message BoolResponse {
-    bool exists = 1;
+    bool Exists = 1;
+}
+
+message ProductIDRequest {
+    int64 ProductID = 1;
 }
 
 service ProductsServices {
     rpc GetAvailableProducts(EmptyRequest) returns (ProductsResponse);
     rpc CheckProductsWithCategory(CategoryIDRequest) returns (BoolResponse);
+    rpc IsProductExists(ProductIDRequest) returns (BoolResponse);
 }
