@@ -109,7 +109,43 @@ func (cd *OrderDao) GetByStatus(status string) ([]models.Order, error) {
 		FilterExpression:          expr.Filter(),
 	}
 
-	fmt.Println("here", status, input)
+	res, err := cd.db.Scan(input)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var results []models.Order
+
+	if len(res.Items) == 0 {
+		return nil, errors.New(literals.OrderNotFound)
+	}
+
+	if err = dynamodbattribute.UnmarshalListOfMaps(res.Items, &results); err != nil {
+		log.Printf("Error unMarshalling Category: %s", err)
+		return nil, err
+	}
+
+	return results, nil
+}
+
+func (cd *OrderDao) GetByCustomerId(customerId int) ([]models.Order, error) {
+
+	filt := expression.Name("customerId").Equal(expression.Value(customerId))
+
+	expr, err := expression.NewBuilder().
+		WithFilter(filt).
+		Build()
+	if err != nil {
+		return nil, err
+	}
+
+	input := &dynamodb.ScanInput{
+		TableName:                 ordersTableName(),
+		ExpressionAttributeNames:  expr.Names(),
+		ExpressionAttributeValues: expr.Values(),
+		FilterExpression:          expr.Filter(),
+	}
 
 	res, err := cd.db.Scan(input)
 
@@ -119,11 +155,9 @@ func (cd *OrderDao) GetByStatus(status string) ([]models.Order, error) {
 
 	var results []models.Order
 
-	if res.Items == nil {
+	if len(res.Items) == 0 {
 		return nil, errors.New(literals.OrderNotFound)
 	}
-
-	fmt.Println(res, "-----------------")
 
 	if err = dynamodbattribute.UnmarshalListOfMaps(res.Items, &results); err != nil {
 		log.Printf("Error unMarshalling Category: %s", err)

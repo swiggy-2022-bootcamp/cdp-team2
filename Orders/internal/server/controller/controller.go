@@ -38,6 +38,22 @@ func BindStatus(c *gin.Context) {
 	c.Next()
 }
 
+func BindCustomer(c *gin.Context) {
+	idstr := c.Param(literals.CustomerIdKey)
+	if idstr == "" {
+		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderNotFound})
+		return
+	}
+	id, err := strconv.Atoi(idstr)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderNotFound})
+		return
+	}
+
+	c.Set(literals.CustomerIdKey, id)
+	c.Next()
+}
+
 func BindOrder(c *gin.Context) {
 	cat := models.Order{}
 	if err := c.BindJSON(&cat); err != nil {

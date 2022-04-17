@@ -23,6 +23,10 @@ func (cs *OrderService) GetByStatus(status string) ([]models.Order, error) {
 	return cs.Dao.GetByStatus(status)
 }
 
+func (cs *OrderService) GetByCustomerId(customerId int) ([]models.Order, error) {
+	return cs.Dao.GetByCustomerId(customerId)
+}
+
 func (cs *OrderService) GetAll() ([]models.Order, error) {
 	return cs.Dao.GetAll()
 }

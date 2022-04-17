@@ -47,6 +47,17 @@ func (cc *OrderController) GetByStatus(c *gin.Context) {
 	c.JSON(http.StatusOK, cat)
 }
 
+func (cc *OrderController) GetByCustomer(c *gin.Context) {
+	customerId := c.GetInt(literals.CustomerIdKey)
+
+	cat, err := cc.service.GetByCustomerId(customerId)
+	if err != nil {
+		c.AbortWithStatusJSON(api.ServerErr(err))
+		return
+	}
+	c.JSON(http.StatusOK, cat)
+}
+
 // Get All Categories
 // @Summary Get All Categories
 // @Tags Category

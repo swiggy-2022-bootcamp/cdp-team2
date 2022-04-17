@@ -9,6 +9,7 @@ type IService interface {
 	GetAll() ([]models.Order, error)
 	Create(models.Order) (*models.Order, error)
 	GetByStatus(string) ([]models.Order, error)
+	GetByCustomerId(int) ([]models.Order, error)
 	UpdateByID(int, models.Order) (*models.Order, error)
 	DeleteByID(int) error
 	//DeleteMultiple([]int) []error
