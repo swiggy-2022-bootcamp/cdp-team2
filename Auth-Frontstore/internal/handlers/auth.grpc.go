@@ -28,7 +28,7 @@ func (server *GrpcServer) Verify(ctx context.Context, req *authpb.VerifyRequest)
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, "Error while getting User Id")
 		}
-		if err := usersrv.New().FetchUser(&bson.M{"_id": id, "tokens": token}, user); err != nil {
+		if err := usersrv.New().FetchUser(&bson.M{"customerId": id, "tokens": token}, user); err != nil {
 			return nil, status.Errorf(codes.Internal, "Token Invalid")
 		} else {
 			res := &authpb.VerifyResponse{

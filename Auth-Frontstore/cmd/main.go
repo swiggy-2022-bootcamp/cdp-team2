@@ -20,5 +20,6 @@ func init() {
 }
 
 func main() {
+	go frontStoreAuthServer.InitializeGrpcServer()
 	frontStoreAuthServer.Initialize()
 }

@@ -4,7 +4,7 @@ protoc services/auth/authpb/auth.proto --go-grpc_out=. --go_out=.
 go run services/auth/server/server.go
 
 #Client Start
-go run greet/auth/client/client.go
+go run grpc/client/main.go
 
 #MongoDB Start
 mongod --dbpath="C:\Program Files\MongoDB\Server\4.2\data".
