@@ -9,8 +9,7 @@ import (
 )
 
 type EmptyCartService interface {
-	ValidateRequest() *errors.ServerError
-	ProcessRequest() *errors.ServerError
+	ProcessRequest(customerId string) *errors.ServerError
 }
 
 var emptyCartServiceStruct EmptyCartService
@@ -40,10 +39,6 @@ func GetEmptyCartService() EmptyCartService {
 	return emptyCartServiceStruct
 }
 
-func (s *emptyCartService) ValidateRequest() *errors.ServerError {
-	return nil
-}
-
-func (s *emptyCartService) ProcessRequest() *errors.ServerError {
-	return nil
+func (s *emptyCartService) ProcessRequest(customerId string) *errors.ServerError {
+	return s.dao.EmptyCart(customerId)
 }

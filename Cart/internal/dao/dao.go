@@ -18,6 +18,8 @@ type DynamoDAO interface {
 	AddCartItem(product models.Product) *errors.ServerError
 	GetCart(customerId string) (models.Cart, *errors.ServerError)
 	DeleteCartItem(customerId string, productId string) *errors.ServerError
+	EmptyCart(customerId string) *errors.ServerError
+	UpdateCartItem(customerId string, productId string, newQuantity int32) *errors.ServerError
 }
 
 type dynamoDAO struct {
