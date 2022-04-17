@@ -1,12 +1,14 @@
 package server
 
 import (
+	"net"
 	"net/http"
 
 	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/config"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/internal/dao"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/internal/services"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/util"
+	"google.golang.org/grpc"
 
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
@@ -50,9 +52,9 @@ func RunServer() error {
 	server := NewServer(webServerConfig)
 	server.Router.InitializeRouter(&routerConfigs)
 
-	//startGrpcServer()
+	go startGrpcServer()
 
-	log.Info("Server starting on PORT: ", webServerConfig.Port)
+	log.Info("Starting Http Server on PORT: ", webServerConfig.Port)
 	err = http.ListenAndServe(":"+webServerConfig.Port, *server.Router)
 	if err != nil {
 		return err
@@ -61,18 +63,19 @@ func RunServer() error {
 	return nil
 }
 
-// func startGrpcServer() {
-// 	lis, err := net.Listen("tcp", ":9000")
-// 	if err != nil {
-// 		log.Fatalf("failed to listen: %v", err)
-// 	}
+func startGrpcServer() {
+	log.Info("Staring gRPC server on PORT: 9000")
+	lis, err := net.Listen("tcp", ":9000")
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
 
-// 	grpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer()
 
-// 	if err := grpcServer.Serve(lis); err != nil {
-// 		log.Fatalf("failed to serve: %s", err)
-// 	}
-// }
+	if err := grpcServer.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %s", err)
+	}
+}
 
 func createDynamoDbSession() *dynamodb.DynamoDB {
 	// Initialize a session that the SDK will use to load
