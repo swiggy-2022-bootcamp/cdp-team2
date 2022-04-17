@@ -1,0 +1,39 @@
+syntax = "proto3";
+package proto;
+option go_package="/internal/proto";
+
+
+ 
+ 
+
+
+
+message Address{
+    string customerId=1;
+    string firstname=2;
+    string lastname=3;
+    string address1=4;
+    string address2=5;
+    string city=6;
+    string postcode=7;
+    string countryId=8;
+}
+
+message AddressutsRequest{
+    Address address=1;
+}
+
+message AddressutsResponse{
+    bool response=1;
+}
+ 
+
+ 
+
+ 
+
+service Service{
+    rpc AddressutsService(AddressutsRequest)returns (AddressutsResponse){};
+ }
+
+
