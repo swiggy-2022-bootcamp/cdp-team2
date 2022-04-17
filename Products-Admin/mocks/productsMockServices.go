@@ -8,8 +8,8 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-	domain "github.com/products-admin-service/internal/core/domain"
-	errors "github.com/products-admin-service/pkg/errors"
+	domain "github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/core/domain"
+	errors "github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/pkg/errors"
 )
 
 // MockIProductsServices is a mock of IProductsServices interface.

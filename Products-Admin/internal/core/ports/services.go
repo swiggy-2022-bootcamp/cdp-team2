@@ -1,8 +1,8 @@
 package ports
 
 import (
-	"github.com/products-admin-service/internal/core/domain"
-	"github.com/products-admin-service/pkg/errors"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/core/domain"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/pkg/errors"
 )
 
 type IProductsServices interface {

@@ -4,11 +4,11 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/products-admin-service/config"
-	_ "github.com/products-admin-service/docs"
-	"github.com/products-admin-service/internal/core/ports"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/config"
+	_ "github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/docs"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/core/ports"
 )
 
 type Server struct {

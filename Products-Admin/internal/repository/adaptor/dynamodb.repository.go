@@ -7,9 +7,9 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/aws/aws-sdk-go/service/dynamodb/expression"
-	"github.com/products-admin-service/internal/core/domain"
-	"github.com/products-admin-service/internal/core/ports"
-	"github.com/products-admin-service/pkg/errors"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/core/domain"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/core/ports"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/pkg/errors"
 )
 
 type ProductsRepository struct {

@@ -4,12 +4,12 @@ import (
 	"log"
 
 	"github.com/aws/aws-sdk-go/service/dynamodb"
-	"github.com/products-admin-service/internal/core/ports"
-	"github.com/products-admin-service/internal/core/services"
-	"github.com/products-admin-service/internal/handlers"
-	"github.com/products-admin-service/internal/repository/adaptor"
-	"github.com/products-admin-service/internal/repository/instance"
-	"github.com/products-admin-service/internal/server"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/core/ports"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/core/services"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/handlers"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/repository/adaptor"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/repository/instance"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/server"
 )
 
 var (
@@ -34,6 +34,7 @@ func init() {
 	productsServices = services.NewProductsServices(productsRepository)
 	productsHandlers = handlers.NewHandlers(productsServices)
 	productsServer = server.NewServer(productsHandlers)
+
 }
 
 func main() {

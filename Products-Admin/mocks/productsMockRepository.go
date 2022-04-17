@@ -10,8 +10,8 @@ import (
 	dynamodb "github.com/aws/aws-sdk-go/service/dynamodb"
 	expression "github.com/aws/aws-sdk-go/service/dynamodb/expression"
 	gomock "github.com/golang/mock/gomock"
-	domain "github.com/products-admin-service/internal/core/domain"
-	errors "github.com/products-admin-service/pkg/errors"
+	domain "github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/core/domain"
+	errors "github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/pkg/errors"
 )
 
 // MockIProductsRepository is a mock of IProductsRepository interface.

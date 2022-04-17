@@ -9,8 +9,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
-	"github.com/products-admin-service/internal/core/domain"
-	"github.com/products-admin-service/mocks"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/core/domain"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/mocks"
 )
 
 func TestAddProduct(t *testing.T) {

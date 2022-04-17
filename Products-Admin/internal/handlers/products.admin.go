@@ -6,9 +6,9 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/products-admin-service/internal/core/domain"
-	"github.com/products-admin-service/internal/core/ports"
-	"github.com/products-admin-service/internal/literals"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/core/domain"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/core/ports"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/literals"
 )
 
 type ProductsHandlers struct {
