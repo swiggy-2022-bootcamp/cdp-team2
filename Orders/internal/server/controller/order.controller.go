@@ -109,14 +109,14 @@ func (cc *OrderController) Update(c *gin.Context) {
 // @Success 200
 // @Failure 500 {object} api.ApiResponseWithErr
 // @Router /categories/{_id} [delete]
-//func (cc *CategoryController) Delete(c *gin.Context) {
-//	id := c.GetInt(literals.CatIdKey)
-//	if err := cc.service.DeleteByID(id); err != nil {
-//		c.AbortWithStatusJSON(api.ServerErr(err))
-//		return
-//	}
-//	c.Status(http.StatusOK)
-//}
+func (cc *OrderController) Delete(c *gin.Context) {
+	id := c.GetInt(literals.OrderIdKey)
+	if err := cc.service.DeleteByID(id); err != nil {
+		c.AbortWithStatusJSON(api.ServerErr(err))
+		return
+	}
+	c.Status(http.StatusOK)
+}
 
 // Delete Multiple Categories
 // @Summary Delete Multiple Categories

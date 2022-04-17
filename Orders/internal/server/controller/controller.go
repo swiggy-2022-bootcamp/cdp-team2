@@ -14,12 +14,12 @@ import (
 func BindId(c *gin.Context) {
 	idstr := c.Param(literals.OrderIdKey)
 	if idstr == "" {
-		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.CatIDNotFound})
+		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderNotFound})
 		return
 	}
 	id, err := strconv.Atoi(idstr)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.CatIDNotFound})
+		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderNotFound})
 		return
 	}
 	c.Set(literals.OrderIdKey, id)
@@ -30,7 +30,7 @@ func BindStatus(c *gin.Context) {
 	status := c.Param(literals.StatusKey)
 	fmt.Println(status)
 	if status == "" {
-		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.CatIDNotFound})
+		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderNotFound})
 		return
 	}
 

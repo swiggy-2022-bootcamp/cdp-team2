@@ -37,9 +37,10 @@ func (cs *OrderService) UpdateByID(id int, cat models.Order) (*models.Order, err
 	return cs.Dao.UpdateByID(id, cat)
 }
 
-//func (cs *OrderService) DeleteByID(id int) error {
-//	return cs.Dao.DeleteByID(id)
-//}
+func (cs *OrderService) DeleteByID(id int) error {
+	return cs.Dao.DeleteByID(id)
+}
+
 //
 //func (cs *OrderService) DeleteMultiple(ids []int) []error {
 //	var errorList []error

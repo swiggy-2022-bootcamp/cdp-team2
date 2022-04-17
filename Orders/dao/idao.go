@@ -10,5 +10,5 @@ type IDao interface {
 	Create(models.Order) (*models.Order, error)
 	GetByStatus(string) ([]models.Order, error)
 	UpdateByID(int, models.Order) (*models.Order, error)
-	//DeleteByID(int) error
+	DeleteByID(int) error
 }

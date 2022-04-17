@@ -70,7 +70,7 @@ func (cd *OrderDao) GetByID(id int) (*models.Order, error) {
 	cat := models.Order{}
 
 	if res.Item == nil {
-		return nil, errors.New(literals.CategoryNotFound)
+		return nil, errors.New(literals.OrderNotFound)
 	}
 
 	if err = dynamodbattribute.UnmarshalMap(res.Item, &cat); err != nil {
@@ -120,7 +120,7 @@ func (cd *OrderDao) GetByStatus(status string) ([]models.Order, error) {
 	var results []models.Order
 
 	if res.Items == nil {
-		return nil, errors.New(literals.CategoryNotFound)
+		return nil, errors.New(literals.OrderNotFound)
 	}
 
 	fmt.Println(res, "-----------------")
@@ -147,7 +147,7 @@ func (cd *OrderDao) GetAll() ([]models.Order, error) {
 	}
 
 	if res.Items == nil {
-		return results, errors.New(literals.NoCategoriesFound)
+		return results, errors.New(literals.OrderNotFound)
 	}
 
 	err = dynamodbattribute.UnmarshalListOfMaps(res.Items, &results)
@@ -243,22 +243,36 @@ func (cd *OrderDao) UpdateByID(id int, cat models.Order) (*models.Order, error) 
 }
 
 //
-//func (cd *CategoryDao) DeleteByID(id int) error {
-//
-//	resp, err := cd.db.DeleteItem(&dynamodb.DeleteItemInput{
-//		TableName: categoriesTableName(),
-//		Key:       getKeyFilter(id),
-//	})
-//
-//	log.Printf("delete category resp %+v", resp)
-//
-//	if err != nil {
-//		log.Printf("delete category err %s", err.Error())
-//		return err
-//	}
-//	return nil
-//}
-//
+func (cd *OrderDao) DeleteByID(id int) error {
+
+	res, err := cd.db.GetItem(&dynamodb.GetItemInput{
+		TableName: ordersTableName(),
+		Key:       getKeyFilter(id),
+	})
+
+	if err != nil {
+		log.Printf("Error Fetching Category: %s", err)
+		return err
+	}
+
+	if res.Item == nil {
+		return errors.New(literals.OrderNotFound)
+	}
+
+	resp, err := cd.db.DeleteItem(&dynamodb.DeleteItemInput{
+		TableName: ordersTableName(),
+		Key:       getKeyFilter(id),
+	})
+
+	log.Printf("delete category resp %+v", resp)
+
+	if err != nil {
+		log.Printf("delete category err %s", err.Error())
+		return err
+	}
+	return nil
+}
+
 ////getCategoryUpdExp creates a Expression from CategoryUpdateInput
 ////this iterates through all fields
 func getOrderUpdExp(cat models.Order) (expression.Expression, error) {
