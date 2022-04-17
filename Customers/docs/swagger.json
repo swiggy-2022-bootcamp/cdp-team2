@@ -8,11 +8,195 @@
             "name": "API Support",
             "url": "http://demo.com/support"
         },
+        "license": {},
         "version": "1.0"
     },
     "host": "localhost:8080",
     "basePath": "/",
     "paths": {
+        "/customers": {
+            "post": {
+                "description": "API to Create Customers-admin's Customer",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customer Create"
+                ],
+                "summary": "Customer Create Route",
+                "parameters": [
+                    {
+                        "description": "Customer Body",
+                        "name": "customer",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/dao.Customer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dao.Customer"
+                        }
+                    },
+                    "500": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/customers/email/{email}": {
+            "get": {
+                "description": "API to Get Customers-admin's Customer",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customer Get"
+                ],
+                "summary": "Customer Get Route",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Customer Email",
+                        "name": "email",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dao.Customer"
+                        }
+                    },
+                    "500": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/customers/{id}": {
+            "get": {
+                "description": "API to Get Customers-admin's Customer",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customer Get"
+                ],
+                "summary": "Customer Get Route",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Customer Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dao.Customer"
+                        }
+                    },
+                    "500": {
+                        "description": ""
+                    }
+                }
+            },
+            "put": {
+                "description": "API to Update Customers-admin's Customer",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customer Update"
+                ],
+                "summary": "Customer Update Route",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Customer Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "update details",
+                        "name": "customer",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/%7B%7D"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dao.Customer"
+                        }
+                    },
+                    "500": {
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "description": "API to Delete Customers-admin's Customer",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customer Delete"
+                ],
+                "summary": "Customer Delete Route",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Customer Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/string"
+                        }
+                    },
+                    "500": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/health": {
             "get": {
                 "description": "API to check Customers-admin's health",
@@ -30,9 +214,111 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/string"
                         }
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dao.Address": {
+            "type": "object",
+            "properties": {
+                "address_1": {
+                    "type": "string"
+                },
+                "address_2": {
+                    "type": "string"
+                },
+                "address_id": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "company": {
+                    "type": "string"
+                },
+                "country_id": {
+                    "type": "string"
+                },
+                "default": {
+                    "type": "string"
+                },
+                "firstname": {
+                    "type": "string"
+                },
+                "lastname": {
+                    "type": "string"
+                },
+                "postcode": {
+                    "type": "string"
+                },
+                "zone_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "dao.Customer": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dao.Address"
+                    }
+                },
+                "approved": {
+                    "type": "string"
+                },
+                "cart": {
+                    "type": "string"
+                },
+                "confirm": {
+                    "type": "string"
+                },
+                "customer_group_id": {
+                    "type": "string"
+                },
+                "customer_id": {
+                    "type": "string"
+                },
+                "date_added": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "fax": {
+                    "type": "string"
+                },
+                "firstname": {
+                    "type": "string"
+                },
+                "lastname": {
+                    "type": "string"
+                },
+                "newsletter": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "reward_total": {
+                    "type": "string"
+                },
+                "safe": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "telephone": {
+                    "type": "string"
+                },
+                "user_balance": {
+                    "type": "string"
                 }
             }
         }

@@ -1,14 +1,203 @@
 basePath: /
+definitions:
+  dao.Address:
+    properties:
+      address_1:
+        type: string
+      address_2:
+        type: string
+      address_id:
+        type: string
+      city:
+        type: string
+      company:
+        type: string
+      country_id:
+        type: string
+      default:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string
+      postcode:
+        type: string
+      zone_id:
+        type: string
+    type: object
+  dao.Customer:
+    properties:
+      address:
+        items:
+          $ref: '#/definitions/dao.Address'
+        type: array
+      approved:
+        type: string
+      cart:
+        type: string
+      confirm:
+        type: string
+      customer_group_id:
+        type: string
+      customer_id:
+        type: string
+      date_added:
+        type: string
+      email:
+        type: string
+      fax:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string
+      newsletter:
+        type: string
+      password:
+        type: string
+      reward_total:
+        type: string
+      safe:
+        type: string
+      status:
+        type: string
+      telephone:
+        type: string
+      user_balance:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact:
     name: API Support
     url: http://demo.com/support
   description: This is customers CRUD service.
+  license: {}
   termsOfService: demo.com
   title: Customers API
   version: "1.0"
 paths:
+  /customers:
+    post:
+      consumes:
+      - application/json
+      description: API to Create Customers-admin's Customer
+      parameters:
+      - description: Customer Body
+        in: body
+        name: customer
+        schema:
+          $ref: '#/definitions/dao.Customer'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dao.Customer'
+        "500":
+          description: ""
+      summary: Customer Create Route
+      tags:
+      - Customer Create
+  /customers/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: API to Delete Customers-admin's Customer
+      parameters:
+      - description: Customer Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/string'
+        "500":
+          description: ""
+      summary: Customer Delete Route
+      tags:
+      - Customer Delete
+    get:
+      consumes:
+      - application/json
+      description: API to Get Customers-admin's Customer
+      parameters:
+      - description: Customer Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dao.Customer'
+        "500":
+          description: ""
+      summary: Customer Get Route
+      tags:
+      - Customer Get
+    put:
+      consumes:
+      - application/json
+      description: API to Update Customers-admin's Customer
+      parameters:
+      - description: Customer Id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: update details
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/%7B%7D'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dao.Customer'
+        "500":
+          description: ""
+      summary: Customer Update Route
+      tags:
+      - Customer Update
+  /customers/email/{email}:
+    get:
+      consumes:
+      - application/json
+      description: API to Get Customers-admin's Customer
+      parameters:
+      - description: Customer Email
+        in: path
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dao.Customer'
+        "500":
+          description: ""
+      summary: Customer Get Route
+      tags:
+      - Customer Get
   /health:
     get:
       consumes:
@@ -20,7 +209,7 @@ paths:
         "200":
           description: OK
           schema:
-            type: string
+            $ref: '#/definitions/string'
       summary: Health Check Route
       tags:
       - Health
