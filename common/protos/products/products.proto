@@ -55,10 +55,15 @@ message CategoryIDRequest {
 }
 
 message BoolResponse {
-    bool exists = 1;
+    bool Exists = 1;
+}
+
+message ProductIDRequest {
+    int64 ProductID = 1;
 }
 
 service ProductsServices {
     rpc GetAvailableProducts(EmptyRequest) returns (ProductsResponse);
     rpc CheckProductsWithCategory(CategoryIDRequest) returns (BoolResponse);
+    rpc IsProductExists(ProductIDRequest) returns (BoolResponse);
 }
