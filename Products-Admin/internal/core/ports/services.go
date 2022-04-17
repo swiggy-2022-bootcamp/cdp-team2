@@ -6,8 +6,8 @@ import (
 )
 
 type IProductsServices interface {
-	AddProduct(*domain.Product) (int, *errors.AppError)
-	UpdateProduct(int, *domain.Product) *errors.AppError
-	DeleteProduct(int) *errors.AppError
+	AddProduct(*domain.Product) (int64, *errors.AppError)
+	UpdateProduct(int64, *domain.Product) *errors.AppError
+	DeleteProduct(int64) *errors.AppError
 	GetProducts() ([]*domain.Product, *errors.AppError)
 }

@@ -199,7 +199,7 @@ type Product struct {
 	Image              string                `protobuf:"bytes,10,opt,name=Image,json=image,proto3" json:"Image,omitempty"`
 	ShippingID         int64                 `protobuf:"varint,11,opt,name=ShippingID,json=shippingID,proto3" json:"ShippingID,omitempty"`
 	Weight             int64                 `protobuf:"varint,12,opt,name=Weight,json=weight,proto3" json:"Weight,omitempty"`
-	Langth             int64                 `protobuf:"varint,13,opt,name=Langth,json=langth,proto3" json:"Langth,omitempty"`
+	Length             int64                 `protobuf:"varint,13,opt,name=Length,json=Length,proto3" json:"Length,omitempty"`
 	Width              int64                 `protobuf:"varint,14,opt,name=Width,json=width,proto3" json:"Width,omitempty"`
 	Height             int64                 `protobuf:"varint,15,opt,name=Height,json=height,proto3" json:"Height,omitempty"`
 	Minimum            int64                 `protobuf:"varint,16,opt,name=Minimum,json=minimum,proto3" json:"Minimum,omitempty"`
@@ -324,9 +324,9 @@ func (x *Product) GetWeight() int64 {
 	return 0
 }
 
-func (x *Product) GetLangth() int64 {
+func (x *Product) GetLength() int64 {
 	if x != nil {
-		return x.Langth
+		return x.Length
 	}
 	return 0
 }

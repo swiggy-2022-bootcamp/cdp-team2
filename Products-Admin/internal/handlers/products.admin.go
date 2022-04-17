@@ -71,7 +71,7 @@ func (h *ProductsHandlers) UpdateProduct(gctx *gin.Context) {
 		gctx.JSON(http.StatusBadRequest, gin.H{"message": "Please provide valid product information."})
 		return
 	}
-	if err := h.ProductsServices.UpdateProduct(productID, &_product); err != nil {
+	if err := h.ProductsServices.UpdateProduct(int64(productID), &_product); err != nil {
 		gctx.JSON(err.GetErrCode(), gin.H{"message": err.Error()})
 		return
 	}
@@ -85,7 +85,7 @@ func (h *ProductsHandlers) DeleteProduct(gctx *gin.Context) {
 		gctx.JSON(http.StatusBadRequest, gin.H{"message": "Please provide valid product id."})
 		return
 	}
-	if err := h.ProductsServices.DeleteProduct(productID); err != nil {
+	if err := h.ProductsServices.DeleteProduct(int64(productID)); err != nil {
 		gctx.JSON(err.GetErrCode(), gin.H{"message": err.Error()})
 		return
 	}

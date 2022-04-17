@@ -23,8 +23,8 @@ const (
 	customEpoch = 1300000000
 )
 
-func getRandomKey() int {
-	return int(time.Now().Unix() - customEpoch)
+func getRandomKey() int64 {
+	return int64(time.Now().Unix() - customEpoch)
 }
 
 func NewProductsServices(productsRepository ports.IProductsRepository) *ProductsServices {
@@ -33,7 +33,7 @@ func NewProductsServices(productsRepository ports.IProductsRepository) *Products
 	}
 }
 
-func (ps *ProductsServices) AddProduct(product *domain.Product) (int, *errors.AppError) {
+func (ps *ProductsServices) AddProduct(product *domain.Product) (int64, *errors.AppError) {
 	product.ID = getRandomKey()
 	if _, err := ps.ProductsRepository.AddProduct(product); err != nil {
 		return 0, err
@@ -41,7 +41,7 @@ func (ps *ProductsServices) AddProduct(product *domain.Product) (int, *errors.Ap
 	return product.ID, nil
 }
 
-func (ps *ProductsServices) UpdateProduct(productID int, product *domain.Product) *errors.AppError {
+func (ps *ProductsServices) UpdateProduct(productID int64, product *domain.Product) *errors.AppError {
 	product.ID = productID
 	if _, err := ps.ProductsRepository.UpdateProduct(product); err != nil {
 		return err
@@ -49,7 +49,7 @@ func (ps *ProductsServices) UpdateProduct(productID int, product *domain.Product
 	return nil
 }
 
-func (ps *ProductsServices) DeleteProduct(productID int) *errors.AppError {
+func (ps *ProductsServices) DeleteProduct(productID int64) *errors.AppError {
 	condition := map[string]*dynamodb.AttributeValue{
 		"_id": {
 			N: aws.String(fmt.Sprint(productID)),

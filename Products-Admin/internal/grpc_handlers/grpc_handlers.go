@@ -10,17 +10,30 @@ import (
 
 type GRPCHandlers struct {
 	pb.UnimplementedProductsServicesServer
+	ProductsServices ports.IProductsServices
 }
 
-func NewGRPCServer(ctx context.Context) *GRPCHandlers {
-	return &GRPCHandlers{}
+func NewGRPCServer(productsServices ports.IProductsServices) *GRPCHandlers {
+	return &GRPCHandlers{
+		ProductsServices: productsServices,
+	}
 }
 
 var _ ports.IGRPCHandlers = (*GRPCHandlers)(nil)
 var _ pb.ProductsServicesServer = (*GRPCHandlers)(nil)
 
 func (gh *GRPCHandlers) GetAvailableProducts(ctx context.Context, emptyReq *pb.EmptyRequest) (*pb.ProductsResponse, error) {
-	return nil, nil
+	_products, err := gh.ProductsServices.GetProducts()
+	var _pbProducts []*pb.Product
+	if err != nil {
+		return nil, err
+	}
+	for _, _p := range _products {
+		_pbProducts = append(_pbProducts, _p.GetPbProduct())
+	}
+	return &pb.ProductsResponse{
+		Products: _pbProducts,
+	}, nil
 }
 
 func (gh *GRPCHandlers) CheckProductsWithCategory(ctx context.Context, categoryID *pb.CategoryIDRequest) (*pb.BoolResponse, error) {

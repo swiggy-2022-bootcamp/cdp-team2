@@ -1,25 +1,59 @@
 package domain
 
+import (
+	pb "github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/pkg/protos"
+)
+
 type Product struct {
-	ID                 int                   `json:"_id"                 bson:"_id"`
-	Model              string                `json:"model"               bson:"model"`
-	Quantity           uint                  `json:"quantity"            bson:"quantity"`
-	Price              string                `json:"price"               bson:"price"`
-	ManufacturerID     int                   `json:"manufacturer_id"     bson:"manufacturer_id"`
-	Sku                string                `json:"sku"                 bson:"sku"`
-	ProductSeoUrl      *ProductSeoUrl        `json:"product_seo_url"     bson:"product_seo_url"`
-	Points             uint                  `json:"points"              bson:"points"`
-	Rewards            uint                  `json:"reward"              bson:"reward"`
-	Image              string                `json:"image"               bson:"image"`
-	ShippingID         int                   `json:"shipping_id"         bson:"shipping_id"`
-	Weight             uint                  `json:"weight"              bson:"weight"`
-	Length             uint                  `json:"length"              bson:"length"`
-	Width              uint                  `json:"width"               bson:"width"`
-	Height             uint                  `json:"height"              bson:"height"`
-	Minimum            uint                  `json:"minimum"             bson:"minimum"`
-	ProductRelated     []int                 `json:"product_related"     bson:"product_related"`
-	ProductDescription []*ProductDescription `json:"product_description" bson:"product_description"`
-	ProductCategory    []int                 `json:"product_category"    bson:"product_category"`
+	ID                 int64                 `json:"_id"                 bson:"_id"`
+	Model              string                `json:"model"               bson:"model"               binding:"required"`
+	Quantity           uint                  `json:"quantity"            bson:"quantity"            binding:"required"`
+	Price              string                `json:"price"               bson:"price"               binding:"required"`
+	ManufacturerID     int                   `json:"manufacturer_id"     bson:"manufacturer_id"     binding:"required"`
+	Sku                string                `json:"sku"                 bson:"sku"                 binding:"required"`
+	ProductSeoUrl      *ProductSeoUrl        `json:"product_seo_url"     bson:"product_seo_url"     binding:"requried"`
+	Points             uint                  `json:"points"              bson:"points"              binding:"requried"`
+	Rewards            uint                  `json:"reward"              bson:"reward"              binding:"requried"`
+	Image              string                `json:"image"               bson:"image"               binding:"requried"`
+	ShippingID         int                   `json:"shipping_id"         bson:"shipping_id"         binding:"requried"`
+	Weight             uint                  `json:"weight"              bson:"weight"              binding:"requried"`
+	Length             uint                  `json:"length"              bson:"length"              binding:"requried"`
+	Width              uint                  `json:"width"               bson:"width"               binding:"requried"`
+	Height             uint                  `json:"height"              bson:"height"              binding:"requried"`
+	Minimum            uint                  `json:"minimum"             bson:"minimum"             binding:"requried"`
+	ProductRelated     []int64               `json:"product_related"     bson:"product_related"     binding:"requried"`
+	ProductDescription []*ProductDescription `json:"product_description" bson:"product_description" binding:"required"`
+	ProductCategory    []int64               `json:"product_category"    bson:"product_category"    binding:"required"`
+}
+
+func GetPbProductDescriptions(_productDesc []*ProductDescription) (_pbProductDesc []*pb.ProductDescription) {
+	for _, _pDesc := range _productDesc {
+		_pbProductDesc = append(_pbProductDesc, _pDesc.GetPbProductDescription())
+	}
+	return
+}
+
+func (p *Product) GetPbProduct() *pb.Product {
+	return &pb.Product{
+		ID:                 int64(p.ID),
+		Model:              p.Model,
+		Quantity:           int64(p.Quantity),
+		Price:              p.Price,
+		ManufacturerID:     int64(p.ManufacturerID),
+		Sku:                p.Sku,
+		ProductSeoUrl:      p.ProductSeoUrl.GetPbProductSeoUrl(),
+		Points:             int64(p.Points),
+		Rewards:            int64(p.Rewards),
+		Image:              p.Image,
+		Weight:             int64(p.Weight),
+		Length:             int64(p.Length),
+		Width:              int64(p.Width),
+		Height:             int64(p.Height),
+		Minimum:            int64(p.Minimum),
+		ProductRelated:     p.ProductRelated,
+		ProductDescription: GetPbProductDescriptions(p.ProductDescription),
+		ProductCategory:    p.ProductCategory,
+	}
 }
 
 func (p *Product) GetMap() map[string]interface{} {
