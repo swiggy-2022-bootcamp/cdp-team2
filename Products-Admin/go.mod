@@ -1,4 +1,4 @@
-module github.com/products-admin-service
+module github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin
 
 go 1.17
 
