@@ -2,7 +2,6 @@ package dao
 
 import (
 	"fmt"
-	"log"
 	"sync"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -11,6 +10,8 @@ import (
 	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/config"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/internal/dao/models"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/internal/errors"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type DynamoDAO interface {
@@ -47,14 +48,18 @@ func GetDynamoDAO() DynamoDAO {
 
 // AddProduct add product details to the cart of the user
 func (dao *dynamoDAO) AddCartItem(product models.Product) *errors.ServerError {
-	cart := models.Cart{
-		CustomerId: "133",
-		Products:   []models.Product{product},
+	cart, err := dao.GetCart("133")
+	if err != nil {
+		log.Info("cart not found for customer")
+		cart.CustomerId = "133"
 	}
 
-	av, err := dynamodbattribute.MarshalMap(cart)
-	if err != nil {
-		log.Fatalf("Got error marshalling new movie item: %s", err)
+	cart.Products = append(cart.Products, product)
+
+	av, goErr := dynamodbattribute.MarshalMap(cart)
+	if goErr != nil {
+		log.WithError(goErr).Error("an error occurred while marshalling reward to dynamo attribute")
+		return &errors.MarshalToAttributesError
 	}
 
 	input := &dynamodb.PutItemInput{
@@ -62,12 +67,13 @@ func (dao *dynamoDAO) AddCartItem(product models.Product) *errors.ServerError {
 		TableName: aws.String("cart"),
 	}
 
-	_, err = dao.client.PutItem(input)
-	if err != nil {
-		log.Fatalf("Got error calling PutItem: %s", err)
+	_, goErr = dao.client.PutItem(input)
+	if goErr != nil {
+		log.WithField("Error: ", goErr).Error("got error while calling GetItem API of dynamo db")
+		return &errors.DatabaseQueryFailed
 	}
 
-	fmt.Println("Successfully, added the item")
+	log.Info("successfully added the cart item to the customer")
 	return nil
 }
 
@@ -78,26 +84,30 @@ func (dao *dynamoDAO) GetCart(customerId string) (models.Cart, *errors.ServerErr
 		TableName: aws.String("cart"),
 		Key: map[string]*dynamodb.AttributeValue{
 			"customerId": {
-				N: aws.String(customerId),
+				S: aws.String(customerId),
 			},
 		},
 	})
 
 	if err != nil {
-		log.Fatalf("Got error calling GetItem: %s", err)
+		log.WithField("Error: ", err).Error("got error while calling GetItem API of dynamo db")
+		return cart, &errors.DatabaseQueryFailed
 	}
 
 	if result.Item == nil {
-		//msg := "Could not find '" + customerId + "'"
+		errMsg := "Could not find cart for customer: '" + customerId + "'"
+		log.WithField("Error: ", errMsg).Error("record not found")
 		return cart, nil
 	}
 
 	err = dynamodbattribute.UnmarshalMap(result.Item, &cart)
 	if err != nil {
-		panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
+		log.WithError(err).Error("an error occurred while unmarshalling dynamo attributes to reward struct")
+		return cart, &errors.UnmarshalAttributesError
 	}
 
 	fmt.Println(cart)
 
+	log.Info("Successfully got the cart for the customer: ", customerId)
 	return cart, nil
 }

@@ -22,7 +22,7 @@ func GetCartHandler(config *util.RouterConfig) http.HandlerFunc {
 		service := services.GetGetCartService()
 
 		// Process the request
-		response, err := service.ProcessRequest()
+		response, err := service.ProcessRequest("133")
 		if err != nil {
 			http.Error(w, err.ErrorMessage, err.HttpResponseCode)
 			return
@@ -34,6 +34,7 @@ func GetCartHandler(config *util.RouterConfig) http.HandlerFunc {
 			return
 		}
 
+		w.Header().Set("Content-Type", "application/json")
 		_, goErr = w.Write(respBytes)
 		if goErr != nil {
 			http.Error(w, errors.InternalError.ErrorMessage, errors.InternalError.HttpResponseCode)

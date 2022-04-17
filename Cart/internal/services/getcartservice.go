@@ -10,7 +10,7 @@ import (
 )
 
 type GetCartService interface {
-	ProcessRequest() (models.Cart, *errors.ServerError)
+	ProcessRequest(customerId string) (models.Cart, *errors.ServerError)
 }
 
 var getCartServiceStruct GetCartService
@@ -40,6 +40,6 @@ func GetGetCartService() GetCartService {
 	return getCartServiceStruct
 }
 
-func (s *getCartService) ProcessRequest() (models.Cart, *errors.ServerError) {
-	return s.dao.GetCart("12233")
+func (s *getCartService) ProcessRequest(customerId string) (models.Cart, *errors.ServerError) {
+	return s.dao.GetCart(customerId)
 }
