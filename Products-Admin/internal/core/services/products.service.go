@@ -74,3 +74,16 @@ func (ps *ProductsServices) GetProducts() ([]*domain.Product, *errors.AppError) 
 	}
 	return _products, nil
 }
+
+func (ps *ProductsServices) GetProductById(productID int64) (*domain.Product, *errors.AppError) {
+	condition := map[string]*dynamodb.AttributeValue{
+		"_id": {
+			N: aws.String(fmt.Sprint(productID)),
+		},
+	}
+	_product, err := ps.ProductsRepository.GetProductById(condition)
+	if err != nil {
+		return nil, err
+	}
+	return _product, err
+}

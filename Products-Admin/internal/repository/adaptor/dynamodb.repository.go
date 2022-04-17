@@ -94,17 +94,32 @@ func (pr *ProductsRepository) UpdateProduct(product *domain.Product) (*domain.Pr
 }
 
 func (pr *ProductsRepository) DeleteProduct(condition map[string]*dynamodb.AttributeValue) (response *dynamodb.DeleteItemOutput, err *errors.AppError) {
-	conditionParsed, dErr := dynamodbattribute.MarshalMap(condition)
-	if dErr != nil {
-		return nil, errors.Wrap(dErr)
-	}
 	input := &dynamodb.DeleteItemInput{
-		Key:       conditionParsed,
+		Key:       condition,
 		TableName: aws.String(pr.TableName),
 	}
-	response, dErr = pr.DynamoDBClient.DeleteItem(input)
+	response, dErr := pr.DynamoDBClient.DeleteItem(input)
 	if dErr != nil {
 		return nil, errors.Wrap(dErr)
 	}
 	return response, nil
+}
+
+func (pr *ProductsRepository) GetProductById(condition map[string]*dynamodb.AttributeValue) (product *domain.Product, err *errors.AppError) {
+	input := &dynamodb.GetItemInput{
+		Key:       condition,
+		TableName: aws.String(pr.TableName),
+	}
+	response, dErr := pr.DynamoDBClient.GetItem(input)
+	if dErr != nil {
+		return nil, errors.Wrap(dErr)
+	}
+	_product := domain.Product{}
+	// if err := dynamodbattribute.UnmarshalMap(response.Item, &_product); err != nil {
+	// 	return nil, errors.New(err.Error(), http.StatusInternalServerError)
+	// }
+	if err := dynamodbattribute.UnmarshalMap(response.Item, &_product); err != nil {
+		return nil, errors.Wrap(err)
+	}
+	return &_product, nil
 }

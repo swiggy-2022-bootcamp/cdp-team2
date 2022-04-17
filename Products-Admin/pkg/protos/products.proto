@@ -62,8 +62,13 @@ message ProductIDRequest {
     int64 ProductID = 1;
 }
 
+message ProductResponse {
+    Product Product = 1;
+}
+
 service ProductsServices {
     rpc GetAvailableProducts(EmptyRequest) returns (ProductsResponse);
     rpc CheckProductsWithCategory(CategoryIDRequest) returns (BoolResponse);
     rpc IsProductExists(ProductIDRequest) returns (BoolResponse);
+    rpc GetProductById(ProductIDRequest) returns (ProductResponse);
 }

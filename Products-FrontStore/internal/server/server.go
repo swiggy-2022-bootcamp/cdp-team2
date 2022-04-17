@@ -4,18 +4,18 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/products-frontstore-service/config"
-	_ "github.com/products-frontstore-service/docs"
-	"github.com/products-frontstore-service/internal/core/ports"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-FrontStore/config"
+	_ "github.com/swiggy-2022-bootcamp/cdp-team2/Products-FrontStore/docs"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-FrontStore/internal/core/ports"
 )
 
 type Server struct {
-	Handlers ports.IHandlers
+	Handlers ports.IProductsHandlers
 }
 
-func NewServer(handlers ports.IHandlers) *Server {
+func NewServer(handlers ports.IProductsHandlers) *Server {
 	return &Server{
 		Handlers: handlers,
 	}
@@ -39,7 +39,9 @@ func (s *Server) Initialize() {
 	server := gin.Default()
 
 	productsRoutes := server.Group("/api/rest/products/")
-	productsRoutes.GET("/", s.Handlers.Health)
+	productsRoutes.GET("/health", s.Handlers.Health)
+	productsRoutes.GET("/", s.Handlers.GetProductList)
+	productsRoutes.GET("/:id", s.Handlers.GetProductById)
 	productsRoutes.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	log.Fatal(server.Run(config.Config["PORT"]))

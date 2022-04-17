@@ -10,4 +10,5 @@ type IProductsServices interface {
 	UpdateProduct(int64, *domain.Product) *errors.AppError
 	DeleteProduct(int64) *errors.AppError
 	GetProducts() ([]*domain.Product, *errors.AppError)
+	GetProductById(int64) (*domain.Product, *errors.AppError)
 }

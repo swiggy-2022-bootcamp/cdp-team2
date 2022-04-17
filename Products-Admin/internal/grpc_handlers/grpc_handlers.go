@@ -9,7 +9,6 @@ import (
 )
 
 type GRPCHandlers struct {
-	pb.UnimplementedProductsServicesServer
 	ProductsServices ports.IProductsServices
 }
 
@@ -36,6 +35,20 @@ func (gh *GRPCHandlers) GetAvailableProducts(ctx context.Context, emptyReq *pb.E
 	}, nil
 }
 
+func (gh *GRPCHandlers) GetProductById(ctx context.Context, productIDReq *pb.ProductIDRequest) (*pb.ProductResponse, error) {
+	_product, err := gh.ProductsServices.GetProductById(productIDReq.ProductID)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.ProductResponse{
+		Product: _product.GetPbProduct(),
+	}, err
+}
+
 func (gh *GRPCHandlers) CheckProductsWithCategory(ctx context.Context, categoryID *pb.CategoryIDRequest) (*pb.BoolResponse, error) {
+	return nil, nil
+}
+
+func (gh *GRPCHandlers) IsProductExists(ctx context.Context, productID *pb.ProductIDRequest) (*pb.BoolResponse, error) {
 	return nil, nil
 }

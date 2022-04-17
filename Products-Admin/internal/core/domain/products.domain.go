@@ -56,6 +56,35 @@ func (p *Product) GetPbProduct() *pb.Product {
 	}
 }
 
+func bindProductDesciption(gprcProDes []*pb.ProductDescription) (_productDecs []*ProductDescription) {
+	for _, _p := range gprcProDes {
+		var _productDes ProductDescription
+		_productDecs = append(_productDecs, _productDes.BindGrpcProductDesciption(_p))
+	}
+	return
+}
+
+func (p *Product) BindGprcProduct(grpcProduct *pb.Product) {
+	p.ID = grpcProduct.ID
+	p.Model = grpcProduct.Model
+	p.Quantity = uint(grpcProduct.Quantity)
+	p.Price = grpcProduct.Price
+	p.ManufacturerID = int(grpcProduct.ManufacturerID)
+	p.Sku = grpcProduct.Sku
+	p.ProductSeoUrl = p.ProductSeoUrl.BindGrpcProductSeoUrl(grpcProduct.ProductSeoUrl)
+	p.Points = uint(grpcProduct.Points)
+	p.Rewards = uint(grpcProduct.Rewards)
+	p.Image = grpcProduct.Image
+	p.Weight = uint(grpcProduct.Weight)
+	p.Length = uint(grpcProduct.Length)
+	p.Width = uint(grpcProduct.Width)
+	p.Height = uint(grpcProduct.Height)
+	p.Minimum = uint(grpcProduct.Minimum)
+	p.ProductRelated = grpcProduct.ProductRelated
+	p.ProductDescription = bindProductDesciption(grpcProduct.ProductDescription)
+	p.ProductCategory = grpcProduct.ProductCategory
+}
+
 func (p *Product) GetMap() map[string]interface{} {
 	return map[string]interface{}{
 		"_id":                 p.ID,
