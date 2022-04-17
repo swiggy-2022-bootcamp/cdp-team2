@@ -4,6 +4,7 @@ import (
 	"log"
 	"net"
 
+	"github.com/auth-frontstore-service/config"
 	"github.com/auth-frontstore-service/internal/handlers"
 	"github.com/auth-frontstore-service/protos/authpb"
 	"google.golang.org/grpc"
@@ -11,7 +12,7 @@ import (
 
 func (server *Server) InitializeGrpcServer() {
 
-	lis, err := net.Listen("tcp", "0.0.0.0:50051")
+	lis, err := net.Listen("tcp", "0.0.0.0:"+config.Config["GRPC"])
 	if err != nil {
 		log.Fatalf("Failed to listen : %v", err)
 	}
