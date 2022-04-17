@@ -9,6 +9,7 @@ import (
 )
 
 type GRPCHandlers struct {
+	pb.UnimplementedProductsServicesServer
 }
 
 func NewGRPCServer(ctx context.Context) *GRPCHandlers {
@@ -16,6 +17,7 @@ func NewGRPCServer(ctx context.Context) *GRPCHandlers {
 }
 
 var _ ports.IGRPCHandlers = (*GRPCHandlers)(nil)
+var _ pb.ProductsServicesServer = (*GRPCHandlers)(nil)
 
 func (gh *GRPCHandlers) GetAvailableProducts(ctx context.Context, emptyReq *pb.EmptyRequest) (*pb.ProductsResponse, error) {
 	return nil, nil

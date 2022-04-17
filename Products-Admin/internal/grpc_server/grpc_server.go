@@ -11,23 +11,24 @@ import (
 )
 
 type GRPCServer struct {
-	pb.UnimplementedProductsServicesServer
 	grpc_handlers.GRPCHandlers
 }
 
+// Check if GRPCServer implements ProductsServiceServer API
 var _ ports.IGRPCServer = (*GRPCServer)(nil)
+var _ pb.ProductsServicesServer = (*GRPCServer)(nil)
 
 func NewGRPCServer() *GRPCServer {
 	return &GRPCServer{}
 }
 
 func (gs *GRPCServer) Initialize() {
-	lis, err := net.Listen("tcp", ":7459")
+	lis, err := net.Listen("tcp", ":8002")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
-	pb.RegisterProductsServicesServer(s, *gs)
+	pb.RegisterProductsServicesServer(s, gs)
 	log.Printf("server listening at %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
