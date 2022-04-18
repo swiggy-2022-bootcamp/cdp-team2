@@ -56,12 +56,13 @@ func (p *Product) GetPbProduct() *pb.Product {
 	}
 }
 
-func bindProductDesciption(gprcProDes []*pb.ProductDescription) (_productDecs []*ProductDescription) {
+func bindProductDesciption(gprcProDes []*pb.ProductDescription) []*ProductDescription {
+	var _productDecs []*ProductDescription
 	for _, _p := range gprcProDes {
 		var _productDes ProductDescription
 		_productDecs = append(_productDecs, _productDes.BindGrpcProductDesciption(_p))
 	}
-	return
+	return _productDecs
 }
 
 func (p *Product) BindGprcProduct(grpcProduct *pb.Product) {

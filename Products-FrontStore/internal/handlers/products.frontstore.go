@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -52,7 +53,8 @@ func (ph *ProductsHandlers) GetProductById(gctx *gin.Context) {
 	}
 	product, Err := ph.ProductsServices.GetProductById(int64(productID))
 	if Err != nil {
-		gctx.JSON(Err.GetErrCode(), gin.H{"message": err.Error()})
+		fmt.Println(Err)
+		gctx.JSON(Err.GetErrCode(), gin.H{"message": Err.Error()})
 		return
 	}
 	gctx.JSON(http.StatusOK, gin.H{"product": product})

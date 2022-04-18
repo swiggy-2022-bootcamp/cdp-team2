@@ -3,6 +3,7 @@ package services
 import (
 	pb "common/pkg/protos"
 	"context"
+	"encoding/json"
 	"net/http"
 
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-FrontStore/internal/core/domain"
@@ -45,7 +46,26 @@ func (ps *ProductsServices) GetProductById(productID int64) (*domain.Product, *e
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
+	// Temporary variables to store unmarshal structs
 	var _product *domain.Product
-	_product.BindGprcProduct(res.Product)
+	var _productDesc []*domain.ProductDescription
+	var _productSeoUrl *domain.ProductSeoUrl
+
+	// Marshal pb.go structs
+	tempProduct, _ := json.Marshal(res.Product)
+	tempSeoUrl, _ := json.Marshal(res.Product.ProductSeoUrl)
+	tempDes, _ := json.Marshal(res.Product.ProductDescription)
+
+	// Unmarshal pb.go structs to go structs
+	json.Unmarshal(tempProduct, &_product)
+	json.Unmarshal(tempSeoUrl, &_productSeoUrl)
+	json.Unmarshal(tempDes, &_productDesc)
+
+	// Assign temporary structs to _products
+	_product.ProductSeoUrl = _productSeoUrl
+	_product.ProductCategory = res.Product.ProductCategory
+	_product.ProductDescription = _productDesc
+	_product.ProductRelated = res.Product.ProductRelated
+
 	return _product, nil
 }
