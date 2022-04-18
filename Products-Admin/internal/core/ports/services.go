@@ -11,4 +11,5 @@ type IProductsServices interface {
 	DeleteProduct(int64) *errors.AppError
 	GetProducts() ([]*domain.Product, *errors.AppError)
 	GetProductById(int64) (*domain.Product, *errors.AppError)
+	IsProductExists(int64) (bool, *errors.AppError)
 }

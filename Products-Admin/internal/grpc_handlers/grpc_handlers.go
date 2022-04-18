@@ -2,6 +2,7 @@ package grpc_handlers
 
 import (
 	"context"
+	"errors"
 
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/core/ports"
 
@@ -40,15 +41,31 @@ func (gh *GRPCHandlers) GetProductById(ctx context.Context, productIDReq *pb.Pro
 	if err != nil {
 		return nil, err
 	}
+	if _product == nil {
+		return nil, errors.New("Product not found.")
+	}
 	return &pb.ProductResponse{
 		Product: _product.GetPbProduct(),
-	}, err
+	}, nil
 }
 
 func (gh *GRPCHandlers) CheckProductsWithCategory(ctx context.Context, categoryID *pb.CategoryIDRequest) (*pb.BoolResponse, error) {
 	return nil, nil
 }
 
-func (gh *GRPCHandlers) IsProductExists(ctx context.Context, productID *pb.ProductIDRequest) (*pb.BoolResponse, error) {
-	return nil, nil
+func (gh *GRPCHandlers) IsProductExists(ctx context.Context, productIDReq *pb.ProductIDRequest) (*pb.BoolResponse, error) {
+	exists, err := gh.ProductsServices.IsProductExists(productIDReq.ProductID)
+	if err != nil {
+		return &pb.BoolResponse{
+			Exists: false,
+		}, err
+	}
+	if exists == false {
+		return &pb.BoolResponse{
+			Exists: false,
+		}, nil
+	}
+	return &pb.BoolResponse{
+		Exists: true,
+	}, nil
 }

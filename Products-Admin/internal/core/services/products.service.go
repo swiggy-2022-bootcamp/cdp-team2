@@ -87,3 +87,16 @@ func (ps *ProductsServices) GetProductById(productID int64) (*domain.Product, *e
 	}
 	return _product, err
 }
+
+func (ps *ProductsServices) IsProductExists(productID int64) (bool, *errors.AppError) {
+	condition := map[string]*dynamodb.AttributeValue{
+		"_id": {
+			N: aws.String(fmt.Sprint(productID)),
+		},
+	}
+	exists, err := ps.ProductsRepository.IsProductExists(condition)
+	if err != nil {
+		return false, err
+	}
+	return exists, err
+}

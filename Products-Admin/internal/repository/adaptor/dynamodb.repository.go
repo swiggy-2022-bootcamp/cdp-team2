@@ -114,6 +114,9 @@ func (pr *ProductsRepository) GetProductById(condition map[string]*dynamodb.Attr
 	if dErr != nil {
 		return nil, errors.Wrap(dErr)
 	}
+	if response.Item == nil {
+		return nil, errors.New("Product not found.", 404)
+	}
 	_product := domain.Product{}
 	// if err := dynamodbattribute.UnmarshalMap(response.Item, &_product); err != nil {
 	// 	return nil, errors.New(err.Error(), http.StatusInternalServerError)
@@ -122,4 +125,19 @@ func (pr *ProductsRepository) GetProductById(condition map[string]*dynamodb.Attr
 		return nil, errors.Wrap(err)
 	}
 	return &_product, nil
+}
+
+func (pr *ProductsRepository) IsProductExists(condition map[string]*dynamodb.AttributeValue) (exists bool, err *errors.AppError) {
+	input := &dynamodb.GetItemInput{
+		Key:       condition,
+		TableName: aws.String(pr.TableName),
+	}
+	response, dErr := pr.DynamoDBClient.GetItem(input)
+	if dErr != nil {
+		return false, errors.Wrap(dErr)
+	}
+	if response.Item == nil {
+		return false, nil
+	}
+	return true, nil
 }
