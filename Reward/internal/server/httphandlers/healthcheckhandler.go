@@ -13,7 +13,7 @@ import (
 // @Summary Checks the health of the microservice
 // @Description Returns json stating with pass status and http response code 200 OK, otherwise returns http response code 500 Internal Server Error.
 // @Tags healthcheck
-// @Produce  json
+// @Produce json
 // @Success 200 {object} models.HealthCheck
 // @Failure 500
 // @Router /reward/v1/healthcheck [get]

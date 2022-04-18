@@ -16,12 +16,15 @@ import (
 // @Summary Add reward points to the customer
 // @Description This API allows Admin to directly add reward points to the customer. It accepts reward points and description in the request body, and on successful insertion in database, it returns 200 OK.
 // @Tags healthcheck
-// @Produce  json
-// @Success 200
+// @Accept json
+// @Success 200 {object} models.Reward
 // @Failure 500
-// @Router /reward/{id} [post]
+// @Router /reward/v1/reward/{id} [post]
 func AddRewardHandler(config *util.RouterConfig) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
+
+		//customerId := util.ExtractDetailsFromToken(req)
+
 		// read request body
 		b, goErr := ioutil.ReadAll(req.Body)
 		defer req.Body.Close()
@@ -33,6 +36,7 @@ func AddRewardHandler(config *util.RouterConfig) http.HandlerFunc {
 
 		// unmarshal the request to Product model
 		var reward models.Reward
+
 		goErr = json.Unmarshal(b, &reward)
 		if goErr != nil {
 			log.WithError(goErr).Error("an error occurred while unmarshalling the request")
@@ -40,6 +44,7 @@ func AddRewardHandler(config *util.RouterConfig) http.HandlerFunc {
 			return
 		}
 
+		// reward.CustomerId = customerId
 		service := services.GetAddRewardService()
 
 		// Process the request

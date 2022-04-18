@@ -8,6 +8,13 @@ import (
 
 func (s *Server) RedeemReward(ctx context.Context, reward *pb.CalculateRewardRequest) (*pb.CalculateRewardResponse, error) {
 
+	// call to Order MS to get list of products
+
+	// calculation of total reward points that customer wants to use
+
+	// call to Order MS to update the finalPrice of the order
+
+	// return the final response to calling microservice
 	return nil, nil
 }
 
