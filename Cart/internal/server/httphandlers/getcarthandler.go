@@ -12,10 +12,11 @@ import (
 // GetCart godoc
 // @Summary To get the cart details
 // @Description It returns the cart details with status code 200 OK.
-// @Produce  json
+// @Tags Cart
+// @Produce json
 // @Success 200
 // @Failure 500
-// @Router /cart [get]
+// @Router /cart/v1/cart [get]
 func GetCartHandler(config *util.RouterConfig) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 

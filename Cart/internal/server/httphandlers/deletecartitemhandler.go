@@ -11,11 +11,11 @@ import (
 // DeleteCartItem godoc
 // @Summary Deletes the cart item
 // @Description Deletes the product from the cart of user. Product id is given as path parameter in request URL. Status 200, returned on successful deletion with no content.
-// @Tags healthcheck
+// @Tags Cart
 // @Produce  json
 // @Success 200
 // @Failure 500
-// @Router /cart/{key} [delete]
+// @Router /cart/v1/cart/{key} [delete]
 func DeleteCartItemHandler(config *util.RouterConfig) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		params := mux.Vars(req)

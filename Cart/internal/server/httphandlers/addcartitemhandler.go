@@ -16,11 +16,11 @@ import (
 // AddCartItem godoc
 // @Summary Add the cart item in the cart.
 // @Description It accepts product id and quantity in the request url. If the product id exists, then it adds to the cart otherwise return 404. On successful addition of item to the cart, returns 200 OK, otherwise 500 Internal Server Error.
-// @Tags healthcheck
+// @Tags Cart
 // @Produce  json
 // @Success 200
 // @Failure 500
-// @Router /cart [post]
+// @Router /cart/v1/cart [post]
 func AddCartItemHandler(config *util.RouterConfig) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		// read request body
