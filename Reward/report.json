@@ -1,0 +1,34 @@
+{
+	"issues": [
+		{
+			"engineId": "gosec",
+			"ruleId": "G102",
+			"primaryLocation": {
+				"message": "Binds to all network interfaces",
+				"filePath": "internal/server/server.go",
+				"textRange": {
+					"startLine": 70,
+					"endLine": 70
+				}
+			},
+			"type": "VULNERABILITY",
+			"severity": "MAJOR",
+			"effortMinutes": 5
+		},
+		{
+			"engineId": "gosec",
+			"ruleId": "G104",
+			"primaryLocation": {
+				"message": "Errors unhandled.",
+				"filePath": "internal/server/httphandlers/healthcheckhandler.go",
+				"textRange": {
+					"startLine": 47,
+					"endLine": 47
+				}
+			},
+			"type": "VULNERABILITY",
+			"severity": "MINOR",
+			"effortMinutes": 5
+		}
+	]
+}
