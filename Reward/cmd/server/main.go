@@ -8,6 +8,7 @@ import (
 	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/internal/server"
 
 	_ "github.com/swiggy-2022-bootcamp/cdp-team2/reward/cmd/server/docs"
+	_ "github.com/swiggy-2022-bootcamp/cdp-team2/reward/internal/dao/models"
 	_ "github.com/swiggy-2022-bootcamp/cdp-team2/reward/internal/server/httphandlers"
 
 	log "github.com/sirupsen/logrus"
