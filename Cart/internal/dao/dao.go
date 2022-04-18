@@ -84,9 +84,16 @@ func (dao *dynamoDAO) DeleteCartItem(customerId string, productId string) *error
 		return nil
 	}
 
-	products[deleteItemIdx] = products[len(products)-1]
+	var updatedProducts []models.Product
+	for idx, product := range products {
+		if idx == deleteItemIdx {
+			continue
+		} else {
+			updatedProducts = append(updatedProducts, product)
+		}
+	}
 
-	cart.Products = products
+	cart.Products = updatedProducts
 
 	err = dao.addCartDetails(cart)
 	if err != nil {

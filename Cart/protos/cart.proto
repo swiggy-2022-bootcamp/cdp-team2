@@ -1,8 +1,6 @@
 syntax = "proto3";
 
 option go_package = "./;protos";
-import "google/protobuf/empty.proto";
-
 
 message Product {
     string productId = 1;
@@ -14,10 +12,14 @@ message Cart {
     repeated Product products = 2;
 }
 
+message CartRequest {
+    string customerId = 1;
+}
+
 message CartResponse {
     Cart cart = 1;
 }
 
 service CartService {
-    rpc GetCart(google.protobuf.Empty) returns (CartResponse);
+    rpc GetCart(CartRequest) returns (CartResponse);
 }

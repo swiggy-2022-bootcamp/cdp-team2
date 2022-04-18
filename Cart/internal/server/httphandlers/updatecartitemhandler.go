@@ -47,7 +47,7 @@ func UpdateCartItemHandler(config *util.RouterConfig) http.HandlerFunc {
 			return
 		}
 
-		err = service.ProcessRequest("123", product)
+		err = service.ProcessRequest("133", product)
 		if err != nil {
 			http.Error(w, err.ErrorMessage, err.HttpResponseCode)
 			return

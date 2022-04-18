@@ -24,7 +24,7 @@ func DeleteCartItemHandler(config *util.RouterConfig) http.HandlerFunc {
 		service := services.GetDeleteCartItemService()
 
 		// Process the request
-		err := service.ProcessRequest("123", productId)
+		err := service.ProcessRequest("133", productId)
 		if err != nil {
 			http.Error(w, err.ErrorMessage, err.HttpResponseCode)
 

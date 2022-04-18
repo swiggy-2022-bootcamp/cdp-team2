@@ -11,4 +11,10 @@ const (
 
 	AddCartAPIName      = "Add Cart API"
 	AddCartItemEndpoint = APIVersion1 + "/cart"
+
+	UpdateCartItemAPIName  = "Update Cart Item API"
+	UpdateCartItemEndpoint = APIVersion1 + "/cart"
+
+	DeleteCartItemAPIName  = "Delete Cart Item API"
+	DeleteCartItemEndpoint = APIVersion1 + "/cart/{key}"
 )

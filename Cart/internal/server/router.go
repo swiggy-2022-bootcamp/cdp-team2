@@ -42,4 +42,15 @@ func (r *Router) InitializeRoutes(routerConfig *util.RouterConfig) {
 		httphandlers.AddCartItemHandler(routerConfig)).
 		Methods(http.MethodPost).
 		Name(literals.AddCartAPIName)
+
+	s.HandleFunc(literals.UpdateCartItemEndpoint,
+		httphandlers.UpdateCartItemHandler(routerConfig)).
+		Methods(http.MethodPut).
+		Name(literals.UpdateCartItemAPIName)
+
+	s.HandleFunc(literals.DeleteCartItemEndpoint,
+		httphandlers.DeleteCartItemHandler(routerConfig)).
+		Methods(http.MethodDelete).
+		Name(literals.DeleteCartItemAPIName)
+
 }
