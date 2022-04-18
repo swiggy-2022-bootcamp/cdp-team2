@@ -7,8 +7,10 @@ import (
 
 	domain "github.com/auth-frontstore-service/internal/core/domain"
 	repo "github.com/auth-frontstore-service/internal/repository"
+	pb "github.com/auth-frontstore-service/protos/customerpb"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"google.golang.org/grpc"
 )
 
 type service struct{}
@@ -17,8 +19,31 @@ func New() *service {
 	return &service{}
 }
 
+func sendCredentialService(c pb.ServiceClient, username string, password string) (bool, string) {
+	credentialRequest := pb.CredentialRequest{
+		Credential: &pb.Credential{
+			Username: username,
+			Password: password,
+		},
+	}
+	fmt.Println(2)
+	res, err := c.CredentialService(context.Background(), &credentialRequest)
+	if err != nil {
+		fmt.Println("Encountered an error while creating the", err.Error())
+		return false, err.Error()
+	}
+	return res.Ispresent, res.Customerid
+}
+
+func sendCredential(username string, password string) (bool, string) {
+	conn, _ := grpc.Dial("localhost:8053", grpc.WithInsecure())
+	defer conn.Close()
+	c := pb.NewServiceClient(conn)
+	return sendCredentialService(c, username, password)
+}
+
 func (srv *service) VerifyCustomerCredentials(email string, password string) (bool, string) {
-	return true, "623cb9f57cbbe99be3193341"
+	return sendCredential(email, password)
 }
 
 func (srv *service) NewUser(role string, customerId primitive.ObjectID) (*domain.User, error) {
