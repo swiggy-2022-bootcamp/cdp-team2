@@ -20,6 +20,10 @@ message CartResponse {
     Cart cart = 1;
 }
 
+message EmptyCartResponse{
+}
+
 service CartService {
     rpc GetCart(CartRequest) returns (CartResponse);
+    rpc EmptyCart(CartRequest) returns (EmptyCartResponse);
 }
