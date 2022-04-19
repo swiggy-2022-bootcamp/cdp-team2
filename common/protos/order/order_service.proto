@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package order;
+option go_package = "github.com/swiggy-2022-bootcamp/cdp-team2/common/protos/order";
+
+enum Status{
+        PENDING = 0;
+        COMPLETED = 1;
+        DECLINED = 2;
+}
+
+message ProductDesc{
+	int32 productid = 1;
+	int32 points = 2;
+	int32 reward = 3;
+	int32 quantity = 4;
+	int32 price = 5;
+}
+
+message Order{
+	int32 order_id = 1;
+	int32 customer_id = 2;
+    Status status = 3;
+	string order_time = 4;
+	int32 address_id = 5;
+	int32 total_price = 6;
+	int32 payed_price = 7;
+	repeated ProductDesc product_description = 8;
+}
+
+message GetOrderInput{
+    int32 order_id = 1;
+}
+
+message UpdateOrderStatusInput{
+    int32 order_id = 1;
+    Status status = 2;
+}
+
+service CategoryService {
+    rpc createOrder(Order) returns (Order);
+    rpc getOrder(GetOrderInput) returns (Order);
+    rpc updateOrderStatus(UpdateOrderStatusInput) returns (Order);
+}
+

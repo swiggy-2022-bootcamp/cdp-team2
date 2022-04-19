@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CategoryServiceClient interface {
-	GetCategory(ctx context.Context, in *GetCategoryInput, opts ...grpc.CallOption) (*GetCategoryOutput, error)
+	GetCategory(ctx context.Context, in *GetCategoryInput, opts ...grpc.CallOption) (*Category, error)
 }
 
 type categoryServiceClient struct {
@@ -33,8 +33,8 @@ func NewCategoryServiceClient(cc grpc.ClientConnInterface) CategoryServiceClient
 	return &categoryServiceClient{cc}
 }
 
-func (c *categoryServiceClient) GetCategory(ctx context.Context, in *GetCategoryInput, opts ...grpc.CallOption) (*GetCategoryOutput, error) {
-	out := new(GetCategoryOutput)
+func (c *categoryServiceClient) GetCategory(ctx context.Context, in *GetCategoryInput, opts ...grpc.CallOption) (*Category, error) {
+	out := new(Category)
 	err := c.cc.Invoke(ctx, "/category.CategoryService/GetCategory", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -46,7 +46,7 @@ func (c *categoryServiceClient) GetCategory(ctx context.Context, in *GetCategory
 // All implementations must embed UnimplementedCategoryServiceServer
 // for forward compatibility
 type CategoryServiceServer interface {
-	GetCategory(context.Context, *GetCategoryInput) (*GetCategoryOutput, error)
+	GetCategory(context.Context, *GetCategoryInput) (*Category, error)
 	mustEmbedUnimplementedCategoryServiceServer()
 }
 
@@ -54,7 +54,7 @@ type CategoryServiceServer interface {
 type UnimplementedCategoryServiceServer struct {
 }
 
-func (UnimplementedCategoryServiceServer) GetCategory(context.Context, *GetCategoryInput) (*GetCategoryOutput, error) {
+func (UnimplementedCategoryServiceServer) GetCategory(context.Context, *GetCategoryInput) (*Category, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCategory not implemented")
 }
 func (UnimplementedCategoryServiceServer) mustEmbedUnimplementedCategoryServiceServer() {}
