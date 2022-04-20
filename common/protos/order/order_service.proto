@@ -37,7 +37,7 @@ message UpdateOrderStatusInput{
     Status status = 2;
 }
 
-service CategoryService {
+service OrderService {
     rpc createOrder(Order) returns (Order);
     rpc getOrder(GetOrderInput) returns (Order);
     rpc updateOrderStatus(UpdateOrderStatusInput) returns (Order);
