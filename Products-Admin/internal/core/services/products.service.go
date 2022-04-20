@@ -101,6 +101,31 @@ func (ps *ProductsServices) IsProductExists(productID int64) (bool, *errors.AppE
 	return exists, err
 }
 
+func (ps *ProductsServices) CheckProductsWithCategory(categoryID int64) (bool, *errors.AppError) {
+
+	// Building filter and condition expression
+	filter := expression.Name("_id").NotEqual(expression.Value(""))
+	condition, err := expression.NewBuilder().WithFilter(filter).Build()
+	if err != nil {
+		return false, errors.Wrap(err)
+	}
+
+	// Get all products and filter
+	_products, err2 := ps.ProductsRepository.GetProductsByCondition(condition)
+	if err2 != nil {
+		return false, errors.Wrap(err2)
+	}
+
+	for _, _product := range _products {
+		for _, _catID := range _product.ProductCategory {
+			if _catID == categoryID {
+				return true, nil
+			}
+		}
+	}
+	return false, nil
+}
+
 func (ps *ProductsServices) GetProductsByCategoryId(categoryID int64) ([]*domain.Product, *errors.AppError) {
 
 	// Convert int64 category to string type

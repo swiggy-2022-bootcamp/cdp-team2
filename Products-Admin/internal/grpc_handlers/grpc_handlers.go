@@ -45,8 +45,16 @@ func (gh *GRPCHandlers) GetProductById(ctx context.Context, productIDReq *pb.Pro
 	}, nil
 }
 
-func (gh *GRPCHandlers) CheckProductsWithCategory(ctx context.Context, categoryID *pb.CategoryIDRequest) (*pb.BoolResponse, error) {
-	return nil, nil
+func (gh *GRPCHandlers) CheckProductsWithCategory(ctx context.Context, categoryReqID *pb.CategoryIDRequest) (*pb.BoolResponse, error) {
+	_exists, err := gh.ProductsServices.CheckProductsWithCategory(categoryReqID.CategoryID)
+	if err != nil {
+		return &pb.BoolResponse{
+			Exists: false,
+		}, err
+	}
+	return &pb.BoolResponse{
+		Exists: _exists,
+	}, nil
 }
 
 func (gh *GRPCHandlers) IsProductExists(ctx context.Context, productIDReq *pb.ProductIDRequest) (*pb.BoolResponse, error) {
