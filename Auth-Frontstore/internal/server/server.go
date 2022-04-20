@@ -6,6 +6,7 @@ import (
 	"github.com/auth-frontstore-service/config"
 	_ "github.com/auth-frontstore-service/docs"
 	"github.com/auth-frontstore-service/internal/core/ports"
+
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -46,6 +47,6 @@ func (s *Server) Initialize() {
 	adminAuthRoutes.GET("/logout", s.Middlewares.CheckAuthMiddleware, s.Handlers.Logout)
 	adminAuthRoutes.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	adminAuthRoutes.GET("/", s.Handlers.Health)
-
+	//	repo.InitDB()
 	log.Fatal(server.Run(config.Config["PORT"]))
 }

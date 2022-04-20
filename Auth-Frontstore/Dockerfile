@@ -1,5 +1,5 @@
 # Builder Image
-FROM golang:1.13-alpine3.11 as builder
+FROM golang:1.18 as builder
 RUN mkdir /app
 Add . /app
 WORKDIR /app
