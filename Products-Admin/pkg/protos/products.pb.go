@@ -726,7 +726,7 @@ var file_products_proto_rawDesc = []byte{
 	0x0f, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
 	0x12, 0x29, 0x0a, 0x07, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28,
 	0x0b, 0x32, 0x0f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x50, 0x72, 0x6f, 0x64, 0x75,
-	0x63, 0x74, 0x52, 0x07, 0x70, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x32, 0xb0, 0x02, 0x0a, 0x10,
+	0x63, 0x74, 0x52, 0x07, 0x70, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x32, 0x80, 0x03, 0x0a, 0x10,
 	0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x73, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73,
 	0x12, 0x46, 0x0a, 0x14, 0x47, 0x65, 0x74, 0x41, 0x76, 0x61, 0x69, 0x6c, 0x61, 0x62, 0x6c, 0x65,
 	0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x73, 0x12, 0x14, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
@@ -745,7 +745,12 @@ var file_products_proto_rawDesc = []byte{
 	0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x42, 0x79, 0x49, 0x64, 0x12, 0x18, 0x2e, 0x70, 0x72,
 	0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x49, 0x44, 0x52, 0x65,
 	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x17, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x50,
-	0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x45,
+	0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x4e,
+	0x0a, 0x17, 0x47, 0x65, 0x74, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x73, 0x42, 0x79, 0x43,
+	0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x49, 0x64, 0x12, 0x19, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x73, 0x2e, 0x43, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x49, 0x44, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x18, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x50, 0x72,
+	0x6f, 0x64, 0x75, 0x63, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x45,
 	0x5a, 0x43, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x77, 0x69,
 	0x67, 0x67, 0x79, 0x2d, 0x32, 0x30, 0x32, 0x32, 0x2d, 0x62, 0x6f, 0x6f, 0x74, 0x63, 0x61, 0x6d,
 	0x70, 0x2f, 0x63, 0x64, 0x70, 0x2d, 0x74, 0x65, 0x61, 0x6d, 0x32, 0x2f, 0x50, 0x72, 0x6f, 0x64,
@@ -786,12 +791,14 @@ var file_products_proto_depIdxs = []int32{
 	5, // 5: protos.ProductsServices.CheckProductsWithCategory:input_type -> protos.CategoryIDRequest
 	7, // 6: protos.ProductsServices.IsProductExists:input_type -> protos.ProductIDRequest
 	7, // 7: protos.ProductsServices.GetProductById:input_type -> protos.ProductIDRequest
-	3, // 8: protos.ProductsServices.GetAvailableProducts:output_type -> protos.ProductsResponse
-	6, // 9: protos.ProductsServices.CheckProductsWithCategory:output_type -> protos.BoolResponse
-	6, // 10: protos.ProductsServices.IsProductExists:output_type -> protos.BoolResponse
-	8, // 11: protos.ProductsServices.GetProductById:output_type -> protos.ProductResponse
-	8, // [8:12] is the sub-list for method output_type
-	4, // [4:8] is the sub-list for method input_type
+	5, // 8: protos.ProductsServices.GetProductsByCategoryId:input_type -> protos.CategoryIDRequest
+	3, // 9: protos.ProductsServices.GetAvailableProducts:output_type -> protos.ProductsResponse
+	6, // 10: protos.ProductsServices.CheckProductsWithCategory:output_type -> protos.BoolResponse
+	6, // 11: protos.ProductsServices.IsProductExists:output_type -> protos.BoolResponse
+	8, // 12: protos.ProductsServices.GetProductById:output_type -> protos.ProductResponse
+	3, // 13: protos.ProductsServices.GetProductsByCategoryId:output_type -> protos.ProductsResponse
+	9, // [9:14] is the sub-list for method output_type
+	4, // [4:9] is the sub-list for method input_type
 	4, // [4:4] is the sub-list for extension type_name
 	4, // [4:4] is the sub-list for extension extendee
 	0, // [0:4] is the sub-list for field type_name
@@ -948,6 +955,7 @@ type ProductsServicesClient interface {
 	CheckProductsWithCategory(ctx context.Context, in *CategoryIDRequest, opts ...grpc.CallOption) (*BoolResponse, error)
 	IsProductExists(ctx context.Context, in *ProductIDRequest, opts ...grpc.CallOption) (*BoolResponse, error)
 	GetProductById(ctx context.Context, in *ProductIDRequest, opts ...grpc.CallOption) (*ProductResponse, error)
+	GetProductsByCategoryId(ctx context.Context, in *CategoryIDRequest, opts ...grpc.CallOption) (*ProductsResponse, error)
 }
 
 type productsServicesClient struct {
@@ -994,12 +1002,22 @@ func (c *productsServicesClient) GetProductById(ctx context.Context, in *Product
 	return out, nil
 }
 
+func (c *productsServicesClient) GetProductsByCategoryId(ctx context.Context, in *CategoryIDRequest, opts ...grpc.CallOption) (*ProductsResponse, error) {
+	out := new(ProductsResponse)
+	err := c.cc.Invoke(ctx, "/protos.ProductsServices/GetProductsByCategoryId", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ProductsServicesServer is the server API for ProductsServices service.
 type ProductsServicesServer interface {
 	GetAvailableProducts(context.Context, *EmptyRequest) (*ProductsResponse, error)
 	CheckProductsWithCategory(context.Context, *CategoryIDRequest) (*BoolResponse, error)
 	IsProductExists(context.Context, *ProductIDRequest) (*BoolResponse, error)
 	GetProductById(context.Context, *ProductIDRequest) (*ProductResponse, error)
+	GetProductsByCategoryId(context.Context, *CategoryIDRequest) (*ProductsResponse, error)
 }
 
 // UnimplementedProductsServicesServer can be embedded to have forward compatible implementations.
@@ -1017,6 +1035,9 @@ func (*UnimplementedProductsServicesServer) IsProductExists(context.Context, *Pr
 }
 func (*UnimplementedProductsServicesServer) GetProductById(context.Context, *ProductIDRequest) (*ProductResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetProductById not implemented")
+}
+func (*UnimplementedProductsServicesServer) GetProductsByCategoryId(context.Context, *CategoryIDRequest) (*ProductsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProductsByCategoryId not implemented")
 }
 
 func RegisterProductsServicesServer(s *grpc.Server, srv ProductsServicesServer) {
@@ -1095,6 +1116,24 @@ func _ProductsServices_GetProductById_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProductsServices_GetProductsByCategoryId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CategoryIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductsServicesServer).GetProductsByCategoryId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protos.ProductsServices/GetProductsByCategoryId",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductsServicesServer).GetProductsByCategoryId(ctx, req.(*CategoryIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _ProductsServices_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "protos.ProductsServices",
 	HandlerType: (*ProductsServicesServer)(nil),
@@ -1114,6 +1153,10 @@ var _ProductsServices_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetProductById",
 			Handler:    _ProductsServices_GetProductById_Handler,
+		},
+		{
+			MethodName: "GetProductsByCategoryId",
+			Handler:    _ProductsServices_GetProductsByCategoryId_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

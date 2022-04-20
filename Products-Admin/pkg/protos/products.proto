@@ -71,4 +71,5 @@ service ProductsServices {
     rpc CheckProductsWithCategory(CategoryIDRequest) returns (BoolResponse);
     rpc IsProductExists(ProductIDRequest) returns (BoolResponse);
     rpc GetProductById(ProductIDRequest) returns (ProductResponse);
+    rpc GetProductsByCategoryId(CategoryIDRequest) returns (ProductsResponse);
 }

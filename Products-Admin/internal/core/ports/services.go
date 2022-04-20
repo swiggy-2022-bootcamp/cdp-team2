@@ -12,4 +12,5 @@ type IProductsServices interface {
 	GetProducts() ([]*domain.Product, *errors.AppError)
 	GetProductById(int64) (*domain.Product, *errors.AppError)
 	IsProductExists(int64) (bool, *errors.AppError)
+	GetProductsByCategoryId(int64) ([]*domain.Product, *errors.AppError)
 }

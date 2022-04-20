@@ -51,9 +51,9 @@ func (h *ProductsHandlers) AddProduct(gctx *gin.Context) {
 		gctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
-	productID, err := h.ProductsServices.AddProduct(&_product)
-	if err != nil {
-		gctx.JSON(err.GetErrCode(), gin.H{"message": err.Error()})
+	productID, err2 := h.ProductsServices.AddProduct(&_product)
+	if err2 != nil {
+		gctx.JSON(err2.GetErrCode(), gin.H{"message": err2.Error()})
 		return
 	}
 	gctx.JSON(http.StatusCreated, gin.H{"message": fmt.Sprint(productID) + " Product Added."})

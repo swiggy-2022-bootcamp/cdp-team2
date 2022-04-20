@@ -1,8 +1,6 @@
 package adaptor
 
 import (
-	"fmt"
-
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
@@ -34,7 +32,7 @@ func (pr *ProductsRepository) Health() bool {
 	return err == nil
 }
 
-func (pr *ProductsRepository) GetAll(condition expression.Expression) (products []*domain.Product, err *errors.AppError) {
+func (pr *ProductsRepository) GetProductsByCondition(condition expression.Expression) (products []*domain.Product, err *errors.AppError) {
 	input := &dynamodb.ScanInput{
 		ExpressionAttributeNames:  condition.Names(),
 		ExpressionAttributeValues: condition.Values(),
@@ -65,7 +63,6 @@ func (pr *ProductsRepository) AddProduct(product *domain.Product) (*domain.Produ
 	if dErr != nil {
 		return nil, errors.Wrap(dErr)
 	}
-	fmt.Println(entityParsed)
 	input := &dynamodb.PutItemInput{
 		Item:      entityParsed,
 		TableName: aws.String(pr.TableName),
