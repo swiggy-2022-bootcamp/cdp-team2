@@ -1,0 +1,31 @@
+basePath: /api/rest/products
+host: localhost:8001
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: Micorservice for handling frontstore products.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Products FrontStore Microservice
+  version: "1.0"
+paths:
+  /:
+    get:
+      consumes:
+      - application/json
+      description: API to check products-admin health
+      produces:
+      - plain/text
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Health Check Route
+      tags:
+      - Health
+swagger: "2.0"
