@@ -90,7 +90,7 @@ func (h *ProductsHandlers) DeleteProduct(gctx *gin.Context) {
 		gctx.JSON(err.GetErrCode(), gin.H{"message": err.Error()})
 		return
 	}
-	gctx.JSON(http.StatusAccepted, gin.H{"message": "Product deleted."})
+	gctx.JSON(http.StatusOK, gin.H{"message": "Product deleted."})
 }
 
 func (ph *ProductsHandlers) SearchByLimit(gctx *gin.Context) {
