@@ -25,6 +25,7 @@ type ServiceClient interface {
 	RewardService(ctx context.Context, in *RewardRequest, opts ...grpc.CallOption) (*RewardResponse, error)
 	CartService(ctx context.Context, in *CartRequest, opts ...grpc.CallOption) (*CartResponse, error)
 	AddressutsService(ctx context.Context, in *AddressutsRequest, opts ...grpc.CallOption) (*AddressutsResponse, error)
+	AddressstuService(ctx context.Context, in *AddressstuRequest, opts ...grpc.CallOption) (*AddressstuResponse, error)
 	CredentialService(ctx context.Context, in *CredentialRequest, opts ...grpc.CallOption) (*CredentialResponse, error)
 }
 
@@ -63,6 +64,15 @@ func (c *serviceClient) AddressutsService(ctx context.Context, in *AddressutsReq
 	return out, nil
 }
 
+func (c *serviceClient) AddressstuService(ctx context.Context, in *AddressstuRequest, opts ...grpc.CallOption) (*AddressstuResponse, error) {
+	out := new(AddressstuResponse)
+	err := c.cc.Invoke(ctx, "/proto.Service/AddressstuService", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *serviceClient) CredentialService(ctx context.Context, in *CredentialRequest, opts ...grpc.CallOption) (*CredentialResponse, error) {
 	out := new(CredentialResponse)
 	err := c.cc.Invoke(ctx, "/proto.Service/CredentialService", in, out, opts...)
@@ -79,6 +89,7 @@ type ServiceServer interface {
 	RewardService(context.Context, *RewardRequest) (*RewardResponse, error)
 	CartService(context.Context, *CartRequest) (*CartResponse, error)
 	AddressutsService(context.Context, *AddressutsRequest) (*AddressutsResponse, error)
+	AddressstuService(context.Context, *AddressstuRequest) (*AddressstuResponse, error)
 	CredentialService(context.Context, *CredentialRequest) (*CredentialResponse, error)
 	mustEmbedUnimplementedServiceServer()
 }
@@ -95,6 +106,9 @@ func (UnimplementedServiceServer) CartService(context.Context, *CartRequest) (*C
 }
 func (UnimplementedServiceServer) AddressutsService(context.Context, *AddressutsRequest) (*AddressutsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddressutsService not implemented")
+}
+func (UnimplementedServiceServer) AddressstuService(context.Context, *AddressstuRequest) (*AddressstuResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddressstuService not implemented")
 }
 func (UnimplementedServiceServer) CredentialService(context.Context, *CredentialRequest) (*CredentialResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CredentialService not implemented")
@@ -166,6 +180,24 @@ func _Service_AddressutsService_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Service_AddressstuService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddressstuRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).AddressstuService(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.Service/AddressstuService",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).AddressstuService(ctx, req.(*AddressstuRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Service_CredentialService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CredentialRequest)
 	if err := dec(in); err != nil {
@@ -202,6 +234,10 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddressutsService",
 			Handler:    _Service_AddressutsService_Handler,
+		},
+		{
+			MethodName: "AddressstuService",
+			Handler:    _Service_AddressstuService_Handler,
 		},
 		{
 			MethodName: "CredentialService",

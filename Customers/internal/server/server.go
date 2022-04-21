@@ -6,7 +6,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"  //gin-swagger middleware
 	"github.com/swaggo/gin-swagger/swaggerFiles"	//swagger embed files
 	_ "customers/docs"
-	model "customers/config"
+	// model "customers/config"
 	"customers/internal/literals"
 	"strconv"
 )
@@ -30,7 +30,7 @@ import (
 // @name                        Authorization
 func RunServer(){
  
-	model.InitDB()
+	// model.InitDB()
 	server:=gin.Default()
 
 	customerRoute:=server.Group("/customers")

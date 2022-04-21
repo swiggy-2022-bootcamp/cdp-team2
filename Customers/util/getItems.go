@@ -2,7 +2,7 @@ package util
 
 import (
 	"fmt"
-	model "customers/internal/dao"
+	model "customers/dao/models"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
@@ -26,12 +26,9 @@ func GetItems(id_string string,db dynamodbiface.DynamoDBAPI)(model.Customer){
 
 	// read the item
 	resp, err := db.GetItem(params)
-	if err!=nil && err.Error()=="test"{
-		return model.Customer{Id:"test"}
-	}
-	if err != nil {
+ 	if err != nil {
 		fmt.Printf("ERROR: %v\n", err.Error())
-		//return 400,model.Customer{},err11.Error()
+		return model.Customer{}
 	}
 
 	// dump the response data

@@ -22,19 +22,33 @@ func (*server)  CredentialService(ctx context.Context,req *pb.CredentialRequest)
  	customer_id,ispresent:=handlegrpc.CheckCredentials(username,password)
 	return &(pb.CredentialResponse{Ispresent:ispresent,Customerid:customer_id}),nil
 }
+func (*server) AddressstuService(ctx context.Context,req *pb.AddressstuRequest)(*pb.AddressstuResponse,error){
+	customer_id:=req.CustomerId;
+	fmt.Println(customer_id)
+
+	// fetch the data from DB
+
+	addresses:=[]*pb.Address{}
+	// write a for loop to add the values into this array
+	addresses=append(addresses,&pb.Address{CustomerId:"rf837fh",Firstname:"uday",Lastname:"Kiran",AddressLine1:"house numer 1",AddressLine2:"ngo street",City:"kamareddy",PostCode:503111,CountryCode:"+91"})
+	return &(pb.AddressstuResponse{Address:addresses}),nil
+}
 
 func (*server)  AddressutsService(ctx context.Context,req *pb.AddressutsRequest)(*pb.AddressutsResponse,error){
-	customer_id:=req.Address.CustomerId
+	fmt.Println("address service called")
+	
+	customerId:=req.Address.CustomerId
 	firstname:=req.Address.Firstname
 	lastname:=req.Address.Lastname
-	address1:=req.Address.Address1
-	address2:=req.Address.Address2
+	addressLine1:=req.Address.AddressLine1
+	addressLine2:=req.Address.AddressLine2
 	city:=req.Address.City
-	postcode:=req.Address.Postcode
-	country_id:=req.Address.CountryId
+	postcode:=req.Address.PostCode
+	countryId:=req.Address.CountryCode
 
-	fmt.Println(customer_id,firstname,lastname,address1,address2,city,postcode,country_id);
-	return &(pb.AddressutsResponse{Response:true}),nil
+	fmt.Println(customerId,firstname,lastname,addressLine1,addressLine2,city,postcode,countryId);
+	resp:=&(pb.AddressutsResponse{Response:true})
+ 	return resp,nil
 }
 func(*server) CartService(ctx context.Context,req *pb.CartRequest )(*pb.CartResponse,error){
     fmt.Println("Cart Service called")
@@ -94,7 +108,7 @@ func GrpcServer(){
     s:=grpc.NewServer(opts...)
     pb.RegisterServiceServer(s,&server{})
 
-    Listener,_:=net.Listen("tcp",":9000")
+    Listener,_:=net.Listen("tcp",":9010")
     s.Serve(Listener)
 
 }

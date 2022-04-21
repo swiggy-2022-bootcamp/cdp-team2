@@ -1,10 +1,10 @@
-package util
+package util_test
 import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbiface"
 	"testing"
  	"github.com/aws/aws-sdk-go/service/dynamodb"
- 	model "customers/internal/dao"
-	"errors"
+ 	model "customers/dao/models"
+	"customers/util"
 )
 
 type mockDynamoDBClient struct {
@@ -12,10 +12,10 @@ type mockDynamoDBClient struct {
 }
 
 func  (m *mockDynamoDBClient) PutItem(*dynamodb.PutItemInput) (*dynamodb.PutItemOutput, error){
-	return nil,nil
+	return &dynamodb.PutItemOutput{},nil
 }
 func    (m *mockDynamoDBClient)  Query(*dynamodb.QueryInput) (*dynamodb.QueryOutput, error){
-	return nil,errors.New("test")
+	return &dynamodb.QueryOutput{},nil
 }
 
 type Tests struct{
@@ -40,7 +40,7 @@ func TestValidateEmail(t *testing.T){
 	mockSvc := &mockDynamoDBClient{}
 	InitTests()
 	for _,val:=range tests{
-		status:=ValidateEmail(val.Customer.Email,mockSvc)
+		status:=util.ValidateEmail(val.Customer.Email,mockSvc)
 		if status!=true{
 			return 
 		}

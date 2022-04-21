@@ -16,7 +16,7 @@
     "paths": {
         "/customers": {
             "post": {
-                "description": "API to Create Customers-admin's Customer",
+                "description": "API to Create Customer-Admin's Customer",
                 "consumes": [
                     "application/json"
                 ],
@@ -24,17 +24,18 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Customer Create"
+                    "Create"
                 ],
                 "summary": "Customer Create Route",
                 "parameters": [
                     {
-                        "description": "Customer Body",
-                        "name": "customer",
+                        "description": "Customer info",
+                        "name": "Customer",
                         "in": "body",
+                        "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/dao.Customer"
+                            "$ref": "#/definitions/models.Customer"
                         }
                     }
                 ],
@@ -42,18 +43,21 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dao.Customer"
+                            "$ref": "#/definitions/models.Customer"
                         }
                     },
                     "500": {
-                        "description": ""
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/string"
+                        }
                     }
                 }
             }
         },
         "/customers/email/{email}": {
             "get": {
-                "description": "API to Get Customers-admin's Customer",
+                "description": "API to Get Customer-Admin's Customer",
                 "consumes": [
                     "application/json"
                 ],
@@ -63,11 +67,11 @@
                 "tags": [
                     "Customer Get"
                 ],
-                "summary": "Customer Get Route",
+                "summary": "Customer Get By Email Route",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Customer Email",
+                        "description": "Customer email",
                         "name": "email",
                         "in": "path",
                         "required": true
@@ -77,18 +81,21 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dao.Customer"
+                            "$ref": "#/definitions/models.Customer"
                         }
                     },
                     "500": {
-                        "description": ""
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/string"
+                        }
                     }
                 }
             }
         },
         "/customers/{id}": {
             "get": {
-                "description": "API to Get Customers-admin's Customer",
+                "description": "API to Get Customer-Admin's Customer",
                 "consumes": [
                     "application/json"
                 ],
@@ -112,16 +119,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dao.Customer"
+                            "$ref": "#/definitions/models.Customer"
                         }
                     },
                     "500": {
-                        "description": ""
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/string"
+                        }
                     }
                 }
             },
             "put": {
-                "description": "API to Update Customers-admin's Customer",
+                "description": "API to Update Customer-Admin's Customer",
                 "consumes": [
                     "application/json"
                 ],
@@ -141,7 +151,7 @@
                         "required": true
                     },
                     {
-                        "description": "update details",
+                        "description": "Customer Update",
                         "name": "customer",
                         "in": "body",
                         "required": true,
@@ -155,16 +165,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dao.Customer"
+                            "$ref": "#/definitions/models.Customer"
                         }
                     },
                     "500": {
-                        "description": ""
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/string"
+                        }
                     }
                 }
             },
             "delete": {
-                "description": "API to Delete Customers-admin's Customer",
+                "description": "API to Delete Customer-Admin's Customer",
                 "consumes": [
                     "application/json"
                 ],
@@ -172,7 +185,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Customer Delete"
+                    "Delete"
                 ],
                 "summary": "Customer Delete Route",
                 "parameters": [
@@ -188,31 +201,11 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/string"
+                            "$ref": "#/definitions/models.Customer"
                         }
                     },
                     "500": {
-                        "description": ""
-                    }
-                }
-            }
-        },
-        "/health": {
-            "get": {
-                "description": "API to check Customers-admin's health",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Health"
-                ],
-                "summary": "Health Check Route",
-                "responses": {
-                    "200": {
-                        "description": "OK",
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/string"
                         }
@@ -222,7 +215,7 @@
         }
     },
     "definitions": {
-        "dao.Address": {
+        "models.Address": {
             "type": "object",
             "properties": {
                 "address_1": {
@@ -243,9 +236,6 @@
                 "country_id": {
                     "type": "string"
                 },
-                "default": {
-                    "type": "string"
-                },
                 "firstname": {
                     "type": "string"
                 },
@@ -253,20 +243,17 @@
                     "type": "string"
                 },
                 "postcode": {
-                    "type": "string"
-                },
-                "zone_id": {
-                    "type": "string"
+                    "type": "integer"
                 }
             }
         },
-        "dao.Customer": {
+        "models.Customer": {
             "type": "object",
             "properties": {
                 "address": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dao.Address"
+                        "$ref": "#/definitions/models.Address"
                     }
                 },
                 "approved": {
@@ -279,7 +266,7 @@
                     "type": "string"
                 },
                 "customer_group_id": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "customer_id": {
                     "type": "string"
@@ -306,7 +293,7 @@
                     "type": "string"
                 },
                 "reward_total": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "safe": {
                     "type": "string"
@@ -318,7 +305,7 @@
                     "type": "string"
                 },
                 "user_balance": {
-                    "type": "string"
+                    "type": "number"
                 }
             }
         }

@@ -1,50 +1,51 @@
 package server
 import (
-	
 	"github.com/gin-gonic/gin"
 	"customers/internal/server/handler"
 )
 
 func CustomerRoute(g *gin.RouterGroup){
+	cont:=handler.NewCustomerController()
 	g.POST("/",func(ctx *gin.Context){
-		status,response,error:=handler.CreateCustomer(ctx);
-		if status==200{
-			ctx.JSON(status,response);
+		response,err:=cont.CreateCustomer(ctx);
+ 		if err==nil{
+			ctx.JSON(200,response);
 		} else{
-			ctx.JSON(status,error);
+			ctx.JSON(400,gin.H{"message":err.Error()});
 		}
 	})
 
 	g.PUT("/:id",func(ctx *gin.Context){
-		status,response,error:=handler.UpdateCustomer(ctx);
-		if status==200{
-			ctx.JSON(status,response);
+		response,err:=cont.UpdateCustomer(ctx);
+		if err==nil{
+			
+			ctx.JSON(200,response);
 		} else{
-			ctx.JSON(status,error);
+			ctx.JSON(400,gin.H{"message":err.Error()});
 		}
 	})
 
 	g.GET("/:id",func(ctx *gin.Context){
-		status,response,error:=handler.ReadCustomer(ctx);
-		if status==200{
-			ctx.JSON(status,response);
+		response,err:=cont.ReadCustomer(ctx);
+		if err==nil{
+			ctx.JSON(200,response);
 		} else{
-			ctx.JSON(status,error);
+			ctx.JSON(400,gin.H{"message":err.Error()});
 		}
 	})
 
 	g.DELETE("/:id",func(ctx *gin.Context){
-		status,response:=handler.DeleteCustomer(ctx);
-		ctx.JSON(status,response);
+		response,_:=cont.DeleteCustomer(ctx);
+		ctx.JSON(200,gin.H{"message":response});
 
 	})
 
 	g.GET("/email/:email",func(ctx *gin.Context){
-		status,response,error:=handler.GetCustomerEmail(ctx);
-		if status==200{
-			ctx.JSON(status,response);
+		response,err:=cont.ReadCustomerByEmail(ctx);
+		if err==nil{
+			ctx.JSON(200,response);
 		} else{
-			ctx.JSON(status,error);
+			ctx.JSON(400,gin.H{"message":err.Error()});
 		}
 	})
 
@@ -53,7 +54,7 @@ func CustomerRoute(g *gin.RouterGroup){
 
 func HealthRoute(g *gin.RouterGroup){
 	g.GET("/",func(ctx *gin.Context){
-		status,message:=handler.Health(ctx)
-		ctx.JSON(status,gin.H{"message":message});
+		// status,message:=handler.Health(ctx)
+		ctx.JSON(200,gin.H{"message":"server up"});
 	})
 }

@@ -48,11 +48,19 @@ message Address{
     string customerId=1;
     string firstname=2;
     string lastname=3;
-    string address1=4;
-    string address2=5;
+    string addressLine1=4;
+    string addressLine2=5;
     string city=6;
-    string postcode=7;
-    string countryId=8;
+    int32  postCode=7;
+    string countryCode=8;
+}
+
+
+message AddressstuRequest{
+    string customerId=1;
+}
+message AddressstuResponse{
+    repeated Address address=1;
 }
 
 message AddressutsRequest{
@@ -63,14 +71,12 @@ message AddressutsResponse{
     bool response=1;
 }
 
-message AddressctuRequest{
-    CustomerId customerid=1;
-}
 
-message AddressctuResponse{
-    Address address=1;
-}
 
+
+
+
+ 
 message Credential{
     string username=1;
     string password=2;
@@ -87,6 +93,7 @@ service Service{
     rpc RewardService(RewardRequest)returns (RewardResponse){};
     rpc CartService(CartRequest)returns (CartResponse){};
     rpc AddressutsService(AddressutsRequest)returns (AddressutsResponse){};
+    rpc AddressstuService(AddressstuRequest)returns (AddressstuResponse){}
     rpc CredentialService(CredentialRequest)returns (CredentialResponse){};
 }
 

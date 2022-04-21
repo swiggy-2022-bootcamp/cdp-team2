@@ -1,18 +1,18 @@
 package handlegrpc
 import (
 	"fmt"
-	model "customers/internal/dao"
+	model "customers/dao/models"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-	db "customers/config"
+	"customers/db"
+
     // "errors"
 )
 
 func CheckCredentials(email string,password string) (string,bool){
 
-	db:=db.GetDB()
-	fmt.Println("####################",db)
+	db:=db.GetInstance()
 	// create the api params
 	params := &dynamodb.QueryInput{
 		TableName: aws.String("Customer"),

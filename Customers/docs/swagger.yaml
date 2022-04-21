@@ -1,6 +1,6 @@
 basePath: /
 definitions:
-  dao.Address:
+  models.Address:
     properties:
       address_1:
         type: string
@@ -14,22 +14,18 @@ definitions:
         type: string
       country_id:
         type: string
-      default:
-        type: string
       firstname:
         type: string
       lastname:
         type: string
       postcode:
-        type: string
-      zone_id:
-        type: string
+        type: integer
     type: object
-  dao.Customer:
+  models.Customer:
     properties:
       address:
         items:
-          $ref: '#/definitions/dao.Address'
+          $ref: '#/definitions/models.Address'
         type: array
       approved:
         type: string
@@ -38,7 +34,7 @@ definitions:
       confirm:
         type: string
       customer_group_id:
-        type: string
+        type: integer
       customer_id:
         type: string
       date_added:
@@ -56,7 +52,7 @@ definitions:
       password:
         type: string
       reward_total:
-        type: string
+        type: integer
       safe:
         type: string
       status:
@@ -64,7 +60,7 @@ definitions:
       telephone:
         type: string
       user_balance:
-        type: string
+        type: number
     type: object
 host: localhost:8080
 info:
@@ -81,13 +77,14 @@ paths:
     post:
       consumes:
       - application/json
-      description: API to Create Customers-admin's Customer
+      description: API to Create Customer-Admin's Customer
       parameters:
-      - description: Customer Body
+      - description: Customer info
         in: body
-        name: customer
+        name: Customer
+        required: true
         schema:
-          $ref: '#/definitions/dao.Customer'
+          $ref: '#/definitions/models.Customer'
           type: object
       produces:
       - application/json
@@ -95,17 +92,19 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dao.Customer'
+            $ref: '#/definitions/models.Customer'
         "500":
-          description: ""
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/string'
       summary: Customer Create Route
       tags:
-      - Customer Create
+      - Create
   /customers/{id}:
     delete:
       consumes:
       - application/json
-      description: API to Delete Customers-admin's Customer
+      description: API to Delete Customer-Admin's Customer
       parameters:
       - description: Customer Id
         in: path
@@ -118,16 +117,18 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/string'
+            $ref: '#/definitions/models.Customer'
         "500":
-          description: ""
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/string'
       summary: Customer Delete Route
       tags:
-      - Customer Delete
+      - Delete
     get:
       consumes:
       - application/json
-      description: API to Get Customers-admin's Customer
+      description: API to Get Customer-Admin's Customer
       parameters:
       - description: Customer Id
         in: path
@@ -140,23 +141,25 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dao.Customer'
+            $ref: '#/definitions/models.Customer'
         "500":
-          description: ""
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/string'
       summary: Customer Get Route
       tags:
       - Customer Get
     put:
       consumes:
       - application/json
-      description: API to Update Customers-admin's Customer
+      description: API to Update Customer-Admin's Customer
       parameters:
       - description: Customer Id
         in: path
         name: id
         required: true
         type: string
-      - description: update details
+      - description: Customer Update
         in: body
         name: customer
         required: true
@@ -169,9 +172,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dao.Customer'
+            $ref: '#/definitions/models.Customer'
         "500":
-          description: ""
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/string'
       summary: Customer Update Route
       tags:
       - Customer Update
@@ -179,9 +184,9 @@ paths:
     get:
       consumes:
       - application/json
-      description: API to Get Customers-admin's Customer
+      description: API to Get Customer-Admin's Customer
       parameters:
-      - description: Customer Email
+      - description: Customer email
         in: path
         name: email
         required: true
@@ -192,27 +197,14 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dao.Customer'
+            $ref: '#/definitions/models.Customer'
         "500":
-          description: ""
-      summary: Customer Get Route
-      tags:
-      - Customer Get
-  /health:
-    get:
-      consumes:
-      - application/json
-      description: API to check Customers-admin's health
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/string'
-      summary: Health Check Route
+      summary: Customer Get By Email Route
       tags:
-      - Health
+      - Customer Get
 securityDefinitions:
   ApiKeyAuth:
     in: header

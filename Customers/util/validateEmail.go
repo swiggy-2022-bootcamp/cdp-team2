@@ -2,8 +2,7 @@ package util
 
 
 import (
-	"fmt"
-	model "customers/internal/dao"
+ 	model "customers/dao/models"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
@@ -31,16 +30,12 @@ func ValidateEmail(email string,db dynamodbiface.DynamoDBAPI) bool{
 	
 	// read the item
 	resp, err := db.Query(params)
-	if err!=nil && err.Error()=="test"{
-		return true
-	}
-	if err != nil {
-		fmt.Printf("ERROR: %v\n", err.Error())
-		//return
+ 
+ 	if err != nil {
+ 		return false;
 	}
 
 	// dump the response data
-	fmt.Println(resp)
 
 	// Unmarshal the slice of dynamodb attribute values
 	// into a slice of custom structs
