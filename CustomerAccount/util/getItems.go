@@ -2,7 +2,7 @@
 package util
 
 import (
- 	model "customer-account/internal/dao"
+ 	"customer-account/dao/models"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
@@ -13,7 +13,7 @@ import (
 
 
 
-func GetItems(id_string string,db dynamodbiface.DynamoDBAPI)(model.Account){
+func GetItems(id_string string,db dynamodbiface.DynamoDBAPI)(models.Account){
 
 	// create the api params
 	params11:= &dynamodb.GetItemInput{
@@ -31,16 +31,17 @@ func GetItems(id_string string,db dynamodbiface.DynamoDBAPI)(model.Account){
 
 	// read the item
 	resp, err := db.GetItem(params11)
+
 	if err!=nil && err.Error()=="test"{
-		return model.Account{Id:"test"}
+		return models.Account{Id:"test"}
 	}
 	if err != nil {
 		fmt.Printf("ERROR: %v\n", err.Error())
-		return model.Account{}
+		return models.Account{}
 	}
 	// dump the response data
 	// unmarshal the dynamodb attribute values into a custom struct
-	var account model.Account
+	var account models.Account
 	err = dynamodbattribute.UnmarshalMap(resp.Item, &account)
 	return account
 }

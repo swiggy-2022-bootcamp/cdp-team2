@@ -1,13 +1,21 @@
-# Builder Image
-FROM golang:1.13-alpine3.11 as builder
-RUN mkdir /app
-ADD . /app
+FROM golang:1.16-alpine AS build
+
 WORKDIR /app
-RUN CGO_ENABLED=0 GOOS=linux go build -a -o ./build/main ./cmd/server
 
-# Final Image
-FROM alpine:latest
-COPY --from=builder app/build/main .
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
 
-# Executable
-ENTRYPOINT ["./main"]
+COPY . .
+
+RUN go build -o account-app cmd/server/main.go
+
+FROM alpine
+
+WORKDIR /
+
+COPY --from=build /app/account-app /account-app
+
+EXPOSE 8050
+
+ENTRYPOINT ["/account-app"]

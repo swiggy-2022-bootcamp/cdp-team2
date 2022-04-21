@@ -6,9 +6,9 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"  //gin-swagger middleware
 	"github.com/swaggo/gin-swagger/swaggerFiles"	//swagger embed files
 	_ "customer-account/docs"
-	model "customer-account/config"
-	"customer-account/internal/literals"
-	"strconv"
+	"customer-account/config"
+	// "customer-account/internal/literals"
+	// "strconv"
 
 )
 
@@ -30,7 +30,7 @@ import (
 // @in header
 // @name Authorization
 func RunServer(){
-	model.InitDB()
+	// model.InitDB()
 	server:=gin.Default()
 	createRoute:=server.Group("/register")
 	{
@@ -48,6 +48,6 @@ func RunServer(){
 	}
 	 
 	server.GET("/swagger/*any",ginSwagger.WrapHandler(swaggerFiles.Handler))
-	go StartGrpc()
-	server.Run(":"+strconv.Itoa(literals.PORT))
+	StartGrpc()
+	server.Run(":"+config.Server["PORT"])
 }

@@ -1,0 +1,54 @@
+syntax = "proto3";
+package proto;
+option go_package="/internal/proto";
+
+message CustomerId{
+    string id=1;
+}
+ 
+
+message Address{
+    string customerId=1;
+    string firstname=2;
+    string lastname=3;
+    string address1=4;
+    string address2=5;
+    string city=6;
+    string postcode=7;
+    string countryId=8;
+}
+
+message AddressutsRequest{
+    Address address=1;
+}
+
+message AddressutsResponse{
+    bool response=1;
+}
+
+message AddressctuRequest{
+    CustomerId customerid=1;
+}
+
+message AddressctuResponse{
+    Address address=1;
+}
+
+message Credential{
+    string username=1;
+    string password=2;
+}
+message CredentialRequest{
+    Credential credential=1;
+}
+message CredentialResponse{
+    string customerid=1;
+    bool ispresent=2;
+}
+
+service Service{
+    rpc AddressutsService(AddressutsRequest)returns (AddressutsResponse){};
+    rpc CredentialService(CredentialRequest)returns (CredentialResponse){};
+}
+
+

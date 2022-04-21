@@ -1,34 +1,37 @@
 package grpc
 import (
-	model "customer-account/internal/dao"
-	"context"
-	pb "customer-account/internal/proto"
-	grpc "google.golang.org/grpc"
-	"fmt"
-	"customer-account/internal/literals"
-	"strconv"
+	model "customer-account/dao/models"
+	// "context"
+	// pb "customer-account/internal/proto/cart"
+	// grpc "google.golang.org/grpc"
+	// "fmt"
+	// "google.golang.org/grpc/credentials/insecure"
+	// "customer-account/internal/literals"
+	// "strconv"
 )
 func GetCartByCustomerId(customer_id string)model.Cart{
-	conn,_:=grpc.Dial("localhost:"+strconv.Itoa(literals.CART_PORT),grpc.WithInsecure())
-	defer conn.Close()
-	c:=pb.NewServiceClient(conn)
-	return CartService(c,customer_id);	
-}
+	// conn,err:=grpc.Dial(":9000",grpc.WithInsecure())
+	// // conn,err:=grpc.Dial("0.tcp.in.ngrok.io:11480",grpc.WithTransportCredentials(insecure.NewCredentials()))
+	// fmt.Println("entered",err)
+	// if err!=nil{
+	// 	fmt.Println(err)
+	// }
+	// defer conn.Close()
+	// c:=pb.NewCartServiceClient(conn)
 
-func CartService(c pb.ServiceClient,customer_id string)model.Cart{
-	cartRequest:=pb.CartRequest{
-			CustomerId:customer_id,
-	}
+	// cartRequest:=pb.CartRequest{
+	// 		CustomerId:"133",
+	// }
 	
-	res,_:=c.CartService(context.Background(),&cartRequest)
-	product:=[]model.Product{}
-	for _,val:=range res.Cart.Product{
-		product=append(product,model.Product{val.ProductId,int(val.Quantity)})
-		fmt.Println(product)
-	}
-	cart:=model.Cart{product}
-	return cart;
+	// res,err:=c.GetCart(context.Background(),&cartRequest)
+	// fmt.Println("res",res,err)
+	// product:=[]model.Product{}
+	// for _,val:=range res.Cart.Products{
+	// 	product=append(product,model.Product{val.ProductId,int(val.Quantity)})
+	// 	fmt.Println(product)
+	// }
+	// cart:=model.Cart{product}
+	// fmt.Println(cart)
+	// return cart;
+	return model.Cart{}
 }
-// func main(){
-// 	GetCartByCustomerId("1234567890");
-// }

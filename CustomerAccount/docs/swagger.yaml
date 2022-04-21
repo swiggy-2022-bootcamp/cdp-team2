@@ -1,37 +1,13 @@
 basePath: /
 definitions:
-  dao.Account:
+  models.Account:
     properties:
       agree:
         type: string
       confirm:
         type: string
       customer_group_id:
-        type: string
-      customer_id:
-        type: string
-      email:
-        type: string
-      firstname:
-        type: string
-      lastname:
-        type: string
-      password:
-        type: string
-      reward_total:
-        type: string
-      telephone:
-        type: string
-      user_balance:
-        type: string
-    type: object
-  dao.Account2:
-    properties:
-      cart:
-        $ref: '#/definitions/dao.Cart'
-        type: object
-      customer_group_id:
-        type: string
+        type: integer
       customer_id:
         type: string
       date_added:
@@ -42,38 +18,59 @@ definitions:
         type: string
       lastname:
         type: string
-      reward_total:
-        $ref: '#/definitions/dao.Reward'
+      password:
+        type: string
+      telephone:
+        type: string
+      user_balance:
+        type: number
+    type: object
+  models.Account2:
+    properties:
+      cart:
+        $ref: '#/definitions/models.Cart'
+        type: object
+      customer_group_id:
+        type: integer
+      customer_id:
+        type: string
+      date_added:
+        type: string
+      email:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string
+      reward:
+        $ref: '#/definitions/models.Reward'
         type: object
       telephone:
         type: string
       user_balance:
-        type: string
+        description: RewardTotal     Reward    `json:"reward_total"`
+        type: number
     type: object
-  dao.Cart:
+  models.Cart:
     properties:
       product:
         items:
-          $ref: '#/definitions/dao.Product'
+          $ref: '#/definitions/models.Product'
         type: array
     type: object
-  dao.Product:
+  models.Product:
     properties:
-      id:
-        type: integer
       product_id:
-        type: integer
+        type: string
       quality:
         type: integer
     type: object
-  dao.Reward:
+  models.Reward:
     properties:
       customer_id:
         type: string
       description:
         type: string
-      id:
-        type: integer
       points:
         type: integer
     type: object
@@ -104,7 +101,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dao.Account2'
+            $ref: '#/definitions/models.Account2'
         "500":
           description: Internal Server Error
           schema:
@@ -135,7 +132,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dao.Account'
+            $ref: '#/definitions/models.Account'
         "500":
           description: Internal Server Error
           schema:
@@ -169,7 +166,7 @@ paths:
         name: account
         required: true
         schema:
-          $ref: '#/definitions/dao.Account'
+          $ref: '#/definitions/models.Account'
           type: object
       produces:
       - application/json
@@ -177,7 +174,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dao.Account'
+            $ref: '#/definitions/models.Account'
         "500":
           description: Internal Server Error
           schema:

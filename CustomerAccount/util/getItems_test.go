@@ -1,23 +1,25 @@
-package util
+package util_test
 import (
  	"testing"
 	 "github.com/aws/aws-sdk-go/service/dynamodb"
- 	"errors"
- 
+ 	"github.com/stretchr/testify/assert"
+	 "customer-account/dao/models"
+	 "customer-account/util"
+"fmt"
  )
 
  
  
  func   (m *mockDynamoDBClient) GetItem(*dynamodb.GetItemInput) (*dynamodb.GetItemOutput, error){
-	return nil,errors.New("test")
+	return &dynamodb.GetItemOutput{},nil
  }
 
 func TestGetItems(t *testing.T){
 	mockSvc := &mockDynamoDBClient{}
+	fmt.Println("Tested GetItems")
+
  	for _,val:=range tests{
-		status:=GetItems(val.Customer.Id,mockSvc)
-		if status.Id!="test"{
-			t.Errorf("Did not returned the Customer %v",status)
-		}
+		status:=util.GetItems(val.Account.Id,mockSvc)
+		assert.Equal(t,status,models.Account{})
 	}
 }

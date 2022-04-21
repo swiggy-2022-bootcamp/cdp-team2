@@ -1,18 +1,18 @@
-package util
-
+package handlegrpc
 import (
-	"customer-account/dao/models"
+	"fmt"
+	model "customer-account/dao/models"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbiface"
-	"fmt"
+	"customer-account/db"
+
+    // "errors"
 )
 
+func CheckCredentials(email string,password string) (string,bool){
 
-
-func ValidateEmail(email string, db dynamodbiface.DynamoDBAPI) bool{
-	
+	db:=db.GetInstance()
 	// create the api params
 	params := &dynamodb.QueryInput{
 		TableName: aws.String("Customer"),
@@ -29,26 +29,35 @@ func ValidateEmail(email string, db dynamodbiface.DynamoDBAPI) bool{
         },
 
 	}
-
+	
 	// read the item
 	resp, err := db.Query(params)
-	if err!=nil &&  err.Error()=="test"{
-		return true
+	if err!=nil && err.Error()=="test"{
+		return "test userid",true
 	}
- 
 	if err != nil {
 		fmt.Printf("ERROR: %v\n", err.Error())
-		return false
+		return "error",false
 	}
 
- 
+	// dump the response data
+	fmt.Println(resp)
+
 	// Unmarshal the slice of dynamodb attribute values
 	// into a slice of custom structs
-	var account []models.Account
-	err = dynamodbattribute.UnmarshalListOfMaps(resp.Items, &account)
-	if len(account)>0{
-		return false;
+	var customer []model.Account
+	err = dynamodbattribute.UnmarshalListOfMaps(resp.Items, &customer)
+	if len(customer)==0{
+		return "UserNotPresent",false;
 	}
- 	return true;
+	if customer[0].Password!=password{
+		return customer[0].Id,false;
+	}
+	
+	return customer[0].Id,true;
 }
 
+
+func main(){
+	fmt.Println(CheckCredentials("uday","kiranbakka"))
+}

@@ -39,7 +39,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dao.Account2"
+                            "$ref": "#/definitions/models.Account2"
                         }
                     },
                     "500": {
@@ -85,7 +85,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dao.Account"
+                            "$ref": "#/definitions/models.Account"
                         }
                     },
                     "500": {
@@ -141,7 +141,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/dao.Account"
+                            "$ref": "#/definitions/models.Account"
                         }
                     }
                 ],
@@ -149,7 +149,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dao.Account"
+                            "$ref": "#/definitions/models.Account"
                         }
                     },
                     "500": {
@@ -163,7 +163,7 @@
         }
     },
     "definitions": {
-        "dao.Account": {
+        "models.Account": {
             "type": "object",
             "properties": {
                 "agree": {
@@ -173,43 +173,7 @@
                     "type": "string"
                 },
                 "customer_group_id": {
-                    "type": "string"
-                },
-                "customer_id": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "firstname": {
-                    "type": "string"
-                },
-                "lastname": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "reward_total": {
-                    "type": "string"
-                },
-                "telephone": {
-                    "type": "string"
-                },
-                "user_balance": {
-                    "type": "string"
-                }
-            }
-        },
-        "dao.Account2": {
-            "type": "object",
-            "properties": {
-                "cart": {
-                    "type": "object",
-                    "$ref": "#/definitions/dao.Cart"
-                },
-                "customer_group_id": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "customer_id": {
                     "type": "string"
@@ -226,44 +190,78 @@
                 "lastname": {
                     "type": "string"
                 },
-                "reward_total": {
-                    "type": "object",
-                    "$ref": "#/definitions/dao.Reward"
+                "password": {
+                    "type": "string"
                 },
                 "telephone": {
                     "type": "string"
                 },
                 "user_balance": {
-                    "type": "string"
+                    "type": "number"
                 }
             }
         },
-        "dao.Cart": {
+        "models.Account2": {
+            "type": "object",
+            "properties": {
+                "cart": {
+                    "type": "object",
+                    "$ref": "#/definitions/models.Cart"
+                },
+                "customer_group_id": {
+                    "type": "integer"
+                },
+                "customer_id": {
+                    "type": "string"
+                },
+                "date_added": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "firstname": {
+                    "type": "string"
+                },
+                "lastname": {
+                    "type": "string"
+                },
+                "reward": {
+                    "type": "object",
+                    "$ref": "#/definitions/models.Reward"
+                },
+                "telephone": {
+                    "type": "string"
+                },
+                "user_balance": {
+                    "description": "RewardTotal     Reward    `json:\"reward_total\"`",
+                    "type": "number"
+                }
+            }
+        },
+        "models.Cart": {
             "type": "object",
             "properties": {
                 "product": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dao.Product"
+                        "$ref": "#/definitions/models.Product"
                     }
                 }
             }
         },
-        "dao.Product": {
+        "models.Product": {
             "type": "object",
             "properties": {
-                "id": {
-                    "type": "integer"
-                },
                 "product_id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "quality": {
                     "type": "integer"
                 }
             }
         },
-        "dao.Reward": {
+        "models.Reward": {
             "type": "object",
             "properties": {
                 "customer_id": {
@@ -271,9 +269,6 @@
                 },
                 "description": {
                     "type": "string"
-                },
-                "id": {
-                    "type": "integer"
                 },
                 "points": {
                     "type": "integer"

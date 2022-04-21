@@ -2,13 +2,13 @@ package grpc
 
 import (
 	"context"
- 	pb "customer-account/internal/proto"
+ 	pb "customer-account/internal/proto/grpc"
 	"fmt"
 	grpc "google.golang.org/grpc"
 )
 
 func SendCredential(username string,password string) bool {
-	conn, _ := grpc.Dial("localhost:8082", grpc.WithInsecure())
+	conn, _ := grpc.Dial("localhost:9000", grpc.WithInsecure())
 	defer conn.Close()
 	c := pb.NewServiceClient(conn)
 	fmt.Println("1")
@@ -25,10 +25,12 @@ func SendCredentialService(c pb.ServiceClient, username string,password string) 
 	fmt.Println(2)
 	res,err:=c.CredentialService(context.Background(), &credentialRequest)
 	if(err!=nil){
-		fmt.Println("Encountered an error while creating the")
+		fmt.Println("Encountered an error while creating the",err)
 		return false
 	}
 	return res.Ispresent
 }
 
- 
+func main(){
+	SendCredential("uday","kiran")
+}

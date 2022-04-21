@@ -1,33 +1,44 @@
 package grpc
 import (
-	model "customer-account/internal/dao"
-	"context"
-	pb "customer-account/internal/proto"
-	grpc "google.golang.org/grpc"
-	"fmt"
-	"customer-account/internal/literals"
-	"strconv"
-
+	model "customer-account/dao/models"
+	// "context"
+	// protos "customer-account/internal/proto/reward"
+	// grpc "google.golang.org/grpc"
+	// "fmt"
+	// "google.golang.org/grpc/credentials/insecure"
+	// "customer-account/internal/literals"
+	// "strconv"
 )
 func GetRewardByCustomerId(customer_id string)model.Reward{
-	conn,_:=grpc.Dial("localhost:"+strconv.Itoa(literals.REWARD_PORT),grpc.WithInsecure())
-	defer conn.Close()
-	c:=pb.NewServiceClient(conn)
-	return RewardService(c,customer_id);	
+// 	// conn,err:=grpc.Dial("localhost:"+strconv.Itoa(literals.REWARD_PORT),grpc.WithInsecure())
+// 	conn, err := grpc.Dial("0.tcp.in.ngrok.io:16128", grpc.WithTransportCredentials(insecure.NewCredentials()))
+// 	reward:=model.Reward{}
+
+// 	if err != nil {
+// 		fmt.Println("unable to connect to grpc service", err)
+// 		return reward
+// 	}
+// 	defer conn.Close()
+
+// 	client := protos.NewRewardServiceClient(conn)
+
+// 	req := &protos.RewardRequest{
+// 		CustomerId: "123",
+// 	}
+// 	res, err := client.GetReward(context.Background(), req)
+// 	if err != nil {
+// 		fmt.Println("Error1:",res,err)
+// 		return reward
+// 	}
+// reward=model.Reward{res.Reward.CustomerId,res.Reward.Description,int(res.Reward.Points)} 
+// fmt.Println(reward)
+// return reward;
+return model.Reward{}
 }
 
-func RewardService(c pb.ServiceClient,customer_id string)model.Reward{
-	rewardRequest:=pb.RewardRequest{
-			CustomerId:customer_id,
-	}
-	fmt.Println("*************")
-	res,_:=c.RewardService(context.Background(),&rewardRequest)
-	fmt.Println("*************",res)
+// func RewardService(c pb.ServiceClient,customer_id string)model.Reward{
 
-	reward:=model.Reward{res.Reward.CustomerId,res.Reward.Description,int(res.Reward.Points)} 
-	fmt.Println(reward)
-	return reward;
-}
+// }
 // func main(){
 // 	GetRewardByCustomerId("1234567890");
 // }
