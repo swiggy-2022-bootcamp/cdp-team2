@@ -40,12 +40,47 @@ func NewServer(handlers ports.IProductsHandlers) *Server {
 func (s *Server) Initialize() {
 	server := gin.Default()
 
-	productsRoutes := server.Group("/api/rest_admin/products/")
-	productsRoutes.GET("/", s.Handlers.Health)
+	baseRoutes := server.Group("/api/rest_admin")
+
+	/*
+	*	Product Specific Routes
+	 */
+	productsRoutes := baseRoutes.Group("/products/")
+	productsRoutes.GET("/health", s.Handlers.Health)
 	productsRoutes.POST("/", s.Handlers.AddProduct)
-	productsRoutes.GET("/all", s.Handlers.GetProducts)
+	productsRoutes.GET("/", s.Handlers.GetProducts)
 	productsRoutes.PUT("/:id", s.Handlers.UpdateProduct)
 	productsRoutes.DELETE("/:id", s.Handlers.DeleteProduct)
+
+	/*
+	* Search Specific Routes
+	* Seach By
+	* 	- Limit
+	*	- Page
+	* 	- Keyword
+	*	- CategoryID
+	* 	- ManufacturerID
+	*	- Tag
+	*	- date_added_from
+	* 	- data_added_to
+	*	- date_modified_from
+	*	- date_modified_to
+	 */
+	searchRoutes := productsRoutes.Group("/search")
+	searchRoutes.GET("/limit/:limit", nil)
+	searchRoutes.GET("/page/:page", nil)
+	searchRoutes.GET("/keyword/:keyword", s.Handlers.SearchByKeyword)
+	searchRoutes.GET("/category/:id", s.Handlers.SearchByCategoryID)
+	searchRoutes.GET("/manufacturer/:id", s.Handlers.SearchByManufacturerID)
+	searchRoutes.GET("/tag/:tag", nil)
+	searchRoutes.GET("/date_added_from/:date", nil)
+	searchRoutes.GET("/date_added_to/:date", nil)
+	searchRoutes.GET("/date_modified_from/:date", nil)
+	searchRoutes.GET("/date_modified_to/:date", nil)
+
+	/*
+	*	SwaggerUI Docs route
+	 */
 	productsRoutes.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	log.Fatal(server.Run(config.Config["PORT"]))

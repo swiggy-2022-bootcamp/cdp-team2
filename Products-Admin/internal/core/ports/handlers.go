@@ -8,4 +8,8 @@ type IProductsHandlers interface {
 	UpdateProduct(*gin.Context)
 	DeleteProduct(*gin.Context)
 	GetProducts(*gin.Context)
+	SearchByLimit(*gin.Context)
+	SearchByKeyword(*gin.Context)
+	SearchByCategoryID(*gin.Context)
+	SearchByManufacturerID(*gin.Context)
 }

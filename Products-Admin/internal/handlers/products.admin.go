@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/core/domain"
@@ -90,4 +91,65 @@ func (h *ProductsHandlers) DeleteProduct(gctx *gin.Context) {
 		return
 	}
 	gctx.JSON(http.StatusAccepted, gin.H{"message": "Product deleted."})
+}
+
+func (ph *ProductsHandlers) SearchByLimit(gctx *gin.Context) {
+	gctx.JSON(http.StatusOK, nil)
+}
+
+func (ph *ProductsHandlers) SearchByKeyword(gctx *gin.Context) {
+
+	// Extract the keyword from the path params
+	keyword := strings.ToLower(gctx.Param("keyword"))
+
+	/*
+	* 	Get all the products that contains the keyword
+	*	in their product name, model name, sku
+	 */
+	products, err := ph.ProductsServices.SearchByKeyword(keyword)
+	if err != nil {
+		gctx.JSON(err.GetErrCode(), gin.H{"message": err.Error()})
+		return
+	}
+	gctx.JSON(http.StatusOK, gin.H{"message": products})
+}
+
+func (ph *ProductsHandlers) SearchByCategoryID(gctx *gin.Context) {
+
+	// Extract the category ID
+	categoryIDStr := gctx.Param("id")
+
+	// Convert the string type to int type
+	categoryID, err := strconv.Atoi(categoryIDStr)
+	if err != nil {
+		gctx.JSON(http.StatusBadRequest, gin.H{"message": "Please provide valid category id."})
+		return
+	}
+
+	products, err2 := ph.ProductsServices.GetProductsByCategoryId(int64(categoryID))
+	if err2 != nil {
+		gctx.JSON(err2.GetErrCode(), gin.H{"message": err2.Error()})
+		return
+	}
+	gctx.JSON(http.StatusOK, gin.H{"message": products})
+}
+
+func (ph *ProductsHandlers) SearchByManufacturerID(gctx *gin.Context) {
+
+	// Extract the manufacturer ID
+	manufacturerIDStr := gctx.Param("id")
+
+	// Convert the string type to int type
+	manufacturerID, err := strconv.Atoi(manufacturerIDStr)
+	if err != nil {
+		gctx.JSON(http.StatusBadRequest, gin.H{"message": "Please provide valid manufacturer id."})
+		return
+	}
+
+	products, err2 := ph.ProductsServices.SearchByManufacturerID(int64(manufacturerID))
+	if err2 != nil {
+		gctx.JSON(err2.GetErrCode(), gin.H{"message": err2.Error()})
+		return
+	}
+	gctx.JSON(http.StatusOK, gin.H{"message": products})
 }

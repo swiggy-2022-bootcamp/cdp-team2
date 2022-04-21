@@ -58,6 +58,27 @@ func (pr *ProductsRepository) GetProductsByCondition(condition expression.Expres
 	return products, nil
 }
 
+func (pr *ProductsRepository) GetProductsByScanInput(scanInput *dynamodb.ScanInput) (products []*domain.Product, err *errors.AppError) {
+
+	// Dynamodb scanning
+	scanInput.TableName = aws.String(pr.TableName)
+	response, dErr := pr.DynamoDBClient.Scan(scanInput)
+	if dErr != nil {
+		return nil, errors.Wrap(dErr)
+	}
+
+	// Unmarshal dynamodb map to domain.Product
+	for _, _dbProduct := range response.Items {
+		var _product domain.Product
+		dErr = dynamodbattribute.UnmarshalMap(_dbProduct, &_product)
+		if dErr != nil {
+			return nil, errors.Wrap(dErr)
+		}
+		products = append(products, &_product)
+	}
+	return products, nil
+}
+
 func (pr *ProductsRepository) AddProduct(product *domain.Product) (*domain.Product, *errors.AppError) {
 	entityParsed, dErr := dynamodbattribute.MarshalMap(product)
 	if dErr != nil {

@@ -10,6 +10,7 @@ import (
 type IProductsRepository interface {
 	Health() bool
 	GetProductsByCondition(condition expression.Expression) (products []*domain.Product, err *errors.AppError)
+	GetProductsByScanInput(scanInput *dynamodb.ScanInput) (products []*domain.Product, err *errors.AppError)
 	GetProductById(map[string]*dynamodb.AttributeValue) (*domain.Product, *errors.AppError)
 	IsProductExists(map[string]*dynamodb.AttributeValue) (bool, *errors.AppError)
 	AddProduct(product *domain.Product) (*domain.Product, *errors.AppError)

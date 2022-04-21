@@ -3,6 +3,8 @@ package services
 import (
 	"fmt"
 	"net/http"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -128,36 +130,67 @@ func (ps *ProductsServices) CheckProductsWithCategory(categoryID int64) (bool, *
 
 func (ps *ProductsServices) GetProductsByCategoryId(categoryID int64) ([]*domain.Product, *errors.AppError) {
 
-	// Convert int64 category to string type
-	// categoryIDStr := *aws.String(strconv.Itoa(int(categoryID)))
+	// Create queryInput
+	queryInput := dynamodb.ScanInput{
+		TableName:        nil,
+		FilterExpression: aws.String("contains (product_category, :categoryID)"),
+		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+			":categoryID": {
+				N: aws.String(strconv.Itoa(int(categoryID))),
+			},
+		},
+	}
+	_products, err2 := ps.ProductsRepository.GetProductsByScanInput(&queryInput)
+	if err2 != nil {
+		return []*domain.Product{}, err2
+	}
 
-	// Create the condition builder
-	// filter := expression.Contains(expression.Name("product_category"), categoryIDStr)
-	filter := expression.Name("_id").NotEqual(expression.Value(""))
+	// Return products
+	return _products, nil
+}
 
-	// Build the condtion
+func (ps *ProductsServices) SearchByKeyword(keyword string) ([]*domain.Product, *errors.AppError) {
+
+	// Define the filter expression for searching product by keyword
+	filter1 := expression.Contains(expression.Name("model"), keyword)
+	filter2 := expression.Contains(expression.Name("model"), strings.ToUpper(keyword))
+	filter3 := expression.Contains(expression.Name("sku"), keyword)
+	filter4 := expression.Contains(expression.Name("sku"), strings.ToUpper(keyword))
+	filter := filter1.Or(filter2).Or(filter3).Or(filter4)
+
+	// Build expression from above filter
 	condition, err := expression.NewBuilder().WithFilter(filter).Build()
 	if err != nil {
 		return []*domain.Product{}, errors.Wrap(err)
 	}
 
-	// Call to repository
+	// Get products from repository
 	_products, err2 := ps.ProductsRepository.GetProductsByCondition(condition)
-	if err != nil {
+	if err2 != nil {
 		return []*domain.Product{}, err2
 	}
 
-	// Service level filtering for category specific products
-	var _catProducts []*domain.Product
-	for _, _product := range _products {
-		for _, catID := range _product.ProductCategory {
-			if catID == categoryID {
-				_catProducts = append(_catProducts, _product)
-				break
-			}
-		}
+	// Return the products to handlers
+	return _products, nil
+}
+
+func (ps *ProductsServices) SearchByManufacturerID(manufacturerID int64) ([]*domain.Product, *errors.AppError) {
+
+	// Define filter expression
+	filter := expression.Name("manufacturer_id").Equal(expression.Value(manufacturerID))
+
+	// Build condition from above filter
+	condition, err := expression.NewBuilder().WithFilter(filter).Build()
+	if err != nil {
+		return []*domain.Product{}, errors.Wrap(err)
+	}
+
+	// Get products from dynamodb repository
+	_products, err2 := ps.ProductsRepository.GetProductsByCondition(condition)
+	if err2 != nil {
+		return []*domain.Product{}, err2
 	}
 
 	// Return products
-	return _catProducts, nil
+	return _products, nil
 }
