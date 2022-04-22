@@ -6,6 +6,7 @@ import (
 	"github.com/auth-frontstore-service/config"
 	_ "github.com/auth-frontstore-service/docs"
 	"github.com/auth-frontstore-service/internal/core/ports"
+
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -23,9 +24,9 @@ func NewServer(handlers ports.IHandlers, middlewares ports.IMiddlewares) *Server
 	}
 }
 
-// @title Swagger adminAuth Admin Microservice
+// @title Swagger Frontstore Auth Microservice
 // @version 1.0
-// @description Micorservice for handling admin adminAuth.
+// @description Micorservice for handling Frontstore Auth.
 // @termsOfService http://swagger.io/terms/
 
 // @contact.name API Support
@@ -35,17 +36,17 @@ func NewServer(handlers ports.IHandlers, middlewares ports.IMiddlewares) *Server
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host localhost:8000
-// @BasePath /adminAuth
+// @host localhost:8088
+// @BasePath /auth
 func (s *Server) Initialize() {
 	server := gin.Default()
 
 	adminAuthRoutes := server.Group("/auth/")
 	adminAuthRoutes.POST("/login", s.Handlers.Login)
-	adminAuthRoutes.POST("/oAuth", s.Middlewares.CheckBasicAuthMiddleware, s.Handlers.OAuth)
+	adminAuthRoutes.POST("/oAuth/token", s.Middlewares.CheckBasicAuthMiddleware, s.Handlers.OAuth)
 	adminAuthRoutes.GET("/logout", s.Middlewares.CheckAuthMiddleware, s.Handlers.Logout)
 	adminAuthRoutes.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	adminAuthRoutes.GET("/", s.Handlers.Health)
-
+	//	repo.InitDB()
 	log.Fatal(server.Run(config.Config["PORT"]))
 }

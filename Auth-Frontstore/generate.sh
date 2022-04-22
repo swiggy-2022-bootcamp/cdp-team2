@@ -8,3 +8,6 @@ go run grpc/client/main.go
 
 #MongoDB Start
 mongod --dbpath="C:\Program Files\MongoDB\Server\4.2\data".
+
+#DynamoDB start
+java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb

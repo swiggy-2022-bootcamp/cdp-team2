@@ -1,23 +1,23 @@
-basePath: /products
-host: localhost:8000
+basePath: /auth
+host: localhost:8088
 info:
   contact:
     email: support@swagger.io
     name: API Support
     url: http://www.swagger.io/support
-  description: Micorservice for handling admin auth.
+  description: Micorservice for handling Frontstore Auth.
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: http://swagger.io/terms/
-  title: Swagger Auth Admin Microservice
+  title: Swagger Frontstore Auth Microservice
   version: "1.0"
 paths:
   /:
     get:
       consumes:
       - application/json
-      description: API to check Admin Auth health
+      description: API to check products-admin health
       produces:
       - plain/text
       responses:
@@ -28,4 +28,77 @@ paths:
       summary: Health Check Route
       tags:
       - Health
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: API to Login Users
+      parameters:
+      - description: Username/email of the user
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      - description: Password of the user
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      produces:
+      - plain/text
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Login Route
+      tags:
+      - Login
+  /logout:
+    post:
+      consumes:
+      - application/json
+      description: API to delete acess token from user databse and logout user
+      parameters:
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - plain/text
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Logout Route
+      tags:
+      - Logout
+  /oAuth/token:
+    post:
+      consumes:
+      - application/json
+      description: API to Generate access token using basic token provided by login
+        API
+      parameters:
+      - default: Basic <Add access token here>
+        description: Insert your basic token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - plain/text
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: OAuth Access Token
+      tags:
+      - OAuth
 swagger: "2.0"
