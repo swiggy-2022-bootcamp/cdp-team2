@@ -44,4 +44,5 @@ message AddressutsResponse{
 
 service Service{
     rpc AddressutsService(AddressutsRequest)returns (AddressutsResponse){};
+    rpc AddressstuService(AddressstuRequest)returns (AddressstuResponse){};
  }
