@@ -105,27 +105,26 @@ func (ps *ProductsServices) IsProductExists(productID int64) (bool, *errors.AppE
 
 func (ps *ProductsServices) CheckProductsWithCategory(categoryID int64) (bool, *errors.AppError) {
 
-	// Building filter and condition expression
-	filter := expression.Name("_id").NotEqual(expression.Value(""))
-	condition, err := expression.NewBuilder().WithFilter(filter).Build()
-	if err != nil {
-		return false, errors.Wrap(err)
+	// Create queryInput
+	queryInput := dynamodb.ScanInput{
+		TableName:        nil,
+		FilterExpression: aws.String("contains (product_category, :categoryID)"),
+		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+			":categoryID": {
+				N: aws.String(strconv.Itoa(int(categoryID))),
+			},
+		},
 	}
-
-	// Get all products and filter
-	_products, err2 := ps.ProductsRepository.GetProductsByCondition(condition)
+	_products, err2 := ps.ProductsRepository.GetProductsByScanInput(&queryInput)
 	if err2 != nil {
-		return false, errors.Wrap(err2)
+		return false, err2
 	}
 
-	for _, _product := range _products {
-		for _, _catID := range _product.ProductCategory {
-			if _catID == categoryID {
-				return true, nil
-			}
-		}
+	// Check if products exists or not
+	if len(_products) == 0 {
+		return false, nil
 	}
-	return false, nil
+	return true, nil
 }
 
 func (ps *ProductsServices) GetProductsByCategoryId(categoryID int64) ([]*domain.Product, *errors.AppError) {
