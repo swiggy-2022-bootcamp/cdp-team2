@@ -9,5 +9,5 @@ type ShippingAddress struct {
 	AddressLine1 string `json:"addressLine1,omitempty" extensions:"x-omitempty"`
 	AddressLine2 string `json:"addressLine2,omitempty" extensions:"x-omitempty"`
 	CountryCode  string `json:"countryCode,omitempty" extensions:"x-omitempty"`
-	PostCode     int    `json:"postCode,omitempty" extensions:"x-omitempty"`
+	PostCode     int32  `json:"postCode,omitempty" extensions:"x-omitempty"`
 }

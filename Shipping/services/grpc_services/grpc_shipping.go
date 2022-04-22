@@ -19,13 +19,11 @@ type Server struct {
 
 func (s *Server) AddressutsService(ctx context.Context, address *pb.AddressutsRequest) (*pb.AddressutsResponse, error) {
 
-	customerIdStr, firstName, lastName, addressLine1, addressLine2, city, countryId, postCodeStr := address.Address.CustomerId, address.Address.Firstname, address.Address.Lastname, address.Address.Address1, address.Address.Address2, address.Address.City, address.Address.CountryId, address.Address.Postcode
+	customerIdStr, firstName, lastName, addressLine1, addressLine2, city, countryId, postCode := address.Address.CustomerId, address.Address.Firstname, address.Address.Lastname, address.Address.AddressLine1, address.Address.AddressLine2, address.Address.City, address.Address.CountryCode, address.Address.PostCode
 
-	fmt.Println(customerIdStr, firstName, lastName, addressLine1, addressLine2, city, countryId, postCodeStr)
+	fmt.Println(customerIdStr, firstName, lastName, addressLine1, addressLine2, city, countryId, postCode)
 
 	customerId, _ := strconv.Atoi(customerIdStr)
-
-	postCode, _ := strconv.Atoi(postCodeStr)
 
 	shippingAddress := models.ShippingAddress{
 		CustomerId:   customerId,
@@ -47,4 +45,33 @@ func (s *Server) AddressutsService(ctx context.Context, address *pb.AddressutsRe
 	return &pb.AddressutsResponse{
 		Response: true,
 	}, nil
+}
+
+func (s *Server) AddressstuService(ctx context.Context, req *pb.AddressstuRequest) (*pb.AddressstuResponse, error) {
+	customerIdStr := req.CustomerId
+	fmt.Println(customerIdStr)
+
+	customerId, _ := strconv.Atoi(customerIdStr)
+
+	addressResponse, err := dao.GetOrderDao().GetByCustomerId(customerId)
+
+	if err != nil {
+		return nil, errors.New("error occurred")
+	}
+
+	addresses := []*pb.Address{}
+
+	for i := 0; i < len(addressResponse); i++ {
+		addresses = append(addresses, &pb.Address{CustomerId: string(addressResponse[i].CustomerId),
+			Firstname:    addressResponse[i].FirstName,
+			Lastname:     addressResponse[i].LastName,
+			AddressLine1: addressResponse[i].AddressLine1,
+			AddressLine2: addressResponse[i].AddressLine2,
+			City:         addressResponse[i].City,
+			PostCode:     addressResponse[i].PostCode,
+			CountryCode:  addressResponse[i].CountryCode})
+
+	}
+
+	return &(pb.AddressstuResponse{Address: addresses}), nil
 }
