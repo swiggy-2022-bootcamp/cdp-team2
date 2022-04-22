@@ -12,15 +12,7 @@ var AWS = map[string]string{
 	"region":   "us-east-1",
 	"endpoint": "https://dynamodb.us-east-1.amazonaws.com",
 }
-
-// Access Key ID:
-// AKIAQ6LFILQYZPAAQPGT
-// Secret Access Key:
-// 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
-// AWS Account ID: 065173740593
-// Canonical User ID: 42102cdb0b0f0278b803eb3d703cb42515d4a5b4dbd72f381f14e954ca4511da
-
-
+ 
 
 // var Database  *dynamodb.DynamoDB
 // func InitDB(){
