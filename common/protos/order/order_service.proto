@@ -1,45 +1,72 @@
 syntax = "proto3";
 
-package order;
-option go_package = "github.com/swiggy-2022-bootcamp/cdp-team2/common/protos/order";
+package proto;
 
-enum Status{
-        PENDING = 0;
-        COMPLETED = 1;
-        DECLINED = 2;
-}
+option go_package="/order";
+
+
 
 message ProductDesc{
-	int32 productid = 1;
-	int32 points = 2;
-	int32 reward = 3;
-	int32 quantity = 4;
-	int32 price = 5;
+  int32 productId=1;
+  int32 points=2;
+  int32 reward=3;
+  int32 quantity=4;
+  int32 price=5;
 }
+
+
 
 message Order{
-	int32 order_id = 1;
-	int32 customer_id = 2;
-    Status status = 3;
-	string order_time = 4;
-	int32 address_id = 5;
-	int32 total_price = 6;
-	int32 payed_price = 7;
-	repeated ProductDesc product_description = 8;
+string customerId=1;
+int32 status=2;
+  int32 addressId=3;
+  int32 totalPrice=4;
+  int32 payedPrice=5;
+repeated ProductDesc productDesc=6;
 }
 
-message GetOrderInput{
-    int32 order_id = 1;
+message OrderStatusUpdateRequest{
+  int32 orderId =1;
+  int32 status=2;
 }
 
-message UpdateOrderStatusInput{
-    int32 order_id = 1;
-    Status status = 2;
+message OrderStatusUpdateResponse{
+  bool response=1;
 }
 
-service OrderService {
-    rpc createOrder(Order) returns (Order);
-    rpc getOrder(GetOrderInput) returns (Order);
-    rpc updateOrderStatus(UpdateOrderStatusInput) returns (Order);
+
+message OrderResponse{
+  string customerId=1;
+  int32 status=2;
+  int32 addressId=3;
+  int32 totalPrice=4;
+  int32 payedPrice=5;
+  repeated ProductDesc productDesc=6;
+  int32 orderId =7;
 }
 
+message OrderCreateRequest{
+Order order=1;
+}
+
+message OrderCreateResponse{
+bool response=1;
+}
+
+message GetOrderRequest{
+  int32 orderId = 1;
+}
+
+
+message GetOrderResponse{
+  OrderResponse order = 1;
+}
+
+
+
+service Service{
+rpc OrderCreateService(OrderCreateRequest)returns (OrderCreateResponse){};
+  rpc OrderStatusUpdateService(OrderStatusUpdateRequest)returns (OrderStatusUpdateResponse){};
+  rpc GetOrderService(GetOrderRequest)returns (GetOrderResponse){};
+
+}
