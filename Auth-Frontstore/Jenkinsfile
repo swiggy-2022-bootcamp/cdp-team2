@@ -15,7 +15,7 @@ pipeline {
 
         stage ("clone") {
             steps {
-                git branch: 'main', url: "https://github.com/22sujata8d/jenkins-ci-demo.git"
+                git branch: 'main', url: "https://github.com/swiggy-2022-bootcamp/cdp-team2.git"
             }
         }
 
@@ -41,7 +41,7 @@ pipeline {
                 echo 'testing the application...'
                 sh script:'''
                     pwd
-                    cd ./Cart
+                    cd ./auth-frontstore
                     go test -v ./...
                 '''
             }
@@ -53,8 +53,8 @@ pipeline {
                 echo 'building the docker image...'
 				sh script:'''
                     pwd
-                    cd ./Cart
-                    docker build -t zen08/cart:latest .
+                    cd ./auth-frontstore
+                    docker build -t swiggyteam2/auth-frontstore:latest .
                 '''
 			}
 		}
@@ -73,7 +73,7 @@ pipeline {
             steps {
                 sh 'docker --version'
                 echo 'pushing the image to docker hub...'
-                sh 'docker push zen08/cart:latest'
+                sh 'docker push swiggyteam2/auth-frontstore:latest'
             }
         }
     }
