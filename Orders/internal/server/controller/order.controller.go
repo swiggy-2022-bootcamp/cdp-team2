@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -28,7 +29,7 @@ func NewOrderController() *OrderController {
 // @Failure 500 {object} api.ApiResponseWithErr
 // @Router /categories/{_id} [get]
 func (cc *OrderController) GetByID(c *gin.Context) {
-	id := c.GetInt(literals.OrderIdKey)
+	id := c.GetString(literals.OrderIdKey)
 	cat, err := cc.service.GetByID(id)
 	if err != nil {
 		c.AbortWithStatusJSON(api.ServerErr(err))
@@ -38,7 +39,8 @@ func (cc *OrderController) GetByID(c *gin.Context) {
 }
 
 func (cc *OrderController) GetByStatus(c *gin.Context) {
-	status := c.GetString(literals.StatusKey)
+	status := c.GetInt(literals.StatusKey)
+	fmt.Println("status---", status)
 	cat, err := cc.service.GetByStatus(status)
 	if err != nil {
 		c.AbortWithStatusJSON(api.ServerErr(err))
@@ -48,7 +50,7 @@ func (cc *OrderController) GetByStatus(c *gin.Context) {
 }
 
 func (cc *OrderController) GetByCustomer(c *gin.Context) {
-	customerId := c.GetInt(literals.CustomerIdKey)
+	customerId := c.GetString(literals.CustomerIdKey)
 
 	cat, err := cc.service.GetByCustomerId(customerId)
 	if err != nil {
@@ -101,7 +103,7 @@ func (cc *OrderController) Create(c *gin.Context) {
 // @Router /categories/{_id} [put]
 func (cc *OrderController) Update(c *gin.Context) {
 
-	id := c.GetInt(literals.OrderIdKey)
+	id := c.GetString(literals.OrderIdKey)
 	nc, _ := c.Get(literals.OrderBodyKey)
 	newCat := nc.(models.Order)
 
@@ -121,7 +123,7 @@ func (cc *OrderController) Update(c *gin.Context) {
 // @Failure 500 {object} api.ApiResponseWithErr
 // @Router /categories/{_id} [delete]
 func (cc *OrderController) Delete(c *gin.Context) {
-	id := c.GetInt(literals.OrderIdKey)
+	id := c.GetString(literals.OrderIdKey)
 	if err := cc.service.DeleteByID(id); err != nil {
 		c.AbortWithStatusJSON(api.ServerErr(err))
 		return

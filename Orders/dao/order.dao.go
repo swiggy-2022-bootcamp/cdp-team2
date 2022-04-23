@@ -3,17 +3,18 @@ package dao
 import (
 	"errors"
 	"fmt"
+	"log"
+
 	"github.com/aws/aws-sdk-go/service/dynamodb/expression"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Order/dao/models"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Order/db"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/literals"
-	"log"
-	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbiface"
+	"github.com/google/uuid"
 )
 
 const (
@@ -35,7 +36,7 @@ func ordersTableName() *string {
 	return aws.String(tabelName)
 }
 
-func getKeyFilter(id int) map[string]*dynamodb.AttributeValue {
+func getKeyFilter(id string) map[string]*dynamodb.AttributeValue {
 	return map[string]*dynamodb.AttributeValue{
 		"orderId": {
 			N: aws.String(fmt.Sprint(id)),
@@ -51,11 +52,13 @@ func getKeyFilterStatus(status string) map[string]*dynamodb.AttributeValue {
 	}
 }
 
-func getRandomKey() int {
-	return int(time.Now().Unix() - customEpoch)
+func getRandomKey() string {
+	uuid := uuid.New()
+	fmt.Println(uuid.String())
+	return uuid.String()
 }
 
-func (cd *OrderDao) GetByID(id int) (*models.Order, error) {
+func (cd *OrderDao) GetByID(id string) (*models.Order, error) {
 
 	res, err := cd.db.GetItem(&dynamodb.GetItemInput{
 		TableName: ordersTableName(),
@@ -81,7 +84,7 @@ func (cd *OrderDao) GetByID(id int) (*models.Order, error) {
 	return &cat, nil
 }
 
-func (cd *OrderDao) GetByStatus(status string) ([]models.Order, error) {
+func (cd *OrderDao) GetByStatus(status int) ([]models.Order, error) {
 
 	//res, err := cd.db.Query(&dynamodb.QueryInput{
 	//	TableName:     ordersTableName(),
@@ -129,7 +132,7 @@ func (cd *OrderDao) GetByStatus(status string) ([]models.Order, error) {
 	return results, nil
 }
 
-func (cd *OrderDao) GetByCustomerId(customerId int) ([]models.Order, error) {
+func (cd *OrderDao) GetByCustomerId(customerId string) ([]models.Order, error) {
 
 	filt := expression.Name("customerId").Equal(expression.Value(customerId))
 
@@ -237,7 +240,7 @@ func (cd *OrderDao) Create(order models.Order) (*models.Order, error) {
 	return &savedCat, nil
 }
 
-func (cd *OrderDao) UpdateByID(id int, cat models.Order) (*models.Order, error) {
+func (cd *OrderDao) UpdateByID(id string, cat models.Order) (*models.Order, error) {
 
 	toUpd, err := getOrderUpdExp(cat)
 
@@ -277,7 +280,7 @@ func (cd *OrderDao) UpdateByID(id int, cat models.Order) (*models.Order, error) 
 }
 
 //
-func (cd *OrderDao) DeleteByID(id int) error {
+func (cd *OrderDao) DeleteByID(id string) error {
 
 	res, err := cd.db.GetItem(&dynamodb.GetItemInput{
 		TableName: ordersTableName(),
@@ -319,7 +322,7 @@ func getOrderUpdExp(cat models.Order) (expression.Expression, error) {
 		updateExp = updateExp.Set(expression.Name("productDesc"), expression.Value(desc))
 	}
 
-	if string(cat.Status) != "" {
+	if cat.Status != 0 {
 		updateExp = updateExp.Set(expression.Name("status"), expression.Value(cat.Status))
 	}
 

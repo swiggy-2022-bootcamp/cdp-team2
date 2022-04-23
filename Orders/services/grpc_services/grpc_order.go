@@ -22,7 +22,7 @@ func (s *Server) OrderCreateService(ctx context.Context, order *pb.OrderCreateRe
 
 	for i := 0; i < len(productDesc); i++ {
 		//productDescArray = append(productDescArray, productDesc[i])
-		productDescArray = append(productDescArray, models.ProductDesc{ProductId: productDesc[i].ProductId, Points: int32(int(productDesc[i].Points)), Reward: int32(int(productDesc[i].Reward)), Quantity: int32(int(productDesc[i].Quantity)), Price: int32(int(productDesc[i].Price))})
+		productDescArray = append(productDescArray, models.ProductDesc{ProductId: productDesc[i].ProductId, Points: int32(int(productDesc[i].Points)), Reward: int32(int(productDesc[i].Reward)), Quantity: int32(int(productDesc[i].Quantity)), Price: productDesc[i].Price})
 
 	}
 
@@ -54,7 +54,7 @@ func (s *Server) OrderStatusUpdateService(ctx context.Context, order *pb.OrderSt
 		Status: models.Status(status),
 	}
 
-	_, err := dao.GetOrderDao().UpdateByID(int(orderId), orderUpdate)
+	_, err := dao.GetOrderDao().UpdateByID(orderId, orderUpdate)
 
 	if err != nil {
 		return nil, errors.New("error occurred")
@@ -69,13 +69,13 @@ func (s *Server) GetOrderService(ctx context.Context, order *pb.GetOrderRequest)
 
 	orderId := order.OrderId
 
-	orderResponse, err := dao.GetOrderDao().GetByID(int(orderId))
+	orderResponse, err := dao.GetOrderDao().GetByID(orderId)
 
 	var productDescArray []*models.ProductDesc
 
 	for i := 0; i < len(orderResponse.ProductDesc); i++ {
 		//productDescArray = append(productDescArray, productDesc[i])
-		productDescArray = append(productDescArray, &models.ProductDesc{ProductId: orderResponse.ProductDesc[i].ProductId, Points: int32(int(orderResponse.ProductDesc[i].Points)), Reward: int32(int(orderResponse.ProductDesc[i].Reward)), Quantity: int32(int(orderResponse.ProductDesc[i].Quantity)), Price: int32(int(orderResponse.ProductDesc[i].Price))})
+		productDescArray = append(productDescArray, &models.ProductDesc{ProductId: orderResponse.ProductDesc[i].ProductId, Points: int32(int(orderResponse.ProductDesc[i].Points)), Reward: int32(int(orderResponse.ProductDesc[i].Reward)), Quantity: int32(int(orderResponse.ProductDesc[i].Quantity)), Price: orderResponse.ProductDesc[i].Price})
 
 	}
 

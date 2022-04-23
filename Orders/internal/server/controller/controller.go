@@ -27,9 +27,9 @@ func BindId(c *gin.Context) {
 }
 
 func BindStatus(c *gin.Context) {
-	status := c.Param(literals.StatusKey)
-	fmt.Println(status)
-	if status == "" {
+	status, _ := strconv.Atoi(c.Param(literals.StatusKey))
+	fmt.Println(status, "----------")
+	if status == 0 {
 		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderNotFound})
 		return
 	}

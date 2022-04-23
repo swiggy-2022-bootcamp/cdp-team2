@@ -15,15 +15,15 @@ func NewOrderService() IService {
 	}
 }
 
-func (cs *OrderService) GetByID(id int) (*models.Order, error) {
+func (cs *OrderService) GetByID(id string) (*models.Order, error) {
 	return cs.Dao.GetByID(id)
 }
 
-func (cs *OrderService) GetByStatus(status string) ([]models.Order, error) {
+func (cs *OrderService) GetByStatus(status int) ([]models.Order, error) {
 	return cs.Dao.GetByStatus(status)
 }
 
-func (cs *OrderService) GetByCustomerId(customerId int) ([]models.Order, error) {
+func (cs *OrderService) GetByCustomerId(customerId string) ([]models.Order, error) {
 	return cs.Dao.GetByCustomerId(customerId)
 }
 
@@ -37,11 +37,11 @@ func (cs *OrderService) Create(cat models.Order) (*models.Order, error) {
 }
 
 //
-func (cs *OrderService) UpdateByID(id int, cat models.Order) (*models.Order, error) {
+func (cs *OrderService) UpdateByID(id string, cat models.Order) (*models.Order, error) {
 	return cs.Dao.UpdateByID(id, cat)
 }
 
-func (cs *OrderService) DeleteByID(id int) error {
+func (cs *OrderService) DeleteByID(id string) error {
 	return cs.Dao.DeleteByID(id)
 }
 
