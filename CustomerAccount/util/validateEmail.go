@@ -12,7 +12,6 @@ import (
 
 
 func ValidateEmail(email string, db dynamodbiface.DynamoDBAPI) bool{
-	fmt.Println("getting email",email,db)
 	// create the api params
 	params := &dynamodb.QueryInput{
 		TableName: aws.String("team-2-Customers"),

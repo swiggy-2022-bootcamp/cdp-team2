@@ -2,8 +2,7 @@ package server
 
 import (
 	"context"
-	// "customer-account/internal/literals"
-	// "customer-account/internal/handlegrpc"
+
 	pb "customer-account/internal/proto/grpc"
 	// pbc "customer-account/internal/proto/cart"
 	"fmt"

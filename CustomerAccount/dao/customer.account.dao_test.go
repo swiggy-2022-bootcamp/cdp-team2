@@ -11,13 +11,16 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/stretchr/testify/assert"
-	"customer-account/config"
+	// "customer-account/config"
 	// "errors"
 	// "github.com/stretchr/testify/assert"
+	"strconv"
+	"crypto/sha1"
+	"encoding/hex"
 )
 
 var (
-	tableName = config.AWS["TABLE_NAME"]
+	tableName = "team-2-Customers"
 )
 
 func RandomAccount()models.Account{
@@ -46,7 +49,7 @@ func RandomAccount2()models.Account2{
 		Reward			: models.Reward{},
 		UserBalance     : 0.0,
 		CustomerGroupID : 1,
-		DateAdded       :    "test",
+		DateAdded       : "test",
 	}
 }
 
@@ -125,6 +128,17 @@ func TestUpdate(t *testing.T){
 	account:=RandomAccount()
 	account.Email=""
 	obj:=account
+		
+	h := sha1.New()
+	h.Write([]byte(obj.Password))
+	obj.Password = hex.EncodeToString(h.Sum(nil))
+
+
+	h = sha1.New()
+	h.Write([]byte(obj.Confirm))
+	obj.Confirm = hex.EncodeToString(h.Sum(nil))
+
+	
 	params := &dynamodb.UpdateItemInput{
 		TableName: aws.String(tableName),
 		Key: map[string]*dynamodb.AttributeValue{
@@ -132,14 +146,16 @@ func TestUpdate(t *testing.T){
 				S: aws.String(account.Id),
 			}, 
 		},
-		UpdateExpression: aws.String("set firstname=:f, lastname=:l, password=:p, confirm=:c, telephone=:t, email=:e"),
+		UpdateExpression: aws.String("set firstname=:f, lastname=:l, password=:p, confirm=:c, telephone=:t, email=:e, user_balance=:ub, customer_group_id=:cgi"),
 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
 			":f": {S: aws.String(obj.Firstname)},
 			":l": {S: aws.String(obj.Lastname)},
 			":p": {S:aws.String(obj.Password)},
-			":c": {S:aws.String(obj.Confirm)},
+			":c": {S:aws.String(obj.Password)},
 			":t": {S:aws.String(obj.Telephone)},
 			":e": {S:aws.String(obj.Email)},
+			":cgi":{N:aws.String(strconv.Itoa(obj.CustomerGroupID))},
+			":ub" :{N:aws.String(strconv.FormatFloat(obj.UserBalance, 'E', -1, 32))},
 		},
 		ReturnValues: aws.String(dynamodb.ReturnValueAllNew),
 	}
