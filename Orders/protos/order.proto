@@ -50,7 +50,7 @@ Order order=1;
 }
 
 message OrderCreateResponse{
-bool response=1;
+OrderResponse order=1;
 }
 
 message GetOrderRequest{

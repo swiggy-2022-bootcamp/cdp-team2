@@ -35,14 +35,24 @@ func (s *Server) OrderCreateService(ctx context.Context, order *pb.OrderCreateRe
 		ProductDesc: productDescArray,
 	}
 
-	_, err := dao.GetOrderDao().Create(orderCreate)
+	orderResponse, err := dao.GetOrderDao().Create(orderCreate)
 
 	if err != nil {
 		return nil, errors.New("error occurred")
 	}
 
+	order1 := &pb.OrderResponse{
+		OrderId:    orderResponse.OrderId,
+		CustomerId: orderResponse.CustomerId,
+		Status:     int32(orderResponse.Status),
+		AddressId:  orderResponse.AddressId,
+		TotalPrice: orderResponse.TotalPrice,
+		PayedPrice: orderResponse.PayedPrice,
+		//ProductDesc: productDescArray,
+	}
+
 	return &pb.OrderCreateResponse{
-		Response: true,
+		Order: order1,
 	}, nil
 }
 
