@@ -12,7 +12,7 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o categories-app cmd/server/main.go
+RUN go build -o orders-app cmd/server/main.go
 
 ##
 ## Deploy

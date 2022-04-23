@@ -55,9 +55,15 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">github.com/swiggy-2022-bootcamp/cdp-team2/Order/dao/order.dao.go (57.3%)</option>
+				<option value="file0">github.com/swiggy-2022-bootcamp/cdp-team2/Order/dao/order.dao.go (45.3%)</option>
 				
-				<option value="file1">github.com/swiggy-2022-bootcamp/cdp-team2/Order/services/order.service.go (87.5%)</option>
+				<option value="file1">github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/server/controller/controller.go (29.7%)</option>
+				
+				<option value="file2">github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/server/controller/health.go (100.0%)</option>
+				
+				<option value="file3">github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/server/controller/order.controller.go (48.9%)</option>
+				
+				<option value="file4">github.com/swiggy-2022-bootcamp/cdp-team2/Order/services/order.service.go (87.5%)</option>
 				
 				</select>
 			</div>
@@ -112,7 +118,7 @@ func ordersTableName() *string <span class="cov8" title="1">{
 func getKeyFilter(id string) map[string]*dynamodb.AttributeValue <span class="cov8" title="1">{
         return map[string]*dynamodb.AttributeValue{
                 "orderId": {
-                        N: aws.String(fmt.Sprint(id)),
+                        S: aws.String(id),
                 },
         }
 }</span>
@@ -157,7 +163,7 @@ func (cd *OrderDao) GetByID(id string) (*models.Order, error) <span class="cov8"
         <span class="cov8" title="1">return &amp;cat, nil</span>
 }
 
-func (cd *OrderDao) GetByStatus(status int) ([]models.Order, error) <span class="cov8" title="1">{
+func (cd *OrderDao) GetByStatus(status int) ([]models.Order, error) <span class="cov0" title="0">{
 
         //res, err := cd.db.Query(&amp;dynamodb.QueryInput{
         //        TableName:     ordersTableName(),
@@ -178,7 +184,7 @@ func (cd *OrderDao) GetByStatus(status int) ([]models.Order, error) <span class=
                 return nil, err
         }</span>
 
-        <span class="cov8" title="1">input := &amp;dynamodb.ScanInput{
+        <span class="cov0" title="0">input := &amp;dynamodb.ScanInput{
                 TableName:                 ordersTableName(),
                 ExpressionAttributeNames:  expr.Names(),
                 ExpressionAttributeValues: expr.Values(),
@@ -205,7 +211,7 @@ func (cd *OrderDao) GetByStatus(status int) ([]models.Order, error) <span class=
         <span class="cov0" title="0">return results, nil</span>
 }
 
-func (cd *OrderDao) GetByCustomerId(customerId string) ([]models.Order, error) <span class="cov8" title="1">{
+func (cd *OrderDao) GetByCustomerId(customerId string) ([]models.Order, error) <span class="cov0" title="0">{
 
         filt := expression.Name("customerId").Equal(expression.Value(customerId))
 
@@ -216,7 +222,7 @@ func (cd *OrderDao) GetByCustomerId(customerId string) ([]models.Order, error) <
                 return nil, err
         }</span>
 
-        <span class="cov8" title="1">input := &amp;dynamodb.ScanInput{
+        <span class="cov0" title="0">input := &amp;dynamodb.ScanInput{
                 TableName:                 ordersTableName(),
                 ExpressionAttributeNames:  expr.Names(),
                 ExpressionAttributeValues: expr.Values(),
@@ -298,7 +304,7 @@ func (cd *OrderDao) Create(order models.Order) (*models.Order, error) <span clas
         resp, err := cd.db.UpdateItem(&amp;createItemIn)
 
         if err != nil </span><span class="cov0" title="0">{
-                log.Printf("error while creating cateogory %s", err.Error())
+                log.Printf("error while creating order %s", err.Error())
                 return nil, err
         }</span>
 
@@ -353,7 +359,7 @@ func (cd *OrderDao) UpdateByID(id string, cat models.Order) (*models.Order, erro
 }
 
 //
-func (cd *OrderDao) DeleteByID(id string) error <span class="cov8" title="1">{
+func (cd *OrderDao) DeleteByID(id string) error <span class="cov0" title="0">{
 
         res, err := cd.db.GetItem(&amp;dynamodb.GetItemInput{
                 TableName: ordersTableName(),
@@ -413,7 +419,250 @@ func getOrderUpdExp(cat models.Order) (expression.Expression, error) <span class
 }
 </pre>
 		
-		<pre class="file" id="file1" style="display: none">package services
+		<pre class="file" id="file1" style="display: none">package controller
+
+import (
+        "fmt"
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Order/dao/models"
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/api"
+        "net/http"
+        "strconv"
+
+        "github.com/gin-gonic/gin"
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/literals"
+)
+
+func BindId(c *gin.Context) <span class="cov8" title="1">{
+        idstr := c.Param(literals.OrderIdKey)
+        if idstr == "" </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderNotFound})
+                return
+        }</span>
+        <span class="cov8" title="1">id, err := strconv.Atoi(idstr)
+        if err != nil </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderNotFound})
+                return
+        }</span>
+        <span class="cov8" title="1">c.Set(literals.OrderIdKey, id)
+        c.Next()</span>
+}
+
+func BindStatus(c *gin.Context) <span class="cov0" title="0">{
+        status, _ := strconv.Atoi(c.Param(literals.StatusKey))
+        fmt.Println(status, "----------")
+        if status == 0 </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderNotFound})
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.Set(literals.StatusKey, status)
+        c.Next()</span>
+}
+
+func BindCustomer(c *gin.Context) <span class="cov0" title="0">{
+        idstr := c.Param(literals.CustomerIdKey)
+        if idstr == "" </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderNotFound})
+                return
+        }</span>
+        <span class="cov0" title="0">id, err := strconv.Atoi(idstr)
+        if err != nil </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderNotFound})
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.Set(literals.CustomerIdKey, id)
+        c.Next()</span>
+}
+
+func BindOrder(c *gin.Context) <span class="cov8" title="1">{
+        cat := models.Order{}
+        if err := c.BindJSON(&amp;cat); err != nil </span><span class="cov0" title="0">{
+                fmt.Println(err)
+                c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderBodyKey})
+                return
+        }</span>
+
+        <span class="cov8" title="1">if cat.Status &gt; 3 || cat.Status &lt;= 0 </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.StatusNotValid})
+                return
+        }</span>
+        <span class="cov8" title="1">c.Set(literals.OrderBodyKey, cat)
+        c.Next()</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package controller
+
+import (
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/literals"
+        "net/http"
+
+        "github.com/gin-gonic/gin"
+)
+
+func Health(c *gin.Context) <span class="cov8" title="1">{
+        c.String(http.StatusOK, literals.Health_OK)
+}</span>
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package controller
+
+import (
+        "fmt"
+        "net/http"
+
+        "github.com/gin-gonic/gin"
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Order/dao/models"
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/api"
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/literals"
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Order/services"
+)
+
+type OrderController struct {
+        service services.IService
+}
+
+func NewOrderController() *OrderController <span class="cov0" title="0">{
+        return &amp;OrderController{
+                services.NewOrderService(),
+        }
+}</span>
+
+// Get Category By ID
+// @Summary Get Single Category By Id
+// @Tags Category
+// @Param _id path string true "category_id"
+// @Success 200 {object} models.Category
+// @Failure 500 {object} api.ApiResponseWithErr
+// @Router /categories/{_id} [get]
+func (cc *OrderController) GetByID(c *gin.Context) <span class="cov8" title="1">{
+        id := c.GetString(literals.OrderIdKey)
+        cat, err := cc.service.GetByID(id)
+        if err != nil </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(api.ServerErr(err))
+                return
+        }</span>
+        <span class="cov8" title="1">c.JSON(http.StatusOK, cat)</span>
+}
+
+func (cc *OrderController) GetByStatus(c *gin.Context) <span class="cov8" title="1">{
+        status := c.GetInt(literals.StatusKey)
+        fmt.Println("status---", status)
+        cat, err := cc.service.GetByStatus(status)
+        if err != nil </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(api.ServerErr(err))
+                return
+        }</span>
+        <span class="cov8" title="1">c.JSON(http.StatusOK, cat)</span>
+}
+
+func (cc *OrderController) GetByCustomer(c *gin.Context) <span class="cov8" title="1">{
+        customerId := c.GetString(literals.CustomerIdKey)
+
+        cat, err := cc.service.GetByCustomerId(customerId)
+        if err != nil </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(api.ServerErr(err))
+                return
+        }</span>
+        <span class="cov8" title="1">c.JSON(http.StatusOK, cat)</span>
+}
+
+// Get All Categories
+// @Summary Get All Categories
+// @Tags Category
+// @Success 200 {array} models.Category
+// @Failure 500 {object} api.ApiResponseWithErr
+// @Router /categories [get]
+func (cc *OrderController) GetAll(c *gin.Context) <span class="cov8" title="1">{
+        res, err := cc.service.GetAll()
+        if err != nil </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(api.ServerErr(err))
+                return
+        }</span>
+        <span class="cov8" title="1">c.JSON(http.StatusOK, res)</span>
+}
+
+// Create Category
+// @Summary Create new Category, id is auto-assigned based on timestamp.
+// @Tags Category
+// @Param   category body models.Category true  "category"
+// @Success 200 {object} models.Category
+// @Failure 500 {object} api.ApiResponseWithErr
+// @Router /categories [post]
+func (cc *OrderController) Create(c *gin.Context) <span class="cov0" title="0">{
+        nc, _ := c.Get(literals.OrderBodyKey)
+        newCat := nc.(models.Order)
+        saved, err := cc.service.Create(newCat)
+        if err != nil </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(api.ServerErr(err))
+                return
+        }</span>
+        <span class="cov0" title="0">c.JSON(http.StatusOK, saved)</span>
+}
+
+// Update Category By ID
+// @Summary Update Category By Id, Updated Category is returned
+// @Tags Category
+// @Param _id path string true "category_id"
+// @Param   category body models.Category false  "category"
+// @Success 200 {object} models.Category
+// @Failure 500 {object} api.ApiResponseWithErr
+// @Router /categories/{_id} [put]
+func (cc *OrderController) Update(c *gin.Context) <span class="cov8" title="1">{
+
+        id := c.GetString(literals.OrderIdKey)
+        nc, _ := c.Get(literals.OrderBodyKey)
+        newCat := nc.(models.Order)
+
+        saved, err := cc.service.UpdateByID(id, newCat)
+        if err != nil </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(api.ServerErr(err))
+                return
+        }</span>
+        <span class="cov8" title="1">c.JSON(http.StatusOK, saved)</span>
+}
+
+// Delete Category By ID
+// @Summary Delete Single Category By Id
+// @Tags Category
+// @Param _id path string true "category_id"
+// @Success 200
+// @Failure 500 {object} api.ApiResponseWithErr
+// @Router /categories/{_id} [delete]
+func (cc *OrderController) Delete(c *gin.Context) <span class="cov0" title="0">{
+        id := c.GetString(literals.OrderIdKey)
+        if err := cc.service.DeleteByID(id); err != nil </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(api.ServerErr(err))
+                return
+        }</span>
+        <span class="cov0" title="0">c.Status(http.StatusOK)</span>
+}
+
+// Delete Multiple Categories
+// @Summary Delete Multiple Categories
+// @Tags Category
+// @Param   category_ids body []int true  "category_ids"
+// @Success 200
+// @Failure 500 {object} api.ApiResponseWithErrors
+// @Router /categories [delete]
+//func (cc *CategoryController) DeleteMultiple(c *gin.Context) {
+//        var ids []int
+//        if err := c.BindJSON(&amp;ids); err != nil {
+//                c.AbortWithStatusJSON(api.ServerErr(err))
+//                return
+//        }
+//
+//        if errs := cc.service.DeleteMultiple(ids); errs != nil {
+//                c.AbortWithStatusJSON(api.ServerErrs(errs))
+//                return
+//        }
+//
+//        c.Status(http.StatusOK)
+//}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package services
 
 import (
         "github.com/swiggy-2022-bootcamp/cdp-team2/Order/dao"
