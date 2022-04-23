@@ -319,7 +319,7 @@ func getOrderUpdExp(cat models.Order) (expression.Expression, error) {
 		updateExp = updateExp.Set(expression.Name("productDesc"), expression.Value(desc))
 	}
 
-	if cat.Status != "" {
+	if string(cat.Status) != "" {
 		updateExp = updateExp.Set(expression.Name("status"), expression.Value(cat.Status))
 	}
 
