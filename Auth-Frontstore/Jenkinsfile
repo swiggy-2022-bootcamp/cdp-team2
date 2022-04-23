@@ -1,0 +1,86 @@
+pipeline {
+    
+    agent any
+
+    tools {
+        go '1.18.1'
+    }
+
+    environment {
+		DOCKERHUB_CREDENTIALS=credentials('docker-hub')
+        PATH = "$PATH:/usr/local/bin"
+	}
+    
+    stages {
+
+        stage ("clone") {
+            steps {
+                git branch: 'main', url: "https://github.com/22sujata8d/jenkins-ci-demo.git"
+            }
+        }
+
+        stage("build") {
+
+            steps {
+                echo 'building the application...auth-frontstore'
+                sh 'ls'
+                sh script:'''
+                    #!/bin/bash
+                    cd ./auth-frontstore
+                    pwd
+                    go mod tidy
+                    cd ./cmd
+                    go build .
+                '''
+            }
+        }
+
+        stage("test") {
+
+            steps {
+                echo 'testing the application...'
+                sh script:'''
+                    pwd
+                    cd ./Cart
+                    go test -v ./...
+                '''
+            }
+        }
+
+        stage("image build") {
+
+			steps {
+                echo 'building the docker image...'
+				sh script:'''
+                    pwd
+                    cd ./Cart
+                    docker build -t zen08/cart:latest .
+                '''
+			}
+		}
+
+        stage("docker login") {
+
+			steps {
+                echo 'loging into docker...'
+                sh 'docker --version'
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+			}
+		}
+
+        stage("push image to dockerhub") {
+
+            steps {
+                sh 'docker --version'
+                echo 'pushing the image to docker hub...'
+                sh 'docker push zen08/cart:latest'
+            }
+        }
+    }
+
+    post {
+		always {
+		    sh 'docker logout'
+		}
+	}
+}
