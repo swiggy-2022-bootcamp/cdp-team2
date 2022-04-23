@@ -55,7 +55,7 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">github.com/swiggy-2022-bootcamp/cdp-team2/Order/dao/order.dao.go (0.0%)</option>
+				<option value="file0">github.com/swiggy-2022-bootcamp/cdp-team2/Order/dao/order.dao.go (57.3%)</option>
 				
 				<option value="file1">github.com/swiggy-2022-bootcamp/cdp-team2/Order/services/order.service.go (87.5%)</option>
 				
@@ -105,11 +105,11 @@ func GetOrderDao() IDao <span class="cov0" title="0">{
         }
 }</span>
 
-func ordersTableName() *string <span class="cov0" title="0">{
+func ordersTableName() *string <span class="cov8" title="1">{
         return aws.String(tabelName)
 }</span>
 
-func getKeyFilter(id string) map[string]*dynamodb.AttributeValue <span class="cov0" title="0">{
+func getKeyFilter(id string) map[string]*dynamodb.AttributeValue <span class="cov8" title="1">{
         return map[string]*dynamodb.AttributeValue{
                 "orderId": {
                         N: aws.String(fmt.Sprint(id)),
@@ -125,13 +125,13 @@ func getKeyFilterStatus(status string) map[string]*dynamodb.AttributeValue <span
         }
 }</span>
 
-func getRandomKey() string <span class="cov0" title="0">{
+func getRandomKey() string <span class="cov8" title="1">{
         uuid := uuid.New()
         fmt.Println(uuid.String())
         return uuid.String()
 }</span>
 
-func (cd *OrderDao) GetByID(id string) (*models.Order, error) <span class="cov0" title="0">{
+func (cd *OrderDao) GetByID(id string) (*models.Order, error) <span class="cov8" title="1">{
 
         res, err := cd.db.GetItem(&amp;dynamodb.GetItemInput{
                 TableName: ordersTableName(),
@@ -143,21 +143,21 @@ func (cd *OrderDao) GetByID(id string) (*models.Order, error) <span class="cov0"
                 return nil, err
         }</span>
 
-        <span class="cov0" title="0">cat := models.Order{}
+        <span class="cov8" title="1">cat := models.Order{}
 
         if res.Item == nil </span><span class="cov0" title="0">{
                 return nil, errors.New(literals.OrderNotFound)
         }</span>
 
-        <span class="cov0" title="0">if err = dynamodbattribute.UnmarshalMap(res.Item, &amp;cat); err != nil </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">if err = dynamodbattribute.UnmarshalMap(res.Item, &amp;cat); err != nil </span><span class="cov0" title="0">{
                 log.Printf("Error unMarshalling Category: %s", err)
                 return nil, err
         }</span>
 
-        <span class="cov0" title="0">return &amp;cat, nil</span>
+        <span class="cov8" title="1">return &amp;cat, nil</span>
 }
 
-func (cd *OrderDao) GetByStatus(status int) ([]models.Order, error) <span class="cov0" title="0">{
+func (cd *OrderDao) GetByStatus(status int) ([]models.Order, error) <span class="cov8" title="1">{
 
         //res, err := cd.db.Query(&amp;dynamodb.QueryInput{
         //        TableName:     ordersTableName(),
@@ -178,7 +178,7 @@ func (cd *OrderDao) GetByStatus(status int) ([]models.Order, error) <span class=
                 return nil, err
         }</span>
 
-        <span class="cov0" title="0">input := &amp;dynamodb.ScanInput{
+        <span class="cov8" title="1">input := &amp;dynamodb.ScanInput{
                 TableName:                 ordersTableName(),
                 ExpressionAttributeNames:  expr.Names(),
                 ExpressionAttributeValues: expr.Values(),
@@ -205,7 +205,7 @@ func (cd *OrderDao) GetByStatus(status int) ([]models.Order, error) <span class=
         <span class="cov0" title="0">return results, nil</span>
 }
 
-func (cd *OrderDao) GetByCustomerId(customerId string) ([]models.Order, error) <span class="cov0" title="0">{
+func (cd *OrderDao) GetByCustomerId(customerId string) ([]models.Order, error) <span class="cov8" title="1">{
 
         filt := expression.Name("customerId").Equal(expression.Value(customerId))
 
@@ -216,7 +216,7 @@ func (cd *OrderDao) GetByCustomerId(customerId string) ([]models.Order, error) <
                 return nil, err
         }</span>
 
-        <span class="cov0" title="0">input := &amp;dynamodb.ScanInput{
+        <span class="cov8" title="1">input := &amp;dynamodb.ScanInput{
                 TableName:                 ordersTableName(),
                 ExpressionAttributeNames:  expr.Names(),
                 ExpressionAttributeValues: expr.Values(),
@@ -243,7 +243,7 @@ func (cd *OrderDao) GetByCustomerId(customerId string) ([]models.Order, error) <
         <span class="cov0" title="0">return results, nil</span>
 }
 
-func (cd *OrderDao) GetAll() ([]models.Order, error) <span class="cov0" title="0">{
+func (cd *OrderDao) GetAll() ([]models.Order, error) <span class="cov8" title="1">{
 
         var results []models.Order
 
@@ -256,21 +256,21 @@ func (cd *OrderDao) GetAll() ([]models.Order, error) <span class="cov0" title="0
                 return nil, err
         }</span>
 
-        <span class="cov0" title="0">if res.Items == nil </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">if res.Items == nil </span><span class="cov0" title="0">{
                 return results, errors.New(literals.OrderNotFound)
         }</span>
 
-        <span class="cov0" title="0">err = dynamodbattribute.UnmarshalListOfMaps(res.Items, &amp;results)
+        <span class="cov8" title="1">err = dynamodbattribute.UnmarshalListOfMaps(res.Items, &amp;results)
         if err != nil </span><span class="cov0" title="0">{
                 log.Printf("Failed to unmarshal categories, %v", err)
                 return nil, err
         }</span>
 
-        <span class="cov0" title="0">return results, nil</span>
+        <span class="cov8" title="1">return results, nil</span>
 }
 
 //
-func (cd *OrderDao) Create(order models.Order) (*models.Order, error) <span class="cov0" title="0">{
+func (cd *OrderDao) Create(order models.Order) (*models.Order, error) <span class="cov8" title="1">{
 
         newId := getRandomKey()
 
@@ -302,7 +302,7 @@ func (cd *OrderDao) Create(order models.Order) (*models.Order, error) <span clas
                 return nil, err
         }</span>
 
-        <span class="cov0" title="0">log.Printf("category create resp %v", resp)
+        <span class="cov8" title="1">log.Printf("category create resp %v", resp)
 
         savedCat := models.Order{}
         if err = dynamodbattribute.UnmarshalMap(resp.Attributes, &amp;savedCat); err != nil </span><span class="cov0" title="0">{
@@ -310,10 +310,10 @@ func (cd *OrderDao) Create(order models.Order) (*models.Order, error) <span clas
                 return nil, err
         }</span>
 
-        <span class="cov0" title="0">return &amp;savedCat, nil</span>
+        <span class="cov8" title="1">return &amp;savedCat, nil</span>
 }
 
-func (cd *OrderDao) UpdateByID(id string, cat models.Order) (*models.Order, error) <span class="cov0" title="0">{
+func (cd *OrderDao) UpdateByID(id string, cat models.Order) (*models.Order, error) <span class="cov8" title="1">{
 
         toUpd, err := getOrderUpdExp(cat)
 
@@ -322,7 +322,7 @@ func (cd *OrderDao) UpdateByID(id string, cat models.Order) (*models.Order, erro
                 return nil, err
         }</span>
 
-        <span class="cov0" title="0">updItemIn := dynamodb.UpdateItemInput{
+        <span class="cov8" title="1">updItemIn := dynamodb.UpdateItemInput{
                 TableName:                 ordersTableName(),
                 Key:                       getKeyFilter(id),
                 ExpressionAttributeNames:  toUpd.Names(),
@@ -341,7 +341,7 @@ func (cd *OrderDao) UpdateByID(id string, cat models.Order) (*models.Order, erro
                 return nil, err
         }</span>
 
-        <span class="cov0" title="0">log.Printf("category update resp %v", resp)
+        <span class="cov8" title="1">log.Printf("category update resp %v", resp)
 
         updatedAttributes := models.Order{}
         if err = dynamodbattribute.UnmarshalMap(resp.Attributes, &amp;updatedAttributes); err != nil </span><span class="cov0" title="0">{
@@ -349,11 +349,11 @@ func (cd *OrderDao) UpdateByID(id string, cat models.Order) (*models.Order, erro
                 return nil, err
         }</span>
 
-        <span class="cov0" title="0">return &amp;updatedAttributes, nil</span>
+        <span class="cov8" title="1">return &amp;updatedAttributes, nil</span>
 }
 
 //
-func (cd *OrderDao) DeleteByID(id string) error <span class="cov0" title="0">{
+func (cd *OrderDao) DeleteByID(id string) error <span class="cov8" title="1">{
 
         res, err := cd.db.GetItem(&amp;dynamodb.GetItemInput{
                 TableName: ordersTableName(),
@@ -385,21 +385,21 @@ func (cd *OrderDao) DeleteByID(id string) error <span class="cov0" title="0">{
 
 ////getCategoryUpdExp creates a Expression from CategoryUpdateInput
 ////this iterates through all fields
-func getOrderUpdExp(cat models.Order) (expression.Expression, error) <span class="cov0" title="0">{
+func getOrderUpdExp(cat models.Order) (expression.Expression, error) <span class="cov8" title="1">{
         var updateExp expression.UpdateBuilder
 
         desc := cat.ProductDesc
         // descPrefix := "category_description."
         //category description
-        if len(desc) != 0 </span><span class="cov0" title="0">{
+        if len(desc) != 0 </span><span class="cov8" title="1">{
                 updateExp = updateExp.Set(expression.Name("productDesc"), expression.Value(desc))
         }</span>
 
-        <span class="cov0" title="0">if cat.Status != 0 </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">if cat.Status != 0 </span><span class="cov8" title="1">{
                 updateExp = updateExp.Set(expression.Name("status"), expression.Value(cat.Status))
         }</span>
 
-        <span class="cov0" title="0">log.Printf("order update expression %+v", updateExp)
+        <span class="cov8" title="1">log.Printf("order update expression %+v", updateExp)
         exp, err := expression.
                 NewBuilder().
                 WithCondition(expression.AttributeExists(expression.Name("orderId"))).
