@@ -11,7 +11,7 @@ message ProductDesc{
   int32 points=2;
   int32 reward=3;
   int32 quantity=4;
-  int32 price=5;
+  float price=5;
 }
 
 
@@ -20,13 +20,13 @@ message Order{
 string customerId=1;
 int32 status=2;
   int32 addressId=3;
-  int32 totalPrice=4;
-  int32 payedPrice=5;
+  float totalPrice=4;
+  float payedPrice=5;
 repeated ProductDesc productDesc=6;
 }
 
 message OrderStatusUpdateRequest{
-  int32 orderId =1;
+  string orderId =1;
   int32 status=2;
 }
 
@@ -39,10 +39,10 @@ message OrderResponse{
   string customerId=1;
   int32 status=2;
   int32 addressId=3;
-  int32 totalPrice=4;
-  int32 payedPrice=5;
+  float totalPrice=4;
+  float payedPrice=5;
   repeated ProductDesc productDesc=6;
-  int32 orderId =7;
+  string orderId =7;
 }
 
 message OrderCreateRequest{
@@ -50,11 +50,11 @@ Order order=1;
 }
 
 message OrderCreateResponse{
-bool response=1;
+OrderResponse order=1;
 }
 
 message GetOrderRequest{
-  int32 orderId = 1;
+  string orderId = 1;
 }
 
 
