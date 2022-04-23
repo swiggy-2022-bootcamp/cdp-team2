@@ -17,10 +17,11 @@ import (
 	"strconv"
 	"crypto/sha1"
 	"encoding/hex"
+	"customer-account/config"
 )
 
-const (
-	tableName = "Customer"
+var (
+	tableName = config.AWS["TABLE_NAME"]
 )
 
 type CustomerDao struct{
@@ -34,7 +35,7 @@ func GetCustomerDao() IDao{
 }
 
 func customersTableName() *string{
-	return aws.String(tableName)
+	return aws.String("team-2-Customers")
 }
  
 func (cd *CustomerDao) Create(account models.Account) (models.Account, error) {
@@ -58,7 +59,7 @@ func (cd *CustomerDao) Create(account models.Account) (models.Account, error) {
 
 	input := &dynamodb.PutItemInput{
 		Item:      info,
-		TableName: aws.String("Customer"),
+		TableName: aws.String("team-2-Customers"),
 	}
 
 	_, err = cd.Db.PutItem(input)
@@ -117,7 +118,7 @@ func (cd *CustomerDao)Update(id_string string,customer models.Account)(models.Ac
 	
 	// create the api params
 	params := &dynamodb.UpdateItemInput{
-		TableName: aws.String("Customer"),
+		TableName: aws.String("team-2-Customers"),
 		Key: map[string]*dynamodb.AttributeValue{
 			"customer_id": {
 				S: aws.String(id_string),
@@ -159,9 +160,9 @@ func (cd *CustomerDao)Update(id_string string,customer models.Account)(models.Ac
 
 
 func (cd *CustomerDao)Get(id_string string)(models.Account2,error){
-
+	fmt.Println("table name",id_string,"team-2-Customers")
 	params := &dynamodb.GetItemInput{
-		TableName: aws.String("Customer"),
+		TableName: aws.String("team-2-Customers"),
 		Key: map[string]*dynamodb.AttributeValue{
 			"customer_id": {
 				S: aws.String(id_string),
@@ -186,9 +187,12 @@ func (cd *CustomerDao)Get(id_string string)(models.Account2,error){
 		return models.Account2{},err
 	}
  
+	if(account.Id==""){
+		return account,errors.New("User not found");
+	}
 	// print the response data
 	fmt.Printf("Unmarshaled Movie-- = %+v\n", account)
- 
+	
 	account.Reward=grpc.GetRewardByCustomerId(id_string)
 	account.Cart=grpc.GetCartByCustomerId(id_string)
 	return account,nil

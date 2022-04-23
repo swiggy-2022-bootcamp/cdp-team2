@@ -17,7 +17,7 @@ func GetItems(id_string string,db dynamodbiface.DynamoDBAPI)(models.Account){
 
 	// create the api params
 	params11:= &dynamodb.GetItemInput{
-		TableName: aws.String("Customer"),
+		TableName: aws.String("team-2-Customers"),
 		Key: map[string]*dynamodb.AttributeValue{
 			// "_id": {
 			// 	N: aws.String(strconv.Itoa(12345)),

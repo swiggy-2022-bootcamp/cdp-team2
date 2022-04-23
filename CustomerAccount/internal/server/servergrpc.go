@@ -3,7 +3,7 @@ package server
 import (
 	"context"
 	// "customer-account/internal/literals"
-	"customer-account/internal/handlegrpc"
+	// "customer-account/internal/handlegrpc"
 	pb "customer-account/internal/proto/grpc"
 	// pbc "customer-account/internal/proto/cart"
 	"fmt"
@@ -12,6 +12,7 @@ import (
 	"crypto/sha1"
 	"encoding/hex"
 	grpc "google.golang.org/grpc"
+	"customer-account/config"
 )
 
 type server struct {
@@ -49,8 +50,9 @@ func (*server)  CredentialService(ctx context.Context,req *pb.CredentialRequest)
 	h.Write([]byte(password))
 	hash_password := hex.EncodeToString(h.Sum(nil))
 	fmt.Println("Credential Service called username and password are :",username,hash_password)
- 	customer_id,ispresent:=handlegrpc.CheckCredentials(username,hash_password)
-	return &(pb.CredentialResponse{Ispresent:ispresent,Customerid:customer_id}),nil
+ 	// customer_id,ispresent:=handlegrpc.CheckCredentials(username,hash_password)
+	 customer_id,ispresent:="123",true
+	 return &(pb.CredentialResponse{Ispresent:ispresent,Customerid:customer_id}),nil
 }
 // 	products := []*pbc.Product{}
 // 	products = append(products, &pbc.Product{ProductId:"id1", Quantity: int32(2)})
@@ -92,7 +94,7 @@ func StartGrpc() {
 	opts := []grpc.ServerOption{}
 	grpcServer := grpc.NewServer(opts...)
 	pb.RegisterServiceServer(grpcServer, &server{})
-	Listener, err := net.Listen("tcp", ":9000")
+	Listener, err := net.Listen("tcp", ":"+config.Server["GRPC_PORT"])
 	if err!=nil{
 		fmt.Println("Failed to listen to the server",err)
 	}

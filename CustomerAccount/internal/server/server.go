@@ -9,7 +9,8 @@ import (
 	"customer-account/config"
 	// "customer-account/internal/literals"
 	// "strconv"
-
+	"fmt"
+	
 )
 
 
@@ -21,7 +22,7 @@ import (
 
 // @contact.name API Support
  
-// @host localhost:8050
+// @host localhost:8092
 // @BasePath /
 
 // @securityDefinitions.basic BasicAuth
@@ -31,6 +32,8 @@ import (
 // @name Authorization
 func RunServer(){
 	// model.InitDB()
+	config.FromEnv()
+	fmt.Println("^^^^^^^",config.Server,config.AWS)
 	server:=gin.Default()
 	createRoute:=server.Group("/register")
 	{
@@ -46,8 +49,8 @@ func RunServer(){
 	{
 		HealthRoute(healthRoute.Group("/"))
 	}
-	 
+
 	server.GET("/swagger/*any",ginSwagger.WrapHandler(swaggerFiles.Handler))
-	StartGrpc()
+	go StartGrpc()
 	server.Run(":"+config.Server["PORT"])
 }

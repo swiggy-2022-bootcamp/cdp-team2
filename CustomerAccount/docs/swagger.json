@@ -10,7 +10,7 @@
         "license": {},
         "version": "1.0"
     },
-    "host": "localhost:8050",
+    "host": "localhost:8092",
     "basePath": "/",
     "paths": {
         "/account/{id}": {

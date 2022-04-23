@@ -15,7 +15,7 @@ message CredentialResponse{
 }
 
 service Service{
-     rpc CredentialService(CredentialRequest)returns (CredentialResponse){};
+    rpc CredentialService(CredentialRequest)returns (CredentialResponse){};
 }
 
 

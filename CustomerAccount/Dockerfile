@@ -8,14 +8,19 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o account-app cmd/server/main.go
+RUN go build -o customer-account-app cmd/server/main.go
+
+##
+## Deploy
+##
 
 FROM alpine
 
 WORKDIR /
 
-COPY --from=build /app/account-app /account-app
+COPY --from=build /app/customer-account-app /customer-account-app
 
 EXPOSE 8050
+EXPOSE 9000
 
-ENTRYPOINT ["/account-app"]
+ENTRYPOINT ["/customer-account-app"]

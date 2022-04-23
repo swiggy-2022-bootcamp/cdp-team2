@@ -11,17 +11,14 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/stretchr/testify/assert"
+	"customer-account/config"
 	// "errors"
 	// "github.com/stretchr/testify/assert"
 )
 
-// var mockDynamo=mock_dynamodbiface.MockDynamoDBAPIMockRecorder{}
-// var dynamoService=mock_dynamodbiface.NewMockDynamoDBAPI(&mockDynamo)
-// func GetMockCustomerDao() dao.IDao{
-// 	return &daCustomerDao{
-// 		mockDynamo,
-// 	}
-// }
+var (
+	tableName = config.AWS["TABLE_NAME"]
+)
 
 func RandomAccount()models.Account{
 	return models.Account{
@@ -62,7 +59,7 @@ func TestGet(t *testing.T){
 
 
 	params := &dynamodb.GetItemInput{
-		TableName: aws.String("Customer"),
+		TableName: aws.String(tableName),
 		Key: map[string]*dynamodb.AttributeValue{
 			"customer_id": {
 				S: aws.String(account.Id),
@@ -90,7 +87,7 @@ func TestCreate(t *testing.T){
 	dynamodbattribute.MarshalMap(account)
 
 	params := &dynamodb.QueryInput{
-		TableName: aws.String("Customer"),
+		TableName: aws.String(tableName),
         IndexName: aws.String("email-index"),
         KeyConditions: map[string]*dynamodb.Condition{
             "email": {
@@ -108,7 +105,7 @@ func TestCreate(t *testing.T){
 	info, err := dynamodbattribute.MarshalMap(account)
 	input := &dynamodb.PutItemInput{
 		Item:      info,
-		TableName: aws.String("Customer"),
+		TableName: aws.String(tableName),
 	}
 	mockDynamo.EXPECT().Query(params).Return(&dynamodb.QueryOutput{},nil)
 	mockDynamo.EXPECT().PutItem(input).Return(&dynamodb.PutItemOutput{},nil)
@@ -129,7 +126,7 @@ func TestUpdate(t *testing.T){
 	account.Email=""
 	obj:=account
 	params := &dynamodb.UpdateItemInput{
-		TableName: aws.String("Customer"),
+		TableName: aws.String(tableName),
 		Key: map[string]*dynamodb.AttributeValue{
 			"customer_id": {
 				S: aws.String(account.Id),
@@ -148,7 +145,7 @@ func TestUpdate(t *testing.T){
 	}
 
 	params2:= &dynamodb.GetItemInput{
-		TableName: aws.String("Customer"),
+		TableName: aws.String(tableName),
 		Key: map[string]*dynamodb.AttributeValue{
 			// "_id": {
 			// 	N: aws.String(strconv.Itoa(12345)),

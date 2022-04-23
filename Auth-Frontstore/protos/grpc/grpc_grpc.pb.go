@@ -4,7 +4,7 @@
 // - protoc             v3.20.0
 // source: internal/proto/grpc.proto
 
-package customerpb
+package grpc
 
 import (
 	context "context"
