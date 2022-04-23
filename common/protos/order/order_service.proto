@@ -1,9 +1,8 @@
 syntax = "proto3";
 
-package proto;
 
-option go_package="/order";
-
+package order;
+option go_package = "github.com/swiggy-2022-bootcamp/cdp-team2/common/protos/order";
 
 
 message ProductDesc{

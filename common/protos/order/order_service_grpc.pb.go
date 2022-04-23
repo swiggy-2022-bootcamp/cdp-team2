@@ -37,7 +37,7 @@ func NewServiceClient(cc grpc.ClientConnInterface) ServiceClient {
 
 func (c *serviceClient) OrderCreateService(ctx context.Context, in *OrderCreateRequest, opts ...grpc.CallOption) (*OrderCreateResponse, error) {
 	out := new(OrderCreateResponse)
-	err := c.cc.Invoke(ctx, "/proto.Service/OrderCreateService", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/order.Service/OrderCreateService", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (c *serviceClient) OrderCreateService(ctx context.Context, in *OrderCreateR
 
 func (c *serviceClient) OrderStatusUpdateService(ctx context.Context, in *OrderStatusUpdateRequest, opts ...grpc.CallOption) (*OrderStatusUpdateResponse, error) {
 	out := new(OrderStatusUpdateResponse)
-	err := c.cc.Invoke(ctx, "/proto.Service/OrderStatusUpdateService", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/order.Service/OrderStatusUpdateService", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +55,7 @@ func (c *serviceClient) OrderStatusUpdateService(ctx context.Context, in *OrderS
 
 func (c *serviceClient) GetOrderService(ctx context.Context, in *GetOrderRequest, opts ...grpc.CallOption) (*GetOrderResponse, error) {
 	out := new(GetOrderResponse)
-	err := c.cc.Invoke(ctx, "/proto.Service/GetOrderService", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/order.Service/GetOrderService", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +108,7 @@ func _Service_OrderCreateService_Handler(srv interface{}, ctx context.Context, d
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto.Service/OrderCreateService",
+		FullMethod: "/order.Service/OrderCreateService",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ServiceServer).OrderCreateService(ctx, req.(*OrderCreateRequest))
@@ -126,7 +126,7 @@ func _Service_OrderStatusUpdateService_Handler(srv interface{}, ctx context.Cont
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto.Service/OrderStatusUpdateService",
+		FullMethod: "/order.Service/OrderStatusUpdateService",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ServiceServer).OrderStatusUpdateService(ctx, req.(*OrderStatusUpdateRequest))
@@ -144,7 +144,7 @@ func _Service_GetOrderService_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto.Service/GetOrderService",
+		FullMethod: "/order.Service/GetOrderService",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ServiceServer).GetOrderService(ctx, req.(*GetOrderRequest))
@@ -156,7 +156,7 @@ func _Service_GetOrderService_Handler(srv interface{}, ctx context.Context, dec 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Service_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "proto.Service",
+	ServiceName: "order.Service",
 	HandlerType: (*ServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
