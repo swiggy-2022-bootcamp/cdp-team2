@@ -11,7 +11,7 @@ type ShippingAddressService struct {
 
 func NewShippingAddressService() IService {
 	return &ShippingAddressService{
-		dao.GetOrderDao(),
+		dao.GetShippingDao(),
 	}
 }
 

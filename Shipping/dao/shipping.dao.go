@@ -3,9 +3,10 @@ package dao
 import (
 	"errors"
 	"fmt"
-	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/dao/models"
 	"log"
 	"time"
+
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/dao/models"
 
 	"github.com/aws/aws-sdk-go/service/dynamodb/expression"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/db"
@@ -22,12 +23,12 @@ const (
 	tabelName   = "team-2-shippingAddress"
 )
 
-type OrderDao struct {
+type ShippingDao struct {
 	db dynamodbiface.DynamoDBAPI
 }
 
-func GetOrderDao() IDao {
-	return &OrderDao{
+func GetShippingDao() IDao {
+	return &ShippingDao{
 		db.GetInstance(),
 	}
 }
@@ -56,7 +57,7 @@ func getRandomKey() int {
 	return int(time.Now().Unix() - customEpoch)
 }
 
-func (cd *OrderDao) GetByCustomerId(customerId int) ([]models.ShippingAddress, error) {
+func (cd *ShippingDao) GetByCustomerId(customerId int) ([]models.ShippingAddress, error) {
 
 	filt := expression.Name("customerId").Equal(expression.Value(customerId))
 
@@ -94,7 +95,7 @@ func (cd *OrderDao) GetByCustomerId(customerId int) ([]models.ShippingAddress, e
 	return results, nil
 }
 
-func (cd *OrderDao) Create(shippingAddress models.ShippingAddress) (*models.ShippingAddress, error) {
+func (cd *ShippingDao) Create(shippingAddress models.ShippingAddress) (*models.ShippingAddress, error) {
 
 	newId := getRandomKey()
 

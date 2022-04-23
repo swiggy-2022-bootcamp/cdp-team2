@@ -36,7 +36,7 @@ func (s *Server) AddressutsService(ctx context.Context, address *pb.AddressutsRe
 		PostCode:     postCode,
 	}
 
-	_, err := dao.GetOrderDao().Create(shippingAddress)
+	_, err := dao.GetShippingDao().Create(shippingAddress)
 
 	if err != nil {
 		return nil, errors.New("error occurred")
@@ -53,7 +53,7 @@ func (s *Server) AddressstuService(ctx context.Context, req *pb.AddressstuReques
 
 	customerId, _ := strconv.Atoi(customerIdStr)
 
-	addressResponse, err := dao.GetOrderDao().GetByCustomerId(customerId)
+	addressResponse, err := dao.GetShippingDao().GetByCustomerId(customerId)
 
 	if err != nil {
 		return nil, errors.New("error occurred")
@@ -62,7 +62,7 @@ func (s *Server) AddressstuService(ctx context.Context, req *pb.AddressstuReques
 	addresses := []*pb.Address{}
 
 	for i := 0; i < len(addressResponse); i++ {
-		addresses = append(addresses, &pb.Address{CustomerId: string(addressResponse[i].CustomerId),
+		addresses = append(addresses, &pb.Address{CustomerId: string(rune(addressResponse[i].CustomerId)),
 			Firstname:    addressResponse[i].FirstName,
 			Lastname:     addressResponse[i].LastName,
 			AddressLine1: addressResponse[i].AddressLine1,
