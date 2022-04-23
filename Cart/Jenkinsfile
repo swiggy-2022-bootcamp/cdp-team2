@@ -15,7 +15,7 @@ pipeline {
 
         stage ("clone") {
             steps {
-                git branch: 'main', url: "https://github.com/22sujata8d/jenkins-ci-demo.git"
+                git branch: 'cart-ms', url: "https://github.com/swiggy-2022-bootcamp/cdp-team2.git"
             }
         }
 
