@@ -15,7 +15,7 @@ pipeline {
 
         stage ("clone") {
             steps {
-                git branch: 'main', url: "https://github.com/swiggy-2022-bootcamp/cdp-team2.git"
+                git branch: 'feature/frontstore-auth', url: "https://github.com/swiggy-2022-bootcamp/cdp-team2.git"
             }
         }
 
