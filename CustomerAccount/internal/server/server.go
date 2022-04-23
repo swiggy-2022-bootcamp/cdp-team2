@@ -6,32 +6,41 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"  //gin-swagger middleware
 	"github.com/swaggo/gin-swagger/swaggerFiles"	//swagger embed files
 	_ "customer-account/docs"
-
+	"customer-account/config"
+	// "customer-account/internal/literals"
+	// "strconv"
+	"fmt"
+	
 )
 
 
 
-// @title Customers API
+// @title Account API
 // @version 1.0
-// @description This is customers CRUD service.
+// @description This is Account CRUD service.
 // @termsOfService demo.com
 
 // @contact.name API Support
-// @contact.url http://demo.com/support
-
-// @host localhost:8081
+ 
+// @host localhost:8092
 // @BasePath /
 
-// @securityDefinitions.basic  BasicAuth
+// @securityDefinitions.basic BasicAuth
 
-// @securityDefinitions.apikey  ApiKeyAuth
-// @in                          header
-// @name                        Authorization
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func RunServer(){
- 
+	// model.InitDB()
+	config.FromEnv()
+	fmt.Println("^^^^^^^",config.Server,config.AWS)
 	server:=gin.Default()
+	createRoute:=server.Group("/register")
+	{
+		CreateRoute(createRoute.Group("/"))
+	}
 
-	customerRoute:=server.Group("/customer")
+	customerRoute:=server.Group("/account")
 	{
 		CustomerRoute(customerRoute.Group("/"))
 	}
@@ -40,8 +49,8 @@ func RunServer(){
 	{
 		HealthRoute(healthRoute.Group("/"))
 	}
-	 
-	server.GET("/swagger/*any",ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	server.Run(":8081")
+	server.GET("/swagger/*any",ginSwagger.WrapHandler(swaggerFiles.Handler))
+	go StartGrpc()
+	server.Run(":"+config.Server["PORT"])
 }

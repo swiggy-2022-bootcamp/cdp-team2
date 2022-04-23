@@ -1,9 +1,9 @@
 package main
 
 import (
-	"customer-account/internal/server"
+	server1 "customer-account/internal/server"
 )
-
+ 
 func main(){
-	server.RunServer()
+	server1.RunServer()
 }
