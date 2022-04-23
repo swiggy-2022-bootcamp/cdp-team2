@@ -3,7 +3,6 @@ package controllers
 import (
 	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Checkout/internal/api"
@@ -32,26 +31,21 @@ func NewCheckoutController() (*CheckoutController, error) {
 // @Router /checkout/{cart_id} [post]
 func (cc *CheckoutController) StartCheckout(c *gin.Context) {
 
-	idstr := c.Param(literals.CartIdKey)
+	idstr := c.Param(literals.CustIdKey)
 	if idstr == "" {
-		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.CartIdNotFound})
-		return
-	}
-	cartId, err := strconv.Atoi(idstr)
-	if err != nil {
-		c.AbortWithStatusJSON(api.UserErr(err))
+		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.CustIdNotFound})
 		return
 	}
 
-	log.Printf("Starting Checkout for cart : %d", cartId)
+	log.Printf("Starting Checkout for cart : %d", idstr)
 
-	err = cc.service.StartCheckout(cartId)
+	order, err := cc.service.StartCheckout(idstr)
 	if err != nil {
 		c.AbortWithStatusJSON(api.ServerErr(err))
 		return
 	}
 
-	c.Status(http.StatusOK)
+	c.JSON(http.StatusOK, order)
 }
 
 // Apply Reward
@@ -70,13 +64,13 @@ func (cc *CheckoutController) ApplyReward(c *gin.Context) {
 		return
 	}
 
-	err := cc.service.ApplyReward(req.OrderID, req.Rewards)
+	order, err := cc.service.ApplyReward(req.OrderID, req.Rewards)
 	if err != nil {
 		c.AbortWithStatusJSON(api.ServerErr(err))
 		return
 	}
 
-	c.Status(http.StatusOK)
+	c.JSON(http.StatusOK, order)
 }
 
 // Pay
@@ -95,13 +89,13 @@ func (cc *CheckoutController) Pay(c *gin.Context) {
 		return
 	}
 
-	err := cc.service.ConfirmOrder(req.OrderID)
+	order, err := cc.service.ConfirmOrder(req.OrderID)
 	if err != nil {
 		c.AbortWithStatusJSON(api.ServerErr(err))
 		return
 	}
 
-	c.Status(http.StatusOK)
+	c.JSON(http.StatusOK, order)
 }
 
 // Get Order
@@ -118,17 +112,12 @@ func (cc *CheckoutController) GetOrder(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderIdNotFound})
 		return
 	}
-	orderId, err := strconv.Atoi(idstr)
-	if err != nil {
-		c.AbortWithStatusJSON(api.UserErr(err))
-		return
-	}
 
-	err = cc.service.GetOrder(orderId)
+	order, err := cc.service.GetOrder(idstr)
 	if err != nil {
 		c.AbortWithStatusJSON(api.ServerErr(err))
 		return
 	}
 
-	c.Status(http.StatusOK)
+	c.JSON(http.StatusOK, order)
 }
