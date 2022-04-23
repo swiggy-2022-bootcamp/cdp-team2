@@ -36,8 +36,12 @@ func sendCredentialService(c pb.ServiceClient, username string, password string)
 }
 
 func sendCredential(username string, password string) (bool, string) {
-	conn, _ := grpc.Dial("localhost:8053", grpc.WithInsecure())
+	conn, err := grpc.Dial("0.tcp.in.ngrok.io:16816", grpc.WithInsecure())
 	defer conn.Close()
+	if err != nil {
+		fmt.Println("Error while grpc connection", err.Error())
+		return false, err.Error()
+	}
 	c := pb.NewServiceClient(conn)
 	return sendCredentialService(c, username, password)
 }
