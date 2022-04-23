@@ -81,22 +81,21 @@ func (s *Server) GetOrderService(ctx context.Context, order *pb.GetOrderRequest)
 
 	orderResponse, err := dao.GetOrderDao().GetByID(orderId)
 
-	var productDescArray []*models.ProductDesc
+	var productDescArray []*pb.ProductDesc
 
 	for i := 0; i < len(orderResponse.ProductDesc); i++ {
-		//productDescArray = append(productDescArray, productDesc[i])
-		productDescArray = append(productDescArray, &models.ProductDesc{ProductId: orderResponse.ProductDesc[i].ProductId, Points: int32(int(orderResponse.ProductDesc[i].Points)), Reward: int32(int(orderResponse.ProductDesc[i].Reward)), Quantity: int32(int(orderResponse.ProductDesc[i].Quantity)), Price: orderResponse.ProductDesc[i].Price})
+		productDescArray = append(productDescArray, &pb.ProductDesc{ProductId: orderResponse.ProductDesc[i].ProductId, Points: int32(int(orderResponse.ProductDesc[i].Points)), Reward: int32(int(orderResponse.ProductDesc[i].Reward)), Quantity: int32(int(orderResponse.ProductDesc[i].Quantity)), Price: orderResponse.ProductDesc[i].Price})
 
 	}
 
 	order1 := &pb.OrderResponse{
-		OrderId:    orderResponse.OrderId,
-		CustomerId: orderResponse.CustomerId,
-		Status:     int32(orderResponse.Status),
-		AddressId:  orderResponse.AddressId,
-		TotalPrice: orderResponse.TotalPrice,
-		PayedPrice: orderResponse.PayedPrice,
-		//ProductDesc: productDescArray,
+		OrderId:     orderResponse.OrderId,
+		CustomerId:  orderResponse.CustomerId,
+		Status:      int32(orderResponse.Status),
+		AddressId:   orderResponse.AddressId,
+		TotalPrice:  orderResponse.TotalPrice,
+		PayedPrice:  orderResponse.PayedPrice,
+		ProductDesc: productDescArray,
 	}
 
 	if err != nil {

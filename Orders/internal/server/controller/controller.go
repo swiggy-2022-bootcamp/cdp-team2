@@ -12,26 +12,27 @@ import (
 )
 
 func BindId(c *gin.Context) {
-	idstr := c.Param(literals.OrderIdKey)
-	if idstr == "" {
+	id := c.Param(literals.OrderIdKey)
+	if id == "" {
 		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderNotFound})
 		return
 	}
-	id, err := strconv.Atoi(idstr)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderNotFound})
-		return
-	}
+
 	c.Set(literals.OrderIdKey, id)
 	c.Next()
 }
 
 func BindStatus(c *gin.Context) {
 	status, _ := strconv.Atoi(c.Param(literals.StatusKey))
-	fmt.Println(status, "----------")
 	if status == 0 {
 		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderNotFound})
 		return
+	}
+
+	if status > 3 || status < 0 {
+		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.StatusNotValid})
+		return
+
 	}
 
 	c.Set(literals.StatusKey, status)
@@ -39,13 +40,8 @@ func BindStatus(c *gin.Context) {
 }
 
 func BindCustomer(c *gin.Context) {
-	idstr := c.Param(literals.CustomerIdKey)
-	if idstr == "" {
-		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderNotFound})
-		return
-	}
-	id, err := strconv.Atoi(idstr)
-	if err != nil {
+	id := c.Param(literals.CustomerIdKey)
+	if id == "" {
 		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderNotFound})
 		return
 	}

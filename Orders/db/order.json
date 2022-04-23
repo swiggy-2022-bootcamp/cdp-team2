@@ -3,7 +3,7 @@
   "AttributeDefinitions": [
     {
       "AttributeName": "orderId",
-      "AttributeType": "N"
+      "AttributeType": "S"
     }
   ],
   "KeySchema": [

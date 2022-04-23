@@ -57,11 +57,11 @@
 				
 				<option value="file0">github.com/swiggy-2022-bootcamp/cdp-team2/Order/dao/order.dao.go (45.3%)</option>
 				
-				<option value="file1">github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/server/controller/controller.go (29.7%)</option>
+				<option value="file1">github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/server/controller/controller.go (29.0%)</option>
 				
 				<option value="file2">github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/server/controller/health.go (100.0%)</option>
 				
-				<option value="file3">github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/server/controller/order.controller.go (48.9%)</option>
+				<option value="file3">github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/server/controller/order.controller.go (67.4%)</option>
 				
 				<option value="file4">github.com/swiggy-2022-bootcamp/cdp-team2/Order/services/order.service.go (87.5%)</option>
 				
@@ -433,26 +433,27 @@ import (
 )
 
 func BindId(c *gin.Context) <span class="cov8" title="1">{
-        idstr := c.Param(literals.OrderIdKey)
-        if idstr == "" </span><span class="cov0" title="0">{
+        id := c.Param(literals.OrderIdKey)
+        if id == "" </span><span class="cov0" title="0">{
                 c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderNotFound})
                 return
         }</span>
-        <span class="cov8" title="1">id, err := strconv.Atoi(idstr)
-        if err != nil </span><span class="cov0" title="0">{
-                c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderNotFound})
-                return
-        }</span>
+
         <span class="cov8" title="1">c.Set(literals.OrderIdKey, id)
         c.Next()</span>
 }
 
 func BindStatus(c *gin.Context) <span class="cov0" title="0">{
         status, _ := strconv.Atoi(c.Param(literals.StatusKey))
-        fmt.Println(status, "----------")
         if status == 0 </span><span class="cov0" title="0">{
                 c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderNotFound})
                 return
+        }</span>
+
+        <span class="cov0" title="0">if status &gt; 3 || status &lt; 0 </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.StatusNotValid})
+                return
+
         }</span>
 
         <span class="cov0" title="0">c.Set(literals.StatusKey, status)
@@ -460,13 +461,8 @@ func BindStatus(c *gin.Context) <span class="cov0" title="0">{
 }
 
 func BindCustomer(c *gin.Context) <span class="cov0" title="0">{
-        idstr := c.Param(literals.CustomerIdKey)
-        if idstr == "" </span><span class="cov0" title="0">{
-                c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderNotFound})
-                return
-        }</span>
-        <span class="cov0" title="0">id, err := strconv.Atoi(idstr)
-        if err != nil </span><span class="cov0" title="0">{
+        id := c.Param(literals.CustomerIdKey)
+        if id == "" </span><span class="cov0" title="0">{
                 c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderNotFound})
                 return
         }</span>
@@ -538,6 +534,7 @@ func NewOrderController() *OrderController <span class="cov0" title="0">{
 // @Router /categories/{_id} [get]
 func (cc *OrderController) GetByID(c *gin.Context) <span class="cov8" title="1">{
         id := c.GetString(literals.OrderIdKey)
+        fmt.Println("here", id)
         cat, err := cc.service.GetByID(id)
         if err != nil </span><span class="cov0" title="0">{
                 c.AbortWithStatusJSON(api.ServerErr(err))
@@ -590,7 +587,7 @@ func (cc *OrderController) GetAll(c *gin.Context) <span class="cov8" title="1">{
 // @Success 200 {object} models.Category
 // @Failure 500 {object} api.ApiResponseWithErr
 // @Router /categories [post]
-func (cc *OrderController) Create(c *gin.Context) <span class="cov0" title="0">{
+func (cc *OrderController) Create(c *gin.Context) <span class="cov8" title="1">{
         nc, _ := c.Get(literals.OrderBodyKey)
         newCat := nc.(models.Order)
         saved, err := cc.service.Create(newCat)
@@ -598,7 +595,7 @@ func (cc *OrderController) Create(c *gin.Context) <span class="cov0" title="0">{
                 c.AbortWithStatusJSON(api.ServerErr(err))
                 return
         }</span>
-        <span class="cov0" title="0">c.JSON(http.StatusOK, saved)</span>
+        <span class="cov8" title="1">c.JSON(http.StatusOK, saved)</span>
 }
 
 // Update Category By ID
@@ -630,13 +627,13 @@ func (cc *OrderController) Update(c *gin.Context) <span class="cov8" title="1">{
 // @Success 200
 // @Failure 500 {object} api.ApiResponseWithErr
 // @Router /categories/{_id} [delete]
-func (cc *OrderController) Delete(c *gin.Context) <span class="cov0" title="0">{
+func (cc *OrderController) Delete(c *gin.Context) <span class="cov8" title="1">{
         id := c.GetString(literals.OrderIdKey)
         if err := cc.service.DeleteByID(id); err != nil </span><span class="cov0" title="0">{
                 c.AbortWithStatusJSON(api.ServerErr(err))
                 return
         }</span>
-        <span class="cov0" title="0">c.Status(http.StatusOK)</span>
+        <span class="cov8" title="1">c.Status(http.StatusOK)</span>
 }
 
 // Delete Multiple Categories

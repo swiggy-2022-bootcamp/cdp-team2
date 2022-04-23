@@ -162,33 +162,39 @@ func TestGetAll(t *testing.T) {
 	assert.Equal(t, res, actual)
 }
 
-//func TestCreate(t *testing.T) {
-//	ctrl := gomock.NewController(t)
-//	mserv := mock_services.NewMockIService(ctrl)
-//	cont := &OrderController{mserv}
-//
-//	res := getDummyOrder()
-//	mserv.EXPECT().Create(models.Order{CustomerId: res.CustomerId, Status: res.Status, AddressId: res.AddressId, TotalPrice: res.TotalPrice, PayedPrice: res.PayedPrice, ProductDesc: res.ProductDesc}).Times(1).Return(res, nil)
-//
-//	w := httptest.NewRecorder()
-//	ctx, _ := gin.CreateTestContext(w)
-//	ctx.Request = &http.Request{
-//		Header: make(http.Header),
-//	}
-//	ctx.Keys = map[string]interface{}{
-//		literals.OrderIdKey: models.Order{ProductDesc: res.ProductDesc},
-//	}
-//
-//	cont.Create(ctx)
-//
-//	actual := models.Order{}
-//	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
-//		t.Errorf("error unmarshing response json")
-//	}
-//
-//	assert.Equal(t, res, actual)
-//
-//}
+func TestCreate(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	mserv := mock_services.NewMockIService(ctrl)
+	cont := &OrderController{mserv}
+
+	res := getDummyOrder()
+	mserv.EXPECT().Create(models.Order{CustomerId: res.CustomerId, Status: res.Status, AddressId: res.AddressId, TotalPrice: res.TotalPrice, PayedPrice: res.PayedPrice, ProductDesc: res.ProductDesc}).Times(1).Return(res, nil)
+
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	ctx.Request = &http.Request{
+		Header: make(http.Header),
+	}
+	ctx.Keys = map[string]interface{}{
+		literals.OrderIdKey:   models.Order{ProductDesc: res.ProductDesc},
+		literals.OrderBodyKey: models.Order{CustomerId: res.CustomerId, Status: res.Status, AddressId: res.AddressId, TotalPrice: res.TotalPrice, PayedPrice: res.PayedPrice, ProductDesc: res.ProductDesc},
+	}
+
+	cont.Create(ctx)
+
+	actual := models.Order{}
+	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
+		t.Errorf("error unmarshing response json")
+	}
+
+	assert.EqualValues(t, res.CustomerId, actual.CustomerId)
+	assert.EqualValues(t, res.Status, actual.Status)
+	assert.EqualValues(t, res.TotalPrice, actual.TotalPrice)
+	assert.EqualValues(t, res.PayedPrice, actual.PayedPrice)
+	assert.EqualValues(t, res.AddressId, actual.AddressId)
+	assert.EqualValues(t, res.ProductDesc, actual.ProductDesc)
+
+}
 
 func TestUpdate(t *testing.T) {
 	ctrl := gomock.NewController(t)
@@ -219,25 +225,25 @@ func TestUpdate(t *testing.T) {
 	assert.Equal(t, *res, actual)
 }
 
-//func TestDelete(t *testing.T) {
-//	ctrl := gomock.NewController(t)
-//	mserv := mock_services.NewMockIService(ctrl)
-//	cont := &OrderController{mserv}
-//
-//	mserv.EXPECT().DeleteByID(1).Times(1).Return(nil)
-//
-//	w := httptest.NewRecorder()
-//	ctx, _ := gin.CreateTestContext(w)
-//	ctx.Request = &http.Request{
-//		Header: make(http.Header),
-//	}
-//	ctx.Keys = map[string]interface{}{
-//		literals.OrderIdKey: 1,
-//	}
-//
-//	cont.Delete(ctx)
-//	assert.EqualValues(t, http.StatusOK, w.Code)
-//}
+func TestDelete(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	mserv := mock_services.NewMockIService(ctrl)
+	cont := &OrderController{mserv}
+
+	mserv.EXPECT().DeleteByID("1").Times(1).Return(nil)
+
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	ctx.Request = &http.Request{
+		Header: make(http.Header),
+	}
+	ctx.Keys = map[string]interface{}{
+		literals.OrderIdKey: "1",
+	}
+
+	cont.Delete(ctx)
+	assert.EqualValues(t, http.StatusOK, w.Code)
+}
 
 func TestBindCategory(t *testing.T) {
 	cat := getDummyOrder()
@@ -268,8 +274,8 @@ func TestBindId(t *testing.T) {
 	}
 
 	BindId(ctx)
-	actual := ctx.GetInt(literals.OrderIdKey)
-	assert.Equal(t, 1, actual)
+	actual := ctx.GetString(literals.OrderIdKey)
+	assert.Equal(t, "1", actual)
 }
 
 func TestHealth(t *testing.T) {
