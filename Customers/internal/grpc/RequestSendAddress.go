@@ -13,9 +13,12 @@ import (
 )
 
 func SendAddress(address model.Address, customer_id string) bool {
-	// conn, _ := grpc.Dial("localhost:"+strconv.Itoa(literals.ADDRESS_PORT), grpc.WithInsecure())
-conn,_:=grpc.Dial("tcp://0.tcp.in.ngrok.io:18160 ",grpc.WithTransportCredentials(insecure.NewCredentials()))
-
+	// conn, _ := grpc.Dial("localhost:9010", grpc.WithInsecure())
+conn,err:=grpc.Dial("0.tcp.in.ngrok.io:13857",grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err!=nil{
+		fmt.Println(err)
+	}
+	fmt.Println(err)
 	// conn, _ := grpc.Dial("13b3-49-37-152-145.in.ngrok.io", grpc.WithInsecure())
 
 	defer conn.Close()
@@ -38,11 +41,14 @@ func SendAddressService(c pb.ServiceClient, address model.Address, customer_id s
 		},
 	}
 	fmt.Println(2)
-	resp,_:=c.AddressutsService(context.Background(), &addressRequest)
+	resp,err:=c.AddressutsService(context.Background(), &addressRequest)
+	if err!=nil{
+		fmt.Println(err)
+	}
 	fmt.Println(resp)
  	return true
 }
  
 // func main(){
-// 	fmt.Println(SendAddress(model.Address{"iday","kiran","erdfg","wesdr","sed",1234,"1234"},"udayid"))
+// 	fmt.Println(SendAddress(model.Address{"uday","kiran","Kam","wesdr","sed",1234,"1234"},"udayid"))
 // }

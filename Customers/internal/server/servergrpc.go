@@ -7,6 +7,7 @@ import (
 	"net"
 	"context"
  	// "strconv"
+	"customers/config"
 	"customers/internal/handlegrpc"
 	// "customers/internal/literals"
 	// db "customers/config"
@@ -108,7 +109,11 @@ func GrpcServer(){
     s:=grpc.NewServer(opts...)
     pb.RegisterServiceServer(s,&server{})
 
-    Listener,_:=net.Listen("tcp",":9010")
+    Listener,err:=net.Listen("tcp",":"+config.Server["GRPC_PORT"])
+	if err!=nil{
+		fmt.Println("Error while starting Grpc Server",err.Error())
+	}
     s.Serve(Listener)
+
 
 }

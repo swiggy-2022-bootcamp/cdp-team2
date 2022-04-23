@@ -7,8 +7,7 @@ import (
 	"github.com/swaggo/gin-swagger/swaggerFiles"	//swagger embed files
 	_ "customers/docs"
 	// model "customers/config"
-	"customers/internal/literals"
-	"strconv"
+	"customers/config"
 )
 
 
@@ -20,7 +19,7 @@ import (
 // @contact.name API Support
 // @contact.url http://demo.com/support
 
-// @host localhost:8080
+// @host localhost:8091
 // @BasePath /
 
 // @securityDefinitions.basic  BasicAuth
@@ -28,10 +27,9 @@ import (
 // @securityDefinitions.apikey  ApiKeyAuth
 // @in                          header
 // @name                        Authorization
-func RunServer(){
- 
-	// model.InitDB()
-	server:=gin.Default()
+func RunServer()error{
+	config.FromEnv()
+ 	server:=gin.Default()
 
 	customerRoute:=server.Group("/customers")
 	{
@@ -45,5 +43,9 @@ func RunServer(){
 	 
 	server.GET("/swagger/*any",ginSwagger.WrapHandler(swaggerFiles.Handler))
 	go GrpcServer()
-	server.Run(":"+strconv.Itoa(literals.PORT))
+	err:=server.Run(":"+config.Server["PORT"])
+	if err!=nil{
+		return err
+	}
+	return nil;
 }

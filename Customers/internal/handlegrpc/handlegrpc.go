@@ -55,6 +55,6 @@ func CheckCredentials(email string,password string) (string,bool){
 }
 
 
-func main(){
-	fmt.Println(CheckCredentials("uday","kiranbakka"))
-}
+// func main(){
+// 	fmt.Println(CheckCredentials("uday","kiranbakka"))
+// }

@@ -13,7 +13,7 @@ func ValidateEmail(email string,db dynamodbiface.DynamoDBAPI) bool{
 	
 	// create the api params
 	params := &dynamodb.QueryInput{
-		TableName: aws.String("Customer"),
+		TableName: aws.String("team-2-Customers"),
         IndexName: aws.String("email-index"),
         KeyConditions: map[string]*dynamodb.Condition{
             "email": {

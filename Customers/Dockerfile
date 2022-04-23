@@ -1,24 +1,26 @@
-FROM golang:1.12-alpine
+FROM golang:1.16-alpine AS build
 
-RUN apk add --no-cache git
+WORKDIR /app
 
-# Set the Current Working Directory inside the container
-WORKDIR /app/go-sample-app
-
-# We want to populate the module cache based on the go.{mod,sum} files.
 COPY go.mod .
 COPY go.sum .
-
 RUN go mod download
 
 COPY . .
 
-# Build the Go app
-RUN go build -o ./out/go-sample-app .
+RUN go build -o customer-app cmd/server/main.go
 
+##
+## Deploy
+##
 
-# This container exposes port 8080 to the outside world
-EXPOSE 8080
+FROM alpine
 
-# Run the binary program produced by `go install`
-CMD ["./out/go-sample-app"]
+WORKDIR /
+
+COPY --from=build /app/customer-app /customer-app
+
+EXPOSE 8050
+EXPOSE 9000
+
+ENTRYPOINT ["/customer-app"]

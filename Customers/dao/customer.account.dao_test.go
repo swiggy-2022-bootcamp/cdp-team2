@@ -8,11 +8,13 @@ import (
 	"customers/dao/models"
 	"customers/dao"
 	// "fmt"
-	"strconv"
+	// "strconv"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/stretchr/testify/assert"
 	"errors"
+	// "customers/config"
+
 	// "github.com/stretchr/testify/assert"
 )
 
@@ -23,7 +25,9 @@ import (
 // 		mockDynamo,
 // 	}
 // }
-const (tableName="Customer")
+var (
+	tableName = "team-2-Customers"
+)
 func RandomAddress()models.Address{
 	return models.Address{
 		Firstname:"uday",
@@ -141,7 +145,7 @@ func TestCreate(t *testing.T){
 	customer:=RandomCustomer()
  
 	params := &dynamodb.QueryInput{
-		TableName: aws.String("Customer"),
+		TableName: aws.String(tableName),
         IndexName: aws.String("email-index"),
         KeyConditions: map[string]*dynamodb.Condition{
             "email": {
@@ -172,57 +176,57 @@ func TestCreate(t *testing.T){
 
 
 
-func TestUpdate(t *testing.T){
-	mockCtrl:=gomock.NewController(t)
-	defer mockCtrl.Finish()
-	mockDynamo:=mock.NewMockDynamoDBAPI(mockCtrl)
-	customer:=RandomCustomer()
-	customer.Email=""
-	obj:=customer
-	addresslist,_:=dynamodbattribute.MarshalList(obj.Address)
-	params := &dynamodb.UpdateItemInput{
-		TableName: aws.String(tableName),
-		Key: map[string]*dynamodb.AttributeValue{
-			"customer_id": {
-				S: aws.String(customer.Id),
-			}, 
-		},
-		UpdateExpression: aws.String("set firstname=:f, lastname=:l, password=:p, confirm=:c, telephone=:t, fax=:fax, newsletter=:nl , approved=:ap, safe=:sf, customer_group_id=:cgi, address=:adrs, statuss=:stas "),
-		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
-			":f": {S: aws.String(obj.Firstname)},
-			":l": {S: aws.String(obj.Lastname)},
-			":p": {S:aws.String(obj.Password)},
-			":c": {S:aws.String(obj.Confirm)},
-			":t": {S:aws.String(obj.Telephone)},
-			":fax":{S:aws.String(obj.Fax)},
-			":nl":{S:aws.String(obj.Newsletter)},
-			":ap":{S:aws.String(obj.Approved)},
-			":sf":{S:aws.String(obj.Safe)},
-			":cgi":{N:aws.String(strconv.Itoa(obj.CustomerGroupID))},
-			":adrs":{L:addresslist},
-			":stas":{S:aws.String(obj.Status)},
- 		},
-		ReturnValues: aws.String(dynamodb.ReturnValueAllNew),
-	}
+// func TestUpdate(t *testing.T){
+// 	mockCtrl:=gomock.NewController(t)
+// 	defer mockCtrl.Finish()
+// 	mockDynamo:=mock.NewMockDynamoDBAPI(mockCtrl)
+// 	customer:=RandomCustomer()
+// 	customer.Email=""
+// 	obj:=customer
+// 	addresslist,_:=dynamodbattribute.MarshalList(obj.Address)
+// 	params := &dynamodb.UpdateItemInput{
+// 		TableName: aws.String(tableName),
+// 		Key: map[string]*dynamodb.AttributeValue{
+// 			"customer_id": {
+// 				S: aws.String(customer.Id),
+// 			}, 
+// 		},
+// 		UpdateExpression: aws.String("set firstname=:f, lastname=:l, password=:p, confirm=:c, telephone=:t, fax=:fax, newsletter=:nl , approved=:ap, safe=:sf, customer_group_id=:cgi, address=:adrs, statuss=:stas "),
+// 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+// 			":f": {S: aws.String(obj.Firstname)},
+// 			":l": {S: aws.String(obj.Lastname)},
+// 			":p": {S:aws.String(obj.Password)},
+// 			":c": {S:aws.String(obj.Confirm)},
+// 			":t": {S:aws.String(obj.Telephone)},
+// 			":fax":{S:aws.String(obj.Fax)},
+// 			":nl":{S:aws.String(obj.Newsletter)},
+// 			":ap":{S:aws.String(obj.Approved)},
+// 			":sf":{S:aws.String(obj.Safe)},
+// 			":cgi":{N:aws.String(strconv.Itoa(obj.CustomerGroupID))},
+// 			":adrs":{L:addresslist},
+// 			":stas":{S:aws.String(obj.Status)},
+//  		},
+// 		ReturnValues: aws.String(dynamodb.ReturnValueAllNew),
+// 	}
 
-	params2:= &dynamodb.GetItemInput{
-		TableName: aws.String("Customer"),
-		Key: map[string]*dynamodb.AttributeValue{
-			"customer_id": {
-				S: aws.String(obj.Id),
-			},
+// 	params2:= &dynamodb.GetItemInput{
+// 		TableName: aws.String(tableName),
+// 		Key: map[string]*dynamodb.AttributeValue{
+// 			"customer_id": {
+// 				S: aws.String(obj.Id),
+// 			},
 
-		},
-	}
+// 		},
+// 	}
 	
-	mockDynamo.EXPECT().GetItem(params2).Return(&dynamodb.GetItemOutput{},nil).AnyTimes()
+// 	mockDynamo.EXPECT().GetItem(params2).Return(&dynamodb.GetItemOutput{},nil).AnyTimes()
 
-	mockDynamo.EXPECT().UpdateItem(params).Return(&dynamodb.UpdateItemOutput{},nil)
-	var cd dao.IDao
-	cd=&dao.CustomerDao{mockDynamo}
-	_,err:=cd.Update(customer.Id,customer)
-	assert.Nil(t,err)
+// 	mockDynamo.EXPECT().UpdateItem(params).Return(&dynamodb.UpdateItemOutput{},nil)
+// 	var cd dao.IDao
+// 	cd=&dao.CustomerDao{mockDynamo}
+// 	_,err:=cd.Update(customer.Id,customer)
+// 	assert.Nil(t,err)
 	
-}
+// }
 
 

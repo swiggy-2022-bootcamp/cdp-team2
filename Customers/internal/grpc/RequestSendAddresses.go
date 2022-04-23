@@ -1,4 +1,4 @@
-package main
+package grpc
 
 import (
 	"context"
@@ -8,12 +8,16 @@ import (
 	grpc "google.golang.org/grpc"
 	// "customers/internal/literals"
 	// "strconv"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 func GetAddress( customerId string)([]models.Address) {
  	// conn, _ := grpc.Dial("localhost:"+strconv.Itoa(literals.ADDRESS_PORT), grpc.WithInsecure())
-	 	conn, _ := grpc.Dial("localhost:9010", grpc.WithInsecure())
-
+	 	conn, err := grpc.Dial("0.tcp.in.ngrok.io:13857", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err!=nil{
+		fmt.Println(err)
+	}
+	fmt.Println(err)
 	defer conn.Close()
 	c := pb.NewServiceClient(conn)
  	return GetAddressService(c, customerId)
@@ -25,6 +29,7 @@ func GetAddressService(c pb.ServiceClient, customerId string)( []models.Address 
 	}
 	fmt.Println(2)
 	resp,err:=c.AddressstuService(context.Background(), &addressRequest)
+	fmt.Println(resp,err)
 	if err!=nil{
 		return []models.Address{};
 	}
@@ -35,6 +40,6 @@ func GetAddressService(c pb.ServiceClient, customerId string)( []models.Address 
 	return addresses
 }
  
-func main(){
-	fmt.Println(GetAddress("frgt"))
-}
+// func main(){
+// 	fmt.Println(GetAddress("0"))
+// }

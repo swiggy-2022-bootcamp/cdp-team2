@@ -6,11 +6,7 @@ definitions:
         type: string
       address_2:
         type: string
-      address_id:
-        type: string
       city:
-        type: string
-      company:
         type: string
       country_id:
         type: string
@@ -28,8 +24,6 @@ definitions:
           $ref: '#/definitions/models.Address'
         type: array
       approved:
-        type: string
-      cart:
         type: string
       confirm:
         type: string
@@ -51,18 +45,14 @@ definitions:
         type: string
       password:
         type: string
-      reward_total:
-        type: integer
       safe:
         type: string
-      status:
+      statuss:
         type: string
       telephone:
         type: string
-      user_balance:
-        type: number
     type: object
-host: localhost:8080
+host: localhost:8091
 info:
   contact:
     name: API Support

@@ -5,13 +5,13 @@ import (
  	pb "customers/internal/proto"
 	"fmt"
 	grpc "google.golang.org/grpc"
-	"customers/internal/literals"
-	"strconv"
+	// "customers/internal/literals"
+	// "strconv"
 
 )
 
 func SendCredential(username string,password string) (bool ,string){
-	conn, _ := grpc.Dial("localhost:"+strconv.Itoa(literals.GRPC_PORT), grpc.WithInsecure())
+	conn, _ := grpc.Dial("localhost:9000", grpc.WithInsecure())
 	defer conn.Close()
 	c := pb.NewServiceClient(conn)
 	fmt.Println("1")

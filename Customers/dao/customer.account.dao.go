@@ -12,12 +12,13 @@ import (
  	"customers/dao/models"
 	"customers/db"
 	"customers/internal/grpc"
-	"time"
+	// "customers/config"
 	"strconv"
+	"time"
 )
 
-const (
-	tableName = "Customer"
+var (
+	tableName = "team-2-Customers"
 )
 
 type CustomerDao struct{
@@ -38,11 +39,11 @@ func customersTableName() *string{
 func (cd *CustomerDao) Create(customer models.Customer) (models.Customer, error) {
 	account:=customer
  	err:=util.ValidateAccount(account,cd.Db)
- 	if err!=nil{
-		return models.Customer{},err
+  	if err!=nil{
+ 		return models.Customer{},err
 	}
 	if customer.Id!="test"{
-		customer.Id=util.Generate()
+		customer.Id="0"
 	}
 	if customer.DateAdded!="test"{
 		customer.DateAdded=time.Now().String()
@@ -61,12 +62,11 @@ func (cd *CustomerDao) Create(customer models.Customer) (models.Customer, error)
 	}
 
 	_, err = cd.Db.PutItem(input)
- 
-	if  len(customer.Address)==1 && customer.Address[0].AddressLine1!="" && customer.Address[0].Firstname!="" && customer.Address[0].CountryCode!=""{
+ 	if  len(customer.Address)==1 && customer.Address[0].AddressLine1!="" && customer.Address[0].Firstname!="" && customer.Address[0].CountryCode!=""{
 		grpc.SendAddress(customer.Address[0],customer.Id)
 
  	}
- 
+	 
 	if err!= nil {
 		return models.Customer{},err
 	}
@@ -193,7 +193,6 @@ func (cd *CustomerDao)Update(id_string string,customer models.Customer)(models.C
 
 
 func (cd *CustomerDao)Get(id_string string)(models.Customer,error){
-
 	params := &dynamodb.GetItemInput{
 		TableName: aws.String(tableName),
 		Key: map[string]*dynamodb.AttributeValue{
@@ -207,20 +206,20 @@ func (cd *CustomerDao)Get(id_string string)(models.Customer,error){
 	var customer models.Customer
  	// read the item
 	resp, err := cd.Db.GetItem(params)
-	if err != nil {
+ 	if err != nil {
  		return models.Customer{},nil
 	}
  	// dump the response data
  	// unmarshal the dynamodb attribute values into a custom struct
 	err = dynamodbattribute.UnmarshalMap(resp.Item, &customer)
-	if err != nil {
+ 	if err != nil {
  		return models.Customer{},err
 	}
 	if customer.Id==""{
 		return customer,errors.New("Customer Not Found")
 	}
 	// print the response data
- 	customer.Address=grpc.GetAddress(id_string)
+ 	customer.Address=grpc.GetAddress("0")
 	
 	 return customer,nil
 }
@@ -284,7 +283,6 @@ func (cd *CustomerDao)Delete(id_string string)(bool,error){
  		return false,err
 	}
 
-	// print the response data
 	 
 	return true,nil
 
