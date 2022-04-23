@@ -39,7 +39,7 @@ func ordersTableName() *string {
 func getKeyFilter(id string) map[string]*dynamodb.AttributeValue {
 	return map[string]*dynamodb.AttributeValue{
 		"orderId": {
-			N: aws.String(fmt.Sprint(id)),
+			S: aws.String(id),
 		},
 	}
 }
@@ -225,7 +225,7 @@ func (cd *OrderDao) Create(order models.Order) (*models.Order, error) {
 	resp, err := cd.db.UpdateItem(&createItemIn)
 
 	if err != nil {
-		log.Printf("error while creating cateogory %s", err.Error())
+		log.Printf("error while creating order %s", err.Error())
 		return nil, err
 	}
 

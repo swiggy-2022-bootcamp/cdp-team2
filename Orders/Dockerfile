@@ -22,8 +22,8 @@ FROM alpine
 
 WORKDIR /
 
-COPY --from=build /app/categories-app /categories-app
+COPY --from=build /app/orders-app /orders-app
 
 EXPOSE 7450
 
-ENTRYPOINT ["/categories-app"]
+ENTRYPOINT ["/orders-app"]
