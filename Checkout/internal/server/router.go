@@ -9,7 +9,7 @@ import (
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Checkout/internal/server/controllers"
 )
 
-func InitRouter() *gin.Engine {
+func InitRouter() (*gin.Engine, error) {
 
 	r := gin.Default()
 	r.Use(gin.Recovery())
@@ -17,7 +17,10 @@ func InitRouter() *gin.Engine {
 	//health Check
 	r.GET("/health", controllers.Health)
 
-	cont := controllers.NewCheckoutController()
+	cont, err := controllers.NewCheckoutController()
+	if err != nil {
+		return nil, err
+	}
 
 	r.POST("/checkout/:cart_id", cont.StartCheckout)
 	r.PUT("/rewards", cont.ApplyReward)
@@ -27,5 +30,5 @@ func InitRouter() *gin.Engine {
 	//swagger
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	return r
+	return r, nil
 }

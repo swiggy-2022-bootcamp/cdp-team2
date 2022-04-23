@@ -21,7 +21,12 @@ import (
 // @in header
 // @name Authorization
 func Start() {
-	router := InitRouter()
+	router, err := InitRouter()
+
+	if err != nil {
+		log.Println("Error starting server")
+		return
+	}
 
 	endPoint := fmt.Sprintf(":%s", config.Config["PORT"])
 

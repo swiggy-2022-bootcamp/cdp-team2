@@ -15,8 +15,12 @@ type CheckoutController struct {
 	service services.ICheckoutService
 }
 
-func NewCheckoutController() *CheckoutController {
-	return &CheckoutController{}
+func NewCheckoutController() (*CheckoutController, error) {
+	s, err := services.NewCheckoutService()
+	if err != nil {
+		return nil, err
+	}
+	return &CheckoutController{s}, nil
 }
 
 // Start Checkout

@@ -1,5 +1,11 @@
 package services
 
+import (
+	"context"
+
+	g "github.com/swiggy-2022-bootcamp/cdp-team2/Checkout/internal/grpc"
+)
+
 type ICheckoutService interface {
 	StartCheckout(cartId int) error
 	ApplyReward(orderId, points int) error
@@ -8,11 +14,16 @@ type ICheckoutService interface {
 }
 
 type CheckoutService struct {
+	orderClient *g.OrderClient
 }
 
-func NewCheckoutService() *CheckoutService {
-	// create grpc connections
-	return &CheckoutService{}
+func NewCheckoutService() (*CheckoutService, error) {
+	bg := context.Background()
+	or, err := g.NewOrderClient(bg)
+	if err != nil {
+		return nil, err
+	}
+	return &CheckoutService{or}, nil
 }
 
 func (cs *CheckoutService) StartCheckout(cartId int) error {
