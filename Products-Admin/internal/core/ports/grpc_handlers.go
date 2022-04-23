@@ -12,4 +12,5 @@ type IGRPCHandlers interface {
 	IsProductExists(context.Context, *pb.ProductIDRequest) (*pb.BoolResponse, error)
 	GetProductById(context.Context, *pb.ProductIDRequest) (*pb.ProductResponse, error)
 	GetProductsByCategoryId(context.Context, *pb.CategoryIDRequest) (*pb.ProductsResponse, error)
+	DeductProductsQuantity(context.Context, *pb.CheckoutRequest) (*pb.CheckoutResponse, error)
 }

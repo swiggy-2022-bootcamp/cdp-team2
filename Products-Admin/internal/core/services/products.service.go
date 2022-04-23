@@ -193,3 +193,47 @@ func (ps *ProductsServices) SearchByManufacturerID(manufacturerID int64) ([]*dom
 	// Return products
 	return _products, nil
 }
+
+func (ps *ProductsServices) CheckoutProducts(productIDQntys []*domain.ProductIDAndQnty) ([]*domain.ProductIDMsg, []*domain.ProductIDMsg, *errors.AppError) {
+
+	var failedProductIDs []*domain.ProductIDMsg
+	var availableProductIDs []*domain.ProductIDMsg
+
+	// Get Search all the Available products
+	for _, p := range productIDQntys {
+
+		// Define filters
+		filter1 := expression.Name("_id").Equal(expression.Value(p.ProductID))
+		filter2 := expression.Name("minimum").LessThanEqual(expression.Value(p.Quantity))
+		filter3 := expression.Name("quantity").GreaterThanEqual(expression.Value(p.Quantity))
+		filter := filter1.And(filter2).And(filter3)
+
+		// building condtions
+		condition, err := expression.NewBuilder().WithFilter(filter).Build()
+		if err != nil {
+			return []*domain.ProductIDMsg{}, []*domain.ProductIDMsg{}, errors.New(err.Error(), http.StatusInternalServerError)
+		}
+
+		// Get products from repostiry
+		_products, err := ps.ProductsRepository.GetProductsByCondition(condition)
+
+		// Check if product is present or not
+		if len(_products) == 1 {
+			availableProductIDs = append(availableProductIDs, &domain.ProductIDMsg{
+				ProductID: p.ProductID,
+			})
+			_products[0].Quantity = _products[0].Quantity - uint(p.Quantity)
+			if _, err2 := ps.ProductsRepository.UpdateProduct(_products[0]); err2 != nil {
+				return availableProductIDs, failedProductIDs, err2
+			}
+			continue
+		}
+
+		// Push to failed products
+		failedProductIDs = append(failedProductIDs, &domain.ProductIDMsg{
+			ProductID: p.ProductID,
+		})
+	}
+
+	return availableProductIDs, failedProductIDs, nil
+}

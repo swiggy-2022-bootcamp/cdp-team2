@@ -66,10 +66,29 @@ message ProductResponse {
     Product Product = 1;
 }
 
+message ProductsIDAndQnty {
+    int64 ProductID = 1;
+    uint64 Quantity = 2;
+}
+
+message CheckoutRequest {
+    repeated ProductsIDAndQnty ProductsIDAndQnty = 1;
+}
+
+message ProductIDMessage {
+    int64 ProductID = 1;
+}
+
+message CheckoutResponse {
+    repeated ProductIDMessage AvailableProducts = 1;
+    repeated ProductIDMessage FailedProducts = 2;
+}
+
 service ProductsServices {
     rpc GetAvailableProducts(EmptyRequest) returns (ProductsResponse);
     rpc CheckProductsWithCategory(CategoryIDRequest) returns (BoolResponse);
     rpc IsProductExists(ProductIDRequest) returns (BoolResponse);
     rpc GetProductById(ProductIDRequest) returns (ProductResponse);
     rpc GetProductsByCategoryId(CategoryIDRequest) returns (ProductsResponse);
+    rpc DeductProductsQuantity(CheckoutRequest) returns (CheckoutResponse);
 }

@@ -3,6 +3,7 @@ package grpc_handlers
 import (
 	"context"
 
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/core/domain"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/core/ports"
 
 	pb "github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/pkg/protos"
@@ -88,5 +89,48 @@ func (gh *GRPCHandlers) GetProductsByCategoryId(ctx context.Context, categoryIDR
 
 	return &pb.ProductsResponse{
 		Products: _pbProducts,
+	}, nil
+}
+
+/*
+*	Mehtod to deduct products from products inventory,
+*	and, return list of available and failed productsID.
+*	Invocation mechanism: gRPC
+ */
+func (gh *GRPCHandlers) DeductProductsQuantity(ctx context.Context, checkoutReq *pb.CheckoutRequest) (*pb.CheckoutResponse, error) {
+
+	// Convert proto file productIDAndQuantity to domain productIDAndQnty
+	var _productsIDQnty []*domain.ProductIDAndQnty
+	for _, p := range checkoutReq.ProductsIDAndQnty {
+		_productsIDQnty = append(_productsIDQnty, &domain.ProductIDAndQnty{
+			ProductID: p.ProductID,
+			Quantity:  p.Quantity,
+		})
+	}
+
+	_availablePro, _failedPro, _err := gh.ProductsServices.CheckoutProducts(_productsIDQnty)
+	if _err != nil {
+		return nil, _err
+	}
+
+	// Create proto file arrays for available and failed products
+	var availableProducts []*pb.ProductIDMessage
+	var failedProducts []*pb.ProductIDMessage
+
+	for _, ap := range _availablePro {
+		availableProducts = append(availableProducts, &pb.ProductIDMessage{
+			ProductID: ap.ProductID,
+		})
+	}
+	for _, ap := range _failedPro {
+		failedProducts = append(failedProducts, &pb.ProductIDMessage{
+			ProductID: ap.ProductID,
+		})
+	}
+
+	// return proto response
+	return &pb.CheckoutResponse{
+		AvailableProducts: availableProducts,
+		FailedProducts:    failedProducts,
 	}, nil
 }

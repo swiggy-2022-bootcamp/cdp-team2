@@ -65,6 +65,22 @@ func (mr *MockIProductsServicesMockRecorder) CheckProductsWithCategory(arg0 inte
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckProductsWithCategory", reflect.TypeOf((*MockIProductsServices)(nil).CheckProductsWithCategory), arg0)
 }
 
+// CheckoutProducts mocks base method.
+func (m *MockIProductsServices) CheckoutProducts(arg0 []*domain.ProductIDAndQnty) ([]*domain.ProductIDMsg, []*domain.ProductIDMsg, *errors.AppError) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CheckoutProducts", arg0)
+	ret0, _ := ret[0].([]*domain.ProductIDMsg)
+	ret1, _ := ret[1].([]*domain.ProductIDMsg)
+	ret2, _ := ret[2].(*errors.AppError)
+	return ret0, ret1, ret2
+}
+
+// CheckoutProducts indicates an expected call of CheckoutProducts.
+func (mr *MockIProductsServicesMockRecorder) CheckoutProducts(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckoutProducts", reflect.TypeOf((*MockIProductsServices)(nil).CheckoutProducts), arg0)
+}
+
 // DeleteProduct mocks base method.
 func (m *MockIProductsServices) DeleteProduct(arg0 int64) *errors.AppError {
 	m.ctrl.T.Helper()
