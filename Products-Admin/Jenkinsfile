@@ -29,7 +29,7 @@ pipeline {
                     cd ./Products-Admin
                     pwd
                     go mod tidy
-                    cd ./cmd
+                    cd ./cmd/server
                     go build .
                 '''
             }
@@ -78,9 +78,12 @@ pipeline {
         }
     }
 
-    post {
+   post {
 		always {
 		    sh 'docker logout'
+            mail to:'team2.swiggy@gmail.com',
+                subject: "Status of pipeline: ${currentBuild.fullDisplayName}",
+                body: "${env.BUILD_URL} has result ${currentBuild.result}"
 		}
 	}
 }

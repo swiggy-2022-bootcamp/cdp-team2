@@ -4,7 +4,6 @@ import (
 	pb "common/protos/products"
 	"context"
 	"encoding/json"
-	"log"
 	"net/http"
 
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-FrontStore/internal/core/domain"
@@ -85,22 +84,5 @@ func (ps *ProductsServices) GetProductsByCategoryId(categoryID int64) ([]*domain
 		_products = append(_products, &_product)
 	}
 
-	// Testing
-	p1 := &pb.ProductsIDAndQnty{
-		ProductID: int64(350449726),
-		Quantity:  2,
-	}
-	p2 := &pb.ProductsIDAndQnty{
-		ProductID: int64(350449658),
-		Quantity:  10,
-	}
-	res1, err2 := ps.ProductsGRPCClient.DeductProductsQuantity(ps.Ctx, &pb.CheckoutRequest{
-		ProductsIDAndQnty: []*pb.ProductsIDAndQnty{p1, p2},
-	})
-	if err2 != nil {
-		log.Println(err2)
-	}
-	log.Println(res1.AvailableProducts)
-	log.Println(res1.FailedProducts)
 	return _products, nil
 }

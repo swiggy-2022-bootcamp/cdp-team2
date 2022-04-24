@@ -1,7 +1,6 @@
 package main
 
 import (
-	pb "common/protos/products"
 	"context"
 
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-FrontStore/internal/client"
@@ -14,7 +13,7 @@ import (
 var (
 	productsFrontStoreServer     ports.IServer
 	productsFrontStoreHandlers   ports.IProductsHandlers
-	productsFrontStoreGrpcClient pb.ProductsServicesClient
+	productsFrontStoreGrpcClient ports.IProductsGrpcClientServices
 	productsFrontStoreServices   ports.IProductsServices
 )
 

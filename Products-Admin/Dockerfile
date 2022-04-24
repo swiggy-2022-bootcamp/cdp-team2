@@ -26,5 +26,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -o ./build/main ./cmd/server/main.go
 FROM alpine:latest
 COPY --from=builder app/build/main .
 
+EXPOSE 8001
+EXPOSE 8002
 # Executable
 ENTRYPOINT ["./main"]
