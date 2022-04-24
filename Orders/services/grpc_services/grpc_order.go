@@ -127,3 +127,24 @@ func (s *Server) OrderAddressUpdateService(ctx context.Context, order *pb.OrderA
 		Response: true,
 	}, nil
 }
+
+func (s *Server) OrderPayedPriceUpdateService(ctx context.Context, order *pb.OrderPayedPriceUpdateRequest) (*pb.OrderPayedPriceUpdateResponse, error) {
+
+	orderId, payedPrice := order.OrderId, order.PayedPrice
+
+	orderUpdate := models.Order{
+		PayedPrice: payedPrice,
+	}
+
+	_, err := dao.GetOrderDao().UpdateByID(orderId, orderUpdate)
+
+	if err != nil {
+		return &pb.OrderPayedPriceUpdateResponse{
+			Response: false,
+		}, errors.New("error occurred")
+	}
+
+	return &pb.OrderPayedPriceUpdateResponse{
+		Response: true,
+	}, nil
+}

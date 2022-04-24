@@ -34,6 +34,15 @@ message OrderStatusUpdateResponse{
   bool response=1;
 }
 
+message OrderPayedPriceUpdateRequest{
+  string orderId =1;
+  float payedPrice=2;
+}
+
+message OrderPayedPriceUpdateResponse{
+  bool response=1;
+}
+
 message OrderAddressUpdateRequest{
   string orderId =1;
   int32 addressId=2;
@@ -78,5 +87,6 @@ rpc OrderCreateService(OrderCreateRequest)returns (OrderCreateResponse){};
   rpc OrderStatusUpdateService(OrderStatusUpdateRequest)returns (OrderStatusUpdateResponse){};
   rpc GetOrderService(GetOrderRequest)returns (GetOrderResponse){};
   rpc OrderAddressUpdateService(OrderAddressUpdateRequest)returns (OrderAddressUpdateResponse){};
+  rpc OrderPayedPriceUpdateService(OrderPayedPriceUpdateRequest)returns (OrderPayedPriceUpdateResponse){};
 
 }
