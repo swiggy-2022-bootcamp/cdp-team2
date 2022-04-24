@@ -54,7 +54,7 @@ pipeline {
 				sh script:'''
                     pwd
                     cd ./Products-FrontStore
-                    docker build -t swiggyteam2/products-frontstore:latest .
+                    docker build -t swiggyteam2/products-frontstore:latest -f Dockerfile ../
                 '''
 			}
 		}
