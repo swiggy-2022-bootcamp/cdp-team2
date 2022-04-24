@@ -4,9 +4,10 @@ import (
 	"log"
 	"net"
 
+	pb "common/protos/products"
+
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/core/ports"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/grpc_handlers"
-	pb "github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/pkg/protos"
 	"google.golang.org/grpc"
 )
 

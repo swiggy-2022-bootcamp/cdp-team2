@@ -1,7 +1,7 @@
 package domain
 
 import (
-	pb "github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/pkg/protos"
+	pb "common/protos/products"
 )
 
 type ProductSeoUrl struct {

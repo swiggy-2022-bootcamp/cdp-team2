@@ -11,10 +11,10 @@ require (
 	github.com/swaggo/gin-swagger v1.4.2
 	github.com/swaggo/swag v1.8.1
 	google.golang.org/grpc v1.45.0
-	google.golang.org/protobuf v1.28.0
 )
 
 require (
+	common v0.0.0-00010101000000-000000000000
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/PuerkitoBio/purell v1.1.1 // indirect
 	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
@@ -46,9 +46,8 @@ require (
 	google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776 // indirect
-	common v0.0.0-00010101000000-000000000000
-	github.com/swaggo/swag v1.7.9
-	google.golang.org/grpc v1.45.0
 )
+
+require google.golang.org/protobuf v1.28.0 // indirect
 
 replace common => ../common

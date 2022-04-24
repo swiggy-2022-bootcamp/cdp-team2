@@ -2,9 +2,6 @@ package server
 
 import (
 	"log"
-	"net"
-
-	pb "common/protos/products"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -12,7 +9,6 @@ import (
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/config"
 	_ "github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/docs"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/core/ports"
-	"google.golang.org/grpc"
 )
 
 type Server struct {
@@ -84,24 +80,5 @@ func (s *Server) Initialize() {
 	 */
 	productsRoutes.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	go StartGrpcServer()
-
 	log.Fatal(server.Run(config.Config["PORT"]))
-}
-
-type GrpcServer struct {
-	pb.UnimplementedProductsServicesServer
-}
-
-func StartGrpcServer() {
-	lis, err := net.Listen("tcp", ":7500")
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
-	}
-	s := grpc.NewServer()
-	pb.RegisterProductsServicesServer(s, &GrpcServer{})
-	log.Printf("server listening at %v", lis.Addr())
-	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
-	}
 }

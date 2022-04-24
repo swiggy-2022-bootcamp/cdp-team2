@@ -6,7 +6,7 @@ import (
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/core/domain"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/core/ports"
 
-	pb "github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/pkg/protos"
+	pb "common/protos/products"
 )
 
 type GRPCHandlers struct {
