@@ -63,28 +63,48 @@ const docTemplate = `{
                     }
                 }
             }
-        }
-    },
-    "securityDefinitions": {
-        "ApiKeyAuth": {
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header"
         },
-        "BasicAuth": {
-            "type": "basic"
+        "/shipping-address/set/address": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "set shipping address to a order",
+                "operationId": "SetAddressToOrder",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "orderId",
+                        "name": "orderId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "addressId",
+                        "name": "addressId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
         }
     }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "1.0",
-	Host:             "localhost:8003",
-	BasePath:         "/",
+	Version:          "",
+	Host:             "",
+	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "Shipping Address Microservice",
-	Description:      "This is shipping address service.",
+	Title:            "",
+	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

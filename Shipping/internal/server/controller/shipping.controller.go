@@ -1,9 +1,9 @@
 package controller
 
 import (
-	"fmt"
-	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/services"
 	"net/http"
+
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/services"
 
 	"github.com/gin-gonic/gin"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/dao/models"
@@ -31,12 +31,12 @@ func NewOShippingAddressController() *ShippingAddressController {
 func (cc *ShippingAddressController) GetByCustomer(c *gin.Context) {
 	customerId := c.GetInt(literals.CustomerIdKey)
 
-	cat, err := cc.service.GetByCustomerId(customerId)
+	shippingAddress, err := cc.service.GetByCustomerId(customerId)
 	if err != nil {
 		c.AbortWithStatusJSON(api.ServerErr(err))
 		return
 	}
-	c.JSON(http.StatusOK, cat)
+	c.JSON(http.StatusOK, shippingAddress)
 }
 
 // @Summary add shipping address to a customer
@@ -47,8 +47,8 @@ func (cc *ShippingAddressController) GetByCustomer(c *gin.Context) {
 // @Router /shipping-address/ [post]
 func (cc *ShippingAddressController) Create(c *gin.Context) {
 	nc, _ := c.Get(literals.AddressBodyKey)
-	newCat := nc.(models.ShippingAddress)
-	saved, err := cc.service.Create(newCat)
+	newshippingAddress := nc.(models.ShippingAddress)
+	saved, err := cc.service.Create(newshippingAddress)
 	if err != nil {
 		c.AbortWithStatusJSON(api.ServerErr(err))
 		return
@@ -56,17 +56,16 @@ func (cc *ShippingAddressController) Create(c *gin.Context) {
 	c.JSON(http.StatusOK, saved)
 }
 
-// @Summary get shipping address of a customer
-// @ID GetByCustomer
-// @Param customerId path string true "customerId"
+// @Summary set shipping address to a order
+// @ID SetAddressToOrder
+// @Param orderId path string true "orderId"
+// @Param addressId path string true "addressId"
 // @Produce json
 // @Success 200
-// @Router /shipping-address/customer/{customerId} [get]
+// @Router /shipping-address/set/address [post]
 func (cc *ShippingAddressController) SetAddressToOrder(c *gin.Context) {
 	orderId := c.GetString(literals.OrderBodyKey)
 	addressId := c.GetInt(literals.AddressBodyKey)
-
-	fmt.Println("order-address", orderId, addressId)
 
 	res, err := cc.service.SetAddressToOrder(orderId, addressId)
 	if err != nil {

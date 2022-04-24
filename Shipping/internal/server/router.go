@@ -14,11 +14,11 @@ func InitRouter() *gin.Engine {
 
 	cont := controller.NewOShippingAddressController()
 
-	catGrp := r.Group("/shipping-address")
+	shippingGrp := r.Group("/shipping-address")
 	{
-		catGrp.POST("/", controller.BindOrder, cont.Create)
-		catGrp.GET("/customer/:customerId", controller.BindCustomer, cont.GetByCustomer)
-		catGrp.POST("/set/address", controller.BindAddressOrder, cont.SetAddressToOrder)
+		shippingGrp.POST("/", controller.BindOrder, cont.Create)
+		shippingGrp.GET("/customer/:customerId", controller.BindCustomer, cont.GetByCustomer)
+		shippingGrp.POST("/set/address", controller.BindAddressOrder, cont.SetAddressToOrder)
 	}
 
 	return r

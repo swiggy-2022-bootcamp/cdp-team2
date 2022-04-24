@@ -3,24 +3,12 @@ package grpc_client
 import (
 	"context"
 	"fmt"
+
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/config"
 	pb "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/protos/shipping"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
-
-//func SetAddressClient(ctx context.Context) (*CartClient, error) {
-//	conn, err := grpc.Dial(config.GrpcAdd["CART_SERVICE"], grpc.WithTransportCredentials(insecure.NewCredentials()))
-//	if err != nil {
-//		log.Printf("Error creating grpc cart Client : %s", err.Error())
-//		return nil, err
-//	}
-//
-//	cartClient := cartpb.NewCartServiceClient(conn)
-//
-//	ctxx, cancel := context.WithCancel(ctx)
-//
-//}
 
 func SetAddress(orderId string, addressId int) (*pb.OrderAddressUpdateResponse, error) {
 	conn, err := grpc.Dial(config.GrpcAdd["ORDER_SERVICE"], grpc.WithTransportCredentials(insecure.NewCredentials()))

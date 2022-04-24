@@ -22,8 +22,8 @@ func (cs *ShippingAddressService) GetByCustomerId(customerId int) ([]models.Ship
 }
 
 //
-func (cs *ShippingAddressService) Create(cat models.ShippingAddress) (*models.ShippingAddress, error) {
-	return cs.Dao.Create(cat)
+func (cs *ShippingAddressService) Create(shippingAddress models.ShippingAddress) (*models.ShippingAddress, error) {
+	return cs.Dao.Create(shippingAddress)
 }
 
 func (cs *ShippingAddressService) SetAddressToOrder(orderId string, addressId int) (*pb.OrderAddressUpdateResponse, error) {

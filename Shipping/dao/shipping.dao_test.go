@@ -23,7 +23,7 @@ func TestGetRandomKey(t *testing.T) {
 //func TestGetByCustomerId(t *testing.T) {
 //	ctrl := gomock.NewController(t)
 //	mdb := mock_dynamodbiface.NewMockDynamoDBAPI(ctrl)
-//	catservice := &ShippingDao{mdb}
+//	shippingService := &ShippingDao{mdb}
 //
 //	res := []models.ShippingAddress{*getDummyShipping()}
 //	output, err := dynamodbattribute.MarshalMap(res)
@@ -42,7 +42,7 @@ func TestGetRandomKey(t *testing.T) {
 //		FilterExpression:          expr.Filter(),
 //	}).Times(1).Return(&dynamodb.ScanOutput{Items: []map[string]*dynamodb.AttributeValue{output}}, nil)
 //
-//	actual, err := catservice.GetByCustomerId(res[0].CustomerId)
+//	actual, err := shippingService.GetByCustomerId(res[0].CustomerId)
 //
 //	assert.NoError(t, err)
 //	assert.Equal(t, res, actual)
@@ -51,7 +51,7 @@ func TestGetRandomKey(t *testing.T) {
 func TestCreate(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	mdb := mock_dynamodbiface.NewMockDynamoDBAPI(ctrl)
-	catservice := &ShippingDao{mdb}
+	shippingService := &ShippingDao{mdb}
 
 	res := getDummyShipping()
 	output, err := dynamodbattribute.MarshalMap(res)
@@ -59,7 +59,7 @@ func TestCreate(t *testing.T) {
 
 	mdb.EXPECT().UpdateItem(gomock.Any()).Times(1).Return(&dynamodb.UpdateItemOutput{Attributes: output}, nil)
 
-	actual, err := catservice.Create(*res)
+	actual, err := shippingService.Create(*res)
 	assert.NoError(t, err)
 	assert.Equal(t, res, actual)
 }

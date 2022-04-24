@@ -49,7 +49,6 @@ func (s *Server) AddressutsService(ctx context.Context, address *pb.AddressutsRe
 
 func (s *Server) AddressstuService(ctx context.Context, req *pb.AddressstuRequest) (*pb.AddressstuResponse, error) {
 	customerIdStr := req.CustomerId
-	fmt.Println("customerIdStr", customerIdStr)
 
 	customerId, _ := strconv.Atoi(customerIdStr)
 

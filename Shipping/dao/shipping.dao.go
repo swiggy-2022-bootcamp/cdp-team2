@@ -57,6 +57,10 @@ func getRandomKey() int {
 	return int(time.Now().Unix() - customEpoch)
 }
 
+/**
+ * Get shipping address of a customer
+ * @param customerId int
+ */
 func (cd *ShippingDao) GetByCustomerId(customerId int) ([]models.ShippingAddress, error) {
 
 	filt := expression.Name("customerId").Equal(expression.Value(customerId))
@@ -95,11 +99,13 @@ func (cd *ShippingDao) GetByCustomerId(customerId int) ([]models.ShippingAddress
 	return results, nil
 }
 
+/**
+ * Create a shipping address of a customer
+ * @parama ddress models.ShippingAddress
+ */
 func (cd *ShippingDao) Create(shippingAddress models.ShippingAddress) (*models.ShippingAddress, error) {
 
 	newId := getRandomKey()
-
-	log.Printf("new shippingAddress %+v", shippingAddress)
 
 	var exp expression.UpdateBuilder
 	exp = exp.Set(expression.Name("firstName"), expression.Value(shippingAddress.FirstName))
@@ -122,22 +128,18 @@ func (cd *ShippingDao) Create(shippingAddress models.ShippingAddress) (*models.S
 		ReturnValues:              aws.String("ALL_NEW"),
 	}
 
-	log.Printf("create item input : %+v", createItemIn)
-
 	resp, err := cd.db.UpdateItem(&createItemIn)
 
 	if err != nil {
-		log.Printf("error while creating cateogory %s", err.Error())
+		log.Printf("error while creating shipping-address %s", err.Error())
 		return nil, err
 	}
 
-	log.Printf("category create resp %v", resp)
-
-	savedCat := models.ShippingAddress{}
-	if err = dynamodbattribute.UnmarshalMap(resp.Attributes, &savedCat); err != nil {
-		log.Printf("error while creating cateogory %s", err.Error())
+	savedAddress := models.ShippingAddress{}
+	if err = dynamodbattribute.UnmarshalMap(resp.Attributes, &savedAddress); err != nil {
+		log.Printf("error while creating shipping-address %s", err.Error())
 		return nil, err
 	}
 
-	return &savedCat, nil
+	return &savedAddress, nil
 }

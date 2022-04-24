@@ -29,24 +29,24 @@ func BindCustomer(c *gin.Context) {
 }
 
 func BindOrder(c *gin.Context) {
-	cat := models.ShippingAddress{}
-	if err := c.BindJSON(&cat); err != nil {
+	shippingAddress := models.ShippingAddress{}
+	if err := c.BindJSON(&shippingAddress); err != nil {
 		fmt.Println(err)
 		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.AddressBodyKey})
 		return
 	}
-	c.Set(literals.AddressBodyKey, cat)
+	c.Set(literals.AddressBodyKey, shippingAddress)
 	c.Next()
 }
 
 func BindAddressOrder(c *gin.Context) {
-	cat := api.SetAddressToOrderRequest{}
-	if err := c.BindJSON(&cat); err != nil {
+	shippingAddress := api.SetAddressToOrderRequest{}
+	if err := c.BindJSON(&shippingAddress); err != nil {
 		fmt.Println(err)
 		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.AddressBodyKey})
 		return
 	}
-	c.Set(literals.OrderBodyKey, cat.OrderID)
-	c.Set(literals.AddressBodyKey, cat.AddressId)
+	c.Set(literals.OrderBodyKey, shippingAddress.OrderID)
+	c.Set(literals.AddressBodyKey, shippingAddress.AddressId)
 	c.Next()
 }

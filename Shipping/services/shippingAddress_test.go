@@ -16,12 +16,12 @@ func getDummyShipping() *models.ShippingAddress {
 func TestGetByCustomerId(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	mdao := mock_dao.NewMockIDao(ctrl)
-	catservice := &ShippingAddressService{mdao}
+	shippingService := &ShippingAddressService{mdao}
 	res := []models.ShippingAddress{*getDummyShipping()}
 
 	mdao.EXPECT().GetByCustomerId(res[0].CustomerId).Times(1).Return(res, nil)
 
-	actual, err := catservice.GetByCustomerId(res[0].CustomerId)
+	actual, err := shippingService.GetByCustomerId(res[0].CustomerId)
 	assert.Nil(t, err)
 	assert.Equal(t, res, actual, "they should be equal")
 }
@@ -29,12 +29,12 @@ func TestGetByCustomerId(t *testing.T) {
 func TestCreate(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	mdao := mock_dao.NewMockIDao(ctrl)
-	catservice := &ShippingAddressService{mdao}
+	shippingService := &ShippingAddressService{mdao}
 	res := getDummyShipping()
 	toCreate := models.ShippingAddress{CustomerId: res.CustomerId, FirstName: res.FirstName, City: res.City, AddressLine1: res.AddressLine1, AddressLine2: res.AddressLine2, CountryCode: res.CountryCode, PostCode: res.PostCode}
 	mdao.EXPECT().Create(toCreate).Times(1).Return(res, nil)
 
-	actual, err := catservice.Create(toCreate)
+	actual, err := shippingService.Create(toCreate)
 	assert.Nil(t, err)
-	assert.Equal(t, res, actual, "Category should be equal")
+	assert.Equal(t, res, actual, "Shipping Address should be equal")
 }

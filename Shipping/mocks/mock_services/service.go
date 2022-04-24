@@ -7,6 +7,7 @@ package mock_services
 import (
 	gomock "github.com/golang/mock/gomock"
 	models "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/dao/models"
+	shipping "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/protos/shipping"
 	reflect "reflect"
 )
 
@@ -61,4 +62,19 @@ func (m *MockIService) GetByCustomerId(arg0 int) ([]models.ShippingAddress, erro
 func (mr *MockIServiceMockRecorder) GetByCustomerId(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByCustomerId", reflect.TypeOf((*MockIService)(nil).GetByCustomerId), arg0)
+}
+
+// SetAddressToOrder mocks base method
+func (m *MockIService) SetAddressToOrder(arg0 string, arg1 int) (*shipping.OrderAddressUpdateResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SetAddressToOrder", arg0, arg1)
+	ret0, _ := ret[0].(*shipping.OrderAddressUpdateResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SetAddressToOrder indicates an expected call of SetAddressToOrder
+func (mr *MockIServiceMockRecorder) SetAddressToOrder(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetAddressToOrder", reflect.TypeOf((*MockIService)(nil).SetAddressToOrder), arg0, arg1)
 }

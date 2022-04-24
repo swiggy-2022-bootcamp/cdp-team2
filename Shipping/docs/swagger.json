@@ -1,13 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is shipping address service.",
-        "title": "Shipping Address Microservice",
-        "contact": {},
-        "version": "1.0"
+        "contact": {}
     },
-    "host": "localhost:8003",
-    "basePath": "/",
     "paths": {
         "/shipping-address/": {
             "post": {
@@ -56,16 +51,36 @@
                     }
                 }
             }
-        }
-    },
-    "securityDefinitions": {
-        "ApiKeyAuth": {
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header"
         },
-        "BasicAuth": {
-            "type": "basic"
+        "/shipping-address/set/address": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "set shipping address to a order",
+                "operationId": "SetAddressToOrder",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "orderId",
+                        "name": "orderId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "addressId",
+                        "name": "addressId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
         }
     }
 }
