@@ -330,6 +330,10 @@ func getOrderUpdExp(cat models.Order) (expression.Expression, error) {
 		updateExp = updateExp.Set(expression.Name("addressId"), expression.Value(cat.AddressId))
 	}
 
+	if cat.PayedPrice != 0 {
+		updateExp = updateExp.Set(expression.Name("payedPrice"), expression.Value(cat.PayedPrice))
+	}
+
 	log.Printf("order update expression %+v", updateExp)
 	exp, err := expression.
 		NewBuilder().
