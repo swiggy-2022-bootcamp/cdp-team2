@@ -181,23 +181,19 @@ func (x *RewardResponse) GetReward() *Reward {
 	return nil
 }
 
-type Product struct {
+type RedeemRewardRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// product id associated with a particular product
-	ProductId string `protobuf:"bytes,1,opt,name=productId,proto3" json:"productId,omitempty"`
-	// reward associated with a particular product
-	Reward int32 `protobuf:"varint,2,opt,name=reward,proto3" json:"reward,omitempty"`
-	// points associated with a particular product
-	Points int32 `protobuf:"varint,3,opt,name=points,proto3" json:"points,omitempty"`
-	// count is the total number of product item with same product id in the cart
-	Count int32 `protobuf:"varint,4,opt,name=count,proto3" json:"count,omitempty"`
+	// orderId of the order for which user wants to redeem reward points
+	OrderId string `protobuf:"bytes,1,opt,name=orderId,proto3" json:"orderId,omitempty"`
+	// points represents the points the user wants to redeem
+	Points int32 `protobuf:"varint,2,opt,name=points,proto3" json:"points,omitempty"`
 }
 
-func (x *Product) Reset() {
-	*x = Product{}
+func (x *RedeemRewardRequest) Reset() {
+	*x = RedeemRewardRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_reward_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -205,13 +201,13 @@ func (x *Product) Reset() {
 	}
 }
 
-func (x *Product) String() string {
+func (x *RedeemRewardRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Product) ProtoMessage() {}
+func (*RedeemRewardRequest) ProtoMessage() {}
 
-func (x *Product) ProtoReflect() protoreflect.Message {
+func (x *RedeemRewardRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_reward_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -223,52 +219,36 @@ func (x *Product) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Product.ProtoReflect.Descriptor instead.
-func (*Product) Descriptor() ([]byte, []int) {
+// Deprecated: Use RedeemRewardRequest.ProtoReflect.Descriptor instead.
+func (*RedeemRewardRequest) Descriptor() ([]byte, []int) {
 	return file_reward_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *Product) GetProductId() string {
+func (x *RedeemRewardRequest) GetOrderId() string {
 	if x != nil {
-		return x.ProductId
+		return x.OrderId
 	}
 	return ""
 }
 
-func (x *Product) GetReward() int32 {
-	if x != nil {
-		return x.Reward
-	}
-	return 0
-}
-
-func (x *Product) GetPoints() int32 {
+func (x *RedeemRewardRequest) GetPoints() int32 {
 	if x != nil {
 		return x.Points
 	}
 	return 0
 }
 
-func (x *Product) GetCount() int32 {
-	if x != nil {
-		return x.Count
-	}
-	return 0
-}
-
-type CalculateRewardRequest struct {
+type RedeemRewardResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// total price of the current order on which reward is to be calculated
-	TotalPrice int32 `protobuf:"varint,1,opt,name=totalPrice,proto3" json:"totalPrice,omitempty"`
-	// array of products with information related to Product
-	Products []*Product `protobuf:"bytes,2,rep,name=products,proto3" json:"products,omitempty"`
+	// finalPrice represents the final price after the deduction of the reward points from total price of the order
+	FinalPrice int32 `protobuf:"varint,1,opt,name=finalPrice,proto3" json:"finalPrice,omitempty"`
 }
 
-func (x *CalculateRewardRequest) Reset() {
-	*x = CalculateRewardRequest{}
+func (x *RedeemRewardResponse) Reset() {
+	*x = RedeemRewardResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_reward_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -276,13 +256,13 @@ func (x *CalculateRewardRequest) Reset() {
 	}
 }
 
-func (x *CalculateRewardRequest) String() string {
+func (x *RedeemRewardResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CalculateRewardRequest) ProtoMessage() {}
+func (*RedeemRewardResponse) ProtoMessage() {}
 
-func (x *CalculateRewardRequest) ProtoReflect() protoreflect.Message {
+func (x *RedeemRewardResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_reward_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -294,80 +274,16 @@ func (x *CalculateRewardRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CalculateRewardRequest.ProtoReflect.Descriptor instead.
-func (*CalculateRewardRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use RedeemRewardResponse.ProtoReflect.Descriptor instead.
+func (*RedeemRewardResponse) Descriptor() ([]byte, []int) {
 	return file_reward_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *CalculateRewardRequest) GetTotalPrice() int32 {
-	if x != nil {
-		return x.TotalPrice
-	}
-	return 0
-}
-
-func (x *CalculateRewardRequest) GetProducts() []*Product {
-	if x != nil {
-		return x.Products
-	}
-	return nil
-}
-
-type CalculateRewardResponse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// final price is the total price of the order after deducting the reward/points
-	FinalPrice int32 `protobuf:"varint,1,opt,name=finalPrice,proto3" json:"finalPrice,omitempty"`
-	// error represents the error occurred while creating the response
-	Error string `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-}
-
-func (x *CalculateRewardResponse) Reset() {
-	*x = CalculateRewardResponse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_reward_proto_msgTypes[5]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *CalculateRewardResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*CalculateRewardResponse) ProtoMessage() {}
-
-func (x *CalculateRewardResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_reward_proto_msgTypes[5]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use CalculateRewardResponse.ProtoReflect.Descriptor instead.
-func (*CalculateRewardResponse) Descriptor() ([]byte, []int) {
-	return file_reward_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *CalculateRewardResponse) GetFinalPrice() int32 {
+func (x *RedeemRewardResponse) GetFinalPrice() int32 {
 	if x != nil {
 		return x.FinalPrice
 	}
 	return 0
-}
-
-func (x *CalculateRewardResponse) GetError() string {
-	if x != nil {
-		return x.Error
-	}
-	return ""
 }
 
 var File_reward_proto protoreflect.FileDescriptor
@@ -386,35 +302,24 @@ var file_reward_proto_rawDesc = []byte{
 	0x72, 0x49, 0x64, 0x22, 0x31, 0x0a, 0x0e, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x52, 0x65, 0x73,
 	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x1f, 0x0a, 0x06, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x18,
 	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x07, 0x2e, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x52, 0x06,
-	0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x22, 0x6d, 0x0a, 0x07, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63,
-	0x74, 0x12, 0x1c, 0x0a, 0x09, 0x70, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x49, 0x64, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x70, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x49, 0x64, 0x12,
-	0x16, 0x0a, 0x06, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52,
-	0x06, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x70, 0x6f, 0x69, 0x6e, 0x74,
-	0x73, 0x18, 0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x73, 0x12,
-	0x14, 0x0a, 0x05, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x05, 0x52, 0x05,
-	0x63, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x5e, 0x0a, 0x16, 0x43, 0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61,
-	0x74, 0x65, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12,
-	0x1e, 0x0a, 0x0a, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x50, 0x72, 0x69, 0x63, 0x65, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x05, 0x52, 0x0a, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x50, 0x72, 0x69, 0x63, 0x65, 0x12,
-	0x24, 0x0a, 0x08, 0x70, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28,
-	0x0b, 0x32, 0x08, 0x2e, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x52, 0x08, 0x70, 0x72, 0x6f,
-	0x64, 0x75, 0x63, 0x74, 0x73, 0x22, 0x4f, 0x0a, 0x17, 0x43, 0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61,
-	0x74, 0x65, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x12, 0x1e, 0x0a, 0x0a, 0x66, 0x69, 0x6e, 0x61, 0x6c, 0x50, 0x72, 0x69, 0x63, 0x65, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x05, 0x52, 0x0a, 0x66, 0x69, 0x6e, 0x61, 0x6c, 0x50, 0x72, 0x69, 0x63, 0x65,
-	0x12, 0x14, 0x0a, 0x05, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x05, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x32, 0x83, 0x01, 0x0a, 0x0d, 0x52, 0x65, 0x77, 0x61, 0x72,
+	0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x22, 0x47, 0x0a, 0x13, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d,
+	0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x18, 0x0a,
+	0x07, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x49, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07,
+	0x6f, 0x72, 0x64, 0x65, 0x72, 0x49, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x70, 0x6f, 0x69, 0x6e, 0x74,
+	0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x73, 0x22,
+	0x36, 0x0a, 0x14, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x1e, 0x0a, 0x0a, 0x66, 0x69, 0x6e, 0x61, 0x6c,
+	0x50, 0x72, 0x69, 0x63, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x0a, 0x66, 0x69, 0x6e,
+	0x61, 0x6c, 0x50, 0x72, 0x69, 0x63, 0x65, 0x32, 0x7a, 0x0a, 0x0d, 0x52, 0x65, 0x77, 0x61, 0x72,
 	0x64, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x2c, 0x0a, 0x09, 0x47, 0x65, 0x74, 0x52,
 	0x65, 0x77, 0x61, 0x72, 0x64, 0x12, 0x0e, 0x2e, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x52, 0x65,
 	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x0f, 0x2e, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x44, 0x0a, 0x0f, 0x43, 0x61, 0x6c, 0x63, 0x75, 0x6c,
-	0x61, 0x74, 0x65, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x12, 0x17, 0x2e, 0x43, 0x61, 0x6c, 0x63,
-	0x75, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x1a, 0x18, 0x2e, 0x43, 0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x52, 0x65,
-	0x77, 0x61, 0x72, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x0b, 0x5a, 0x09,
-	0x2e, 0x2f, 0x3b, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x33,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3b, 0x0a, 0x0c, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d,
+	0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x12, 0x14, 0x2e, 0x52, 0x65, 0x64, 0x65, 0x65, 0x6d, 0x52,
+	0x65, 0x77, 0x61, 0x72, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x15, 0x2e, 0x52,
+	0x65, 0x64, 0x65, 0x65, 0x6d, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x42, 0x0b, 0x5a, 0x09, 0x2e, 0x2f, 0x3b, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73,
+	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -429,27 +334,25 @@ func file_reward_proto_rawDescGZIP() []byte {
 	return file_reward_proto_rawDescData
 }
 
-var file_reward_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_reward_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_reward_proto_goTypes = []interface{}{
-	(*Reward)(nil),                  // 0: Reward
-	(*RewardRequest)(nil),           // 1: RewardRequest
-	(*RewardResponse)(nil),          // 2: RewardResponse
-	(*Product)(nil),                 // 3: Product
-	(*CalculateRewardRequest)(nil),  // 4: CalculateRewardRequest
-	(*CalculateRewardResponse)(nil), // 5: CalculateRewardResponse
+	(*Reward)(nil),               // 0: Reward
+	(*RewardRequest)(nil),        // 1: RewardRequest
+	(*RewardResponse)(nil),       // 2: RewardResponse
+	(*RedeemRewardRequest)(nil),  // 3: RedeemRewardRequest
+	(*RedeemRewardResponse)(nil), // 4: RedeemRewardResponse
 }
 var file_reward_proto_depIdxs = []int32{
 	0, // 0: RewardResponse.reward:type_name -> Reward
-	3, // 1: CalculateRewardRequest.products:type_name -> Product
-	1, // 2: RewardService.GetReward:input_type -> RewardRequest
-	4, // 3: RewardService.CalculateReward:input_type -> CalculateRewardRequest
-	2, // 4: RewardService.GetReward:output_type -> RewardResponse
-	5, // 5: RewardService.CalculateReward:output_type -> CalculateRewardResponse
-	4, // [4:6] is the sub-list for method output_type
-	2, // [2:4] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	1, // 1: RewardService.GetReward:input_type -> RewardRequest
+	3, // 2: RewardService.RedeemReward:input_type -> RedeemRewardRequest
+	2, // 3: RewardService.GetReward:output_type -> RewardResponse
+	4, // 4: RewardService.RedeemReward:output_type -> RedeemRewardResponse
+	3, // [3:5] is the sub-list for method output_type
+	1, // [1:3] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_reward_proto_init() }
@@ -495,7 +398,7 @@ func file_reward_proto_init() {
 			}
 		}
 		file_reward_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Product); i {
+			switch v := v.(*RedeemRewardRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -507,19 +410,7 @@ func file_reward_proto_init() {
 			}
 		}
 		file_reward_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CalculateRewardRequest); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_reward_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CalculateRewardResponse); i {
+			switch v := v.(*RedeemRewardResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -537,7 +428,7 @@ func file_reward_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_reward_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
@@ -566,7 +457,7 @@ type RewardServiceClient interface {
 	// Get the total reward currently associated with a customer with given customerId
 	GetReward(ctx context.Context, in *RewardRequest, opts ...grpc.CallOption) (*RewardResponse, error)
 	// Calculates the final pricing after deducting the reward/points from the total price for the user
-	CalculateReward(ctx context.Context, in *CalculateRewardRequest, opts ...grpc.CallOption) (*CalculateRewardResponse, error)
+	RedeemReward(ctx context.Context, in *RedeemRewardRequest, opts ...grpc.CallOption) (*RedeemRewardResponse, error)
 }
 
 type rewardServiceClient struct {
@@ -586,9 +477,9 @@ func (c *rewardServiceClient) GetReward(ctx context.Context, in *RewardRequest, 
 	return out, nil
 }
 
-func (c *rewardServiceClient) CalculateReward(ctx context.Context, in *CalculateRewardRequest, opts ...grpc.CallOption) (*CalculateRewardResponse, error) {
-	out := new(CalculateRewardResponse)
-	err := c.cc.Invoke(ctx, "/RewardService/CalculateReward", in, out, opts...)
+func (c *rewardServiceClient) RedeemReward(ctx context.Context, in *RedeemRewardRequest, opts ...grpc.CallOption) (*RedeemRewardResponse, error) {
+	out := new(RedeemRewardResponse)
+	err := c.cc.Invoke(ctx, "/RewardService/RedeemReward", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -600,7 +491,7 @@ type RewardServiceServer interface {
 	// Get the total reward currently associated with a customer with given customerId
 	GetReward(context.Context, *RewardRequest) (*RewardResponse, error)
 	// Calculates the final pricing after deducting the reward/points from the total price for the user
-	CalculateReward(context.Context, *CalculateRewardRequest) (*CalculateRewardResponse, error)
+	RedeemReward(context.Context, *RedeemRewardRequest) (*RedeemRewardResponse, error)
 }
 
 // UnimplementedRewardServiceServer can be embedded to have forward compatible implementations.
@@ -610,8 +501,8 @@ type UnimplementedRewardServiceServer struct {
 func (*UnimplementedRewardServiceServer) GetReward(context.Context, *RewardRequest) (*RewardResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetReward not implemented")
 }
-func (*UnimplementedRewardServiceServer) CalculateReward(context.Context, *CalculateRewardRequest) (*CalculateRewardResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CalculateReward not implemented")
+func (*UnimplementedRewardServiceServer) RedeemReward(context.Context, *RedeemRewardRequest) (*RedeemRewardResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RedeemReward not implemented")
 }
 
 func RegisterRewardServiceServer(s *grpc.Server, srv RewardServiceServer) {
@@ -636,20 +527,20 @@ func _RewardService_GetReward_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _RewardService_CalculateReward_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CalculateRewardRequest)
+func _RewardService_RedeemReward_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RedeemRewardRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(RewardServiceServer).CalculateReward(ctx, in)
+		return srv.(RewardServiceServer).RedeemReward(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/RewardService/CalculateReward",
+		FullMethod: "/RewardService/RedeemReward",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RewardServiceServer).CalculateReward(ctx, req.(*CalculateRewardRequest))
+		return srv.(RewardServiceServer).RedeemReward(ctx, req.(*RedeemRewardRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -663,8 +554,8 @@ var _RewardService_serviceDesc = grpc.ServiceDesc{
 			Handler:    _RewardService_GetReward_Handler,
 		},
 		{
-			MethodName: "CalculateReward",
-			Handler:    _RewardService_CalculateReward_Handler,
+			MethodName: "RedeemReward",
+			Handler:    _RewardService_RedeemReward_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
