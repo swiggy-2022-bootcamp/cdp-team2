@@ -23,9 +23,7 @@ import (
 //}
 
 func SetAddress(orderId string, addressId int) (*pb.OrderAddressUpdateResponse, error) {
-	// conn, _ := grpc.Dial("localhost:"+strconv.Itoa(literals.ADDRESS_PORT), grpc.WithInsecure())
-	fmt.Println("config.GrpcAdd[\"CART_SERVICE\"]", config.GrpcAdd["CART_SERVICE"])
-	conn, err := grpc.Dial("0.tcp.in.ngrok.io:18600", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(config.GrpcAdd["ORDER_SERVICE"], grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -43,7 +41,9 @@ func SetAddressService(c pb.ServiceClient, orderId string, addressId int) (*pb.O
 	resp, err := c.OrderAddressUpdateService(context.Background(), &addressRequest)
 	fmt.Println(resp, err)
 	if err != nil {
-		return nil, nil
+		return &pb.OrderAddressUpdateResponse{
+			Response: false,
+		}, nil
 	}
 
 	return resp, err

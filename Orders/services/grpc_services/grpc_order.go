@@ -118,7 +118,9 @@ func (s *Server) OrderAddressUpdateService(ctx context.Context, order *pb.OrderA
 	_, err := dao.GetOrderDao().UpdateByID(orderId, orderUpdate)
 
 	if err != nil {
-		return nil, errors.New("error occurred")
+		return &pb.OrderAddressUpdateResponse{
+			Response: false,
+		}, errors.New("error occurred")
 	}
 
 	return &pb.OrderAddressUpdateResponse{
