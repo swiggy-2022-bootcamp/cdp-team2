@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package category;
+option go_package = "github.com/swiggy-2022-bootcamp/cdp-team2/common/protos/category";
+
+message CategoryDesc{
+    string name = 1;
+	string description = 2 ;
+	string meta_description = 3;
+	string meta_keyword = 4;
+	string meta_title = 5;
+}
+
+message Category{
+    int32 category_id = 1;
+    CategoryDesc category_description = 2;
+}
+
+
+message GetCategoryInput{
+    int32 category_id = 1;
+}
+
+service CategoryService {
+    rpc GetCategory(GetCategoryInput) returns (Category);
+}
+

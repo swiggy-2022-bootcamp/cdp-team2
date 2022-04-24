@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package reward;
+option go_package = "github.com/swiggy-2022-bootcamp/cdp-team2/common/protos/reward";
+
+message Reward {
+    string customerId = 1;
+    string description = 2;
+    int32 points = 3;
+}
+
+message RewardRequest {
+    string customerId = 1;
+}
+
+message RewardResponse {
+    Reward reward = 1;
+}
+
+message RedeemRewardRequest {
+    // orderId of the order for which user wants to redeem reward points
+    string orderId = 1;
+    // points represents the points the user wants to redeem
+    int32 points = 2;
+}
+
+message RedeemRewardResponse {
+    // finalPrice represents the final price after the deduction of the reward points from total price of the order
+    int32 finalPrice = 1;
+}
+
+service RewardService {
+    // Get the total reward currently associated with a customer with given customerId
+    rpc GetReward(RewardRequest) returns (RewardResponse);
+
+    // Calculates the final pricing after deducting the reward/points from the total price for the user
+    rpc RedeemReward (RedeemRewardRequest) returns (RedeemRewardResponse);
+}
