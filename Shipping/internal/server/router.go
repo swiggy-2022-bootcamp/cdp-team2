@@ -18,6 +18,7 @@ func InitRouter() *gin.Engine {
 	{
 		catGrp.POST("/", controller.BindOrder, cont.Create)
 		catGrp.GET("/customer/:customerId", controller.BindCustomer, cont.GetByCustomer)
+		catGrp.POST("/set/address", controller.BindAddressOrder, cont.SetAddressToOrder)
 	}
 
 	return r

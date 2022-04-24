@@ -36,7 +36,15 @@ message AddressutsRequest{
 message AddressutsResponse{
     bool response=1;
 }
- 
+
+message OrderAddressUpdateRequest{
+    string orderId =1;
+    int32 addressId=2;
+}
+
+message OrderAddressUpdateResponse{
+    bool response=1;
+}
 
  
 
@@ -45,4 +53,5 @@ message AddressutsResponse{
 service Service{
     rpc AddressutsService(AddressutsRequest)returns (AddressutsResponse){};
     rpc AddressstuService(AddressstuRequest)returns (AddressstuResponse){};
+    rpc OrderAddressUpdateService(OrderAddressUpdateRequest)returns (OrderAddressUpdateResponse){};
  }

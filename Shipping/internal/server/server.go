@@ -2,17 +2,19 @@ package server
 
 import (
 	"fmt"
+	"net"
+	"net/http"
+
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 	"google.golang.org/grpc"
-	"net"
-	"net/http"
+
+	"log"
 
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/config"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/docs"
 	pb "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/protos/shipping"
-	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/services/grpc_services"
-	"log"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/services/grpc_server_services"
 )
 
 // @title Shipping Address Microservice
@@ -52,7 +54,7 @@ func Start() {
 }
 
 func startGrpcServer() {
-	lis, err := net.Listen("tcp", ":9000")
+	lis, err := net.Listen("tcp", ":9001")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}

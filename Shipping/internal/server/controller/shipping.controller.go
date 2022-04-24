@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/services"
 	"net/http"
 
@@ -53,4 +54,24 @@ func (cc *ShippingAddressController) Create(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, saved)
+}
+
+// @Summary get shipping address of a customer
+// @ID GetByCustomer
+// @Param customerId path string true "customerId"
+// @Produce json
+// @Success 200
+// @Router /shipping-address/customer/{customerId} [get]
+func (cc *ShippingAddressController) SetAddressToOrder(c *gin.Context) {
+	orderId := c.GetString(literals.OrderBodyKey)
+	addressId := c.GetInt(literals.AddressBodyKey)
+
+	fmt.Println("order-address", orderId, addressId)
+
+	res, err := cc.service.SetAddressToOrder(orderId, addressId)
+	if err != nil {
+		c.AbortWithStatusJSON(api.ServerErr(err))
+		return
+	}
+	c.JSON(http.StatusOK, res)
 }

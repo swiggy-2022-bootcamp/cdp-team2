@@ -323,7 +323,11 @@ func getOrderUpdExp(cat models.Order) (expression.Expression, error) {
 	}
 
 	if cat.Status != 0 {
-		updateExp = updateExp.Set(expression.Name("status"), expression.Value(cat.Status))
+		updateExp = updateExp.Set(expression.Name("statusId"), expression.Value(cat.Status))
+	}
+
+	if cat.AddressId != 0 {
+		updateExp = updateExp.Set(expression.Name("addressId"), expression.Value(cat.AddressId))
 	}
 
 	log.Printf("order update expression %+v", updateExp)

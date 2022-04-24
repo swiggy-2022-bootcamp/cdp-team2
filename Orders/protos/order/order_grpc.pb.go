@@ -21,6 +21,7 @@ type ServiceClient interface {
 	OrderCreateService(ctx context.Context, in *OrderCreateRequest, opts ...grpc.CallOption) (*OrderCreateResponse, error)
 	OrderStatusUpdateService(ctx context.Context, in *OrderStatusUpdateRequest, opts ...grpc.CallOption) (*OrderStatusUpdateResponse, error)
 	GetOrderService(ctx context.Context, in *GetOrderRequest, opts ...grpc.CallOption) (*GetOrderResponse, error)
+	OrderAddressUpdateService(ctx context.Context, in *OrderAddressUpdateRequest, opts ...grpc.CallOption) (*OrderAddressUpdateResponse, error)
 }
 
 type serviceClient struct {
@@ -58,6 +59,15 @@ func (c *serviceClient) GetOrderService(ctx context.Context, in *GetOrderRequest
 	return out, nil
 }
 
+func (c *serviceClient) OrderAddressUpdateService(ctx context.Context, in *OrderAddressUpdateRequest, opts ...grpc.CallOption) (*OrderAddressUpdateResponse, error) {
+	out := new(OrderAddressUpdateResponse)
+	err := c.cc.Invoke(ctx, "/proto.Service/OrderAddressUpdateService", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ServiceServer is the server API for Service service.
 // All implementations must embed UnimplementedServiceServer
 // for forward compatibility
@@ -65,6 +75,7 @@ type ServiceServer interface {
 	OrderCreateService(context.Context, *OrderCreateRequest) (*OrderCreateResponse, error)
 	OrderStatusUpdateService(context.Context, *OrderStatusUpdateRequest) (*OrderStatusUpdateResponse, error)
 	GetOrderService(context.Context, *GetOrderRequest) (*GetOrderResponse, error)
+	OrderAddressUpdateService(context.Context, *OrderAddressUpdateRequest) (*OrderAddressUpdateResponse, error)
 	mustEmbedUnimplementedServiceServer()
 }
 
@@ -80,6 +91,9 @@ func (UnimplementedServiceServer) OrderStatusUpdateService(context.Context, *Ord
 }
 func (UnimplementedServiceServer) GetOrderService(context.Context, *GetOrderRequest) (*GetOrderResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetOrderService not implemented")
+}
+func (UnimplementedServiceServer) OrderAddressUpdateService(context.Context, *OrderAddressUpdateRequest) (*OrderAddressUpdateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OrderAddressUpdateService not implemented")
 }
 func (UnimplementedServiceServer) mustEmbedUnimplementedServiceServer() {}
 
@@ -148,6 +162,24 @@ func _Service_GetOrderService_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Service_OrderAddressUpdateService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OrderAddressUpdateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).OrderAddressUpdateService(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.Service/OrderAddressUpdateService",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).OrderAddressUpdateService(ctx, req.(*OrderAddressUpdateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Service_ServiceDesc is the grpc.ServiceDesc for Service service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -166,6 +198,10 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetOrderService",
 			Handler:    _Service_GetOrderService_Handler,
+		},
+		{
+			MethodName: "OrderAddressUpdateService",
+			Handler:    _Service_OrderAddressUpdateService_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

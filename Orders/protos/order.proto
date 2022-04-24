@@ -34,6 +34,15 @@ message OrderStatusUpdateResponse{
   bool response=1;
 }
 
+message OrderAddressUpdateRequest{
+  string orderId =1;
+  int32 addressId=2;
+}
+
+message OrderAddressUpdateResponse{
+  bool response=1;
+}
+
 
 message OrderResponse{
   string customerId=1;
@@ -68,5 +77,6 @@ service Service{
 rpc OrderCreateService(OrderCreateRequest)returns (OrderCreateResponse){};
   rpc OrderStatusUpdateService(OrderStatusUpdateRequest)returns (OrderStatusUpdateResponse){};
   rpc GetOrderService(GetOrderRequest)returns (GetOrderResponse){};
+  rpc OrderAddressUpdateService(OrderAddressUpdateRequest)returns (OrderAddressUpdateResponse){};
 
 }

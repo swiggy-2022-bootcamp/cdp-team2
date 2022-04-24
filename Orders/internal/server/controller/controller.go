@@ -58,10 +58,10 @@ func BindOrder(c *gin.Context) {
 		return
 	}
 
-	if cat.Status > 3 || cat.Status <= 0 {
-		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.StatusNotValid})
-		return
-	}
+	//if cat.Status > 3 || cat.Status <= 0 {
+	//	c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.StatusNotValid})
+	//	return
+	//}
 	c.Set(literals.OrderBodyKey, cat)
 	c.Next()
 }

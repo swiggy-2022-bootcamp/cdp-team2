@@ -38,3 +38,15 @@ func BindOrder(c *gin.Context) {
 	c.Set(literals.AddressBodyKey, cat)
 	c.Next()
 }
+
+func BindAddressOrder(c *gin.Context) {
+	cat := api.SetAddressToOrderRequest{}
+	if err := c.BindJSON(&cat); err != nil {
+		fmt.Println(err)
+		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.AddressBodyKey})
+		return
+	}
+	c.Set(literals.OrderBodyKey, cat.OrderID)
+	c.Set(literals.AddressBodyKey, cat.AddressId)
+	c.Next()
+}

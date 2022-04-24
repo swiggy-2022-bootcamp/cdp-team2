@@ -106,3 +106,22 @@ func (s *Server) GetOrderService(ctx context.Context, order *pb.GetOrderRequest)
 		Order: order1,
 	}, nil
 }
+
+func (s *Server) OrderAddressUpdateService(ctx context.Context, order *pb.OrderAddressUpdateRequest) (*pb.OrderAddressUpdateResponse, error) {
+
+	orderId, addressId := order.OrderId, order.AddressId
+
+	orderUpdate := models.Order{
+		AddressId: addressId,
+	}
+
+	_, err := dao.GetOrderDao().UpdateByID(orderId, orderUpdate)
+
+	if err != nil {
+		return nil, errors.New("error occurred")
+	}
+
+	return &pb.OrderAddressUpdateResponse{
+		Response: true,
+	}, nil
+}
