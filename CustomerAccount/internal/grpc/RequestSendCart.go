@@ -13,8 +13,7 @@ import (
 func GetCartByCustomerId(customer_id string)model.Cart{
 	conn,err:=grpc.Dial("localhost:"+config.Server["CART_PORT"],grpc.WithTransportCredentials(insecure.NewCredentials()))
 	// conn,err:=grpc.Dial("0.tcp.in.ngrok.io:11480",grpc.WithTransportCredentials(insecure.NewCredentials()))
-	fmt.Println("entered",err)
-	if err!=nil{
+ 	if err!=nil{
 		fmt.Println(err)
 		return model.Cart{}
 	}
@@ -36,6 +35,6 @@ func GetCartByCustomerId(customer_id string)model.Cart{
 	}
 	cart:=model.Cart{product}
 	fmt.Println(cart)
-	return cart;
+ 	return cart;
 	return model.Cart{}
 }

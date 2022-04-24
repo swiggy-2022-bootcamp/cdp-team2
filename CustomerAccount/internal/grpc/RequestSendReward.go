@@ -28,8 +28,7 @@ func GetRewardByCustomerId(customer_id string)model.Reward{
 	}
 	res, err := client.GetReward(context.Background(), req)
 	if err != nil {
-		fmt.Println("Error1:",res,err)
-		return reward
+ 		return reward
 	}
 reward=model.Reward{res.Reward.CustomerId,res.Reward.Description,int(res.Reward.Points)} 
 fmt.Println(reward)

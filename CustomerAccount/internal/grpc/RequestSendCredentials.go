@@ -5,10 +5,11 @@ import (
  	pb "customer-account/internal/proto/grpc"
 	"fmt"
 	grpc "google.golang.org/grpc"
+	"customer-account/config"
 )
 
 func SendCredential(username string,password string) bool {
-	conn, _ := grpc.Dial("localhost:9000", grpc.WithInsecure())
+	conn, _ := grpc.Dial("localhost:"+config.Server["GRPC_PORT"], grpc.WithInsecure())
 	defer conn.Close()
 	c := pb.NewServiceClient(conn)
 	fmt.Println("1")

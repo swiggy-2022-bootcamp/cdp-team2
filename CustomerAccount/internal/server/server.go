@@ -1,16 +1,12 @@
 package server
 
 import (
- 
 	"github.com/gin-gonic/gin"
 	ginSwagger "github.com/swaggo/gin-swagger"  //gin-swagger middleware
 	"github.com/swaggo/gin-swagger/swaggerFiles"	//swagger embed files
 	_ "customer-account/docs"
 	"customer-account/config"
-	// "customer-account/internal/literals"
-	// "strconv"
 	"fmt"
-	
 )
 
 
@@ -22,7 +18,7 @@ import (
 
 // @contact.name API Support
  
-// @host localhost:8092
+// @host localhost:config.Server["PORT"]
 // @BasePath /
 
 // @securityDefinitions.basic BasicAuth
@@ -31,9 +27,7 @@ import (
 // @in header
 // @name Authorization
 func RunServer(){
-	// model.InitDB()
-	config.FromEnv()
-	fmt.Println("^^^^^^^",config.Server,config.AWS)
+	fmt.Println("Server:Config",config.Server,config.AWS)
 	server:=gin.Default()
 	createRoute:=server.Group("/register")
 	{

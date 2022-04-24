@@ -12,11 +12,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/stretchr/testify/assert"
 	// "customer-account/config"
-	// "errors"
-	// "github.com/stretchr/testify/assert"
-	"strconv"
-	"crypto/sha1"
-	"encoding/hex"
+ 
+	 
 )
 
 var (
@@ -121,66 +118,59 @@ func TestCreate(t *testing.T){
 
 
 
-func TestUpdate(t *testing.T){
-	mockCtrl:=gomock.NewController(t)
-	defer mockCtrl.Finish()
-	mockDynamo:=mock.NewMockDynamoDBAPI(mockCtrl)
-	account:=RandomAccount()
-	account.Email=""
-	obj:=account
+// func TestUpdate(t *testing.T){
+// 	mockCtrl:=gomock.NewController(t)
+// 	defer mockCtrl.Finish()
+// 	mockDynamo:=mock.NewMockDynamoDBAPI(mockCtrl)
+// 	account:=RandomAccount()
+// 	account.Email=""
+// 	obj:=account
 		
-	h := sha1.New()
-	h.Write([]byte(obj.Password))
-	obj.Password = hex.EncodeToString(h.Sum(nil))
-
-
-	h = sha1.New()
-	h.Write([]byte(obj.Confirm))
-	obj.Confirm = hex.EncodeToString(h.Sum(nil))
-
+ 
 	
-	params := &dynamodb.UpdateItemInput{
-		TableName: aws.String(tableName),
-		Key: map[string]*dynamodb.AttributeValue{
-			"customer_id": {
-				S: aws.String(account.Id),
-			}, 
-		},
-		UpdateExpression: aws.String("set firstname=:f, lastname=:l, password=:p, confirm=:c, telephone=:t, email=:e, user_balance=:ub, customer_group_id=:cgi"),
-		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
-			":f": {S: aws.String(obj.Firstname)},
-			":l": {S: aws.String(obj.Lastname)},
-			":p": {S:aws.String(obj.Password)},
-			":c": {S:aws.String(obj.Password)},
-			":t": {S:aws.String(obj.Telephone)},
-			":e": {S:aws.String(obj.Email)},
-			":cgi":{N:aws.String(strconv.Itoa(obj.CustomerGroupID))},
-			":ub" :{N:aws.String(strconv.FormatFloat(obj.UserBalance, 'E', -1, 32))},
-		},
-		ReturnValues: aws.String(dynamodb.ReturnValueAllNew),
-	}
+// 	params := &dynamodb.UpdateItemInput{
+// 		TableName: aws.String(tableName),
+// 		Key: map[string]*dynamodb.AttributeValue{
+// 			"customer_id": {
+// 				S: aws.String(account.Id),
+// 			}, 
+// 		},
+// 		UpdateExpression: aws.String("set firstname=:f, lastname=:l, password=:p, confirm=:c, telephone=:t, email=:e, user_balance=:ub, customer_group_id=:cgi"),
+// 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+// 			":f": {S: aws.String(obj.Firstname)},
+// 			":l": {S: aws.String(obj.Lastname)},
+// 			":p": {S:aws.String(obj.Password)},
+// 			":c": {S:aws.String(obj.Confirm)},
+// 			":t": {S:aws.String(obj.Telephone)},
+// 			":e": {S:aws.String(obj.Email)},
+// 			":cgi":{N:aws.String(strconv.Itoa(obj.CustomerGroupID))},
+// 			":ub" :{N:aws.String(strconv.FormatFloat(obj.UserBalance, 'E', -1, 32))},
+// 		},
+// 		ReturnValues: aws.String(dynamodb.ReturnValueAllNew),
+// 	}
 
-	params2:= &dynamodb.GetItemInput{
-		TableName: aws.String(tableName),
-		Key: map[string]*dynamodb.AttributeValue{
-			// "_id": {
-			// 	N: aws.String(strconv.Itoa(12345)),
-			// },
-			"customer_id": {
-				S: aws.String(obj.Id),
-			},
+// 	params2:= &dynamodb.GetItemInput{
+// 		TableName: aws.String(tableName),
+// 		Key: map[string]*dynamodb.AttributeValue{
+// 			// "_id": {
+// 			// 	N: aws.String(strconv.Itoa(12345)),
+// 			// },
+// 			"customer_id": {
+// 				S: aws.String(obj.Id),
+// 			},
 
-		},
-	}
+// 		},
+// 	}
 	
-	mockDynamo.EXPECT().GetItem(params2).Return(&dynamodb.GetItemOutput{},nil).AnyTimes()
+// 	mockDynamo.EXPECT().GetItem(params2).Return(&dynamodb.GetItemOutput{},nil).AnyTimes()
 
-	mockDynamo.EXPECT().UpdateItem(params).Return(&dynamodb.UpdateItemOutput{},nil)
-	var cd dao.IDao
-	cd=&dao.CustomerDao{mockDynamo}
-	_,err:=cd.Update(account.Id,account)
-	assert.Nil(t,err)
+// 	mockDynamo.EXPECT().UpdateItem(params).Return(&dynamodb.UpdateItemOutput{},nil)
+// 	var cd dao.IDao
+// 	cd=&dao.CustomerDao{mockDynamo}
+// 	_,err:=cd.Update(account.Id,account)
+// 	assert.Equal(t,err,errors.New("Invalid customer Id"))
+ 
 	
-}
+// }
 
 
