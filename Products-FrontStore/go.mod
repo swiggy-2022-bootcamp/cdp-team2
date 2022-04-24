@@ -40,4 +40,4 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
-replace common => ../Products-Admin/
+replace common => ../common

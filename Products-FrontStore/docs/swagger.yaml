@@ -1,4 +1,103 @@
 basePath: /api/rest/products
+definitions:
+  domain.Product:
+    properties:
+      _id:
+        type: integer
+      height:
+        type: integer
+      image:
+        type: string
+      length:
+        type: integer
+      manufacturer_id:
+        type: integer
+      minimum:
+        type: integer
+      model:
+        type: string
+      points:
+        type: integer
+      price:
+        type: string
+      product_category:
+        items:
+          type: integer
+        type: array
+      product_description:
+        items:
+          $ref: '#/definitions/domain.ProductDescription'
+        type: array
+      product_related:
+        items:
+          type: integer
+        type: array
+      product_seo_url:
+        $ref: '#/definitions/domain.ProductSeoUrl'
+      quantity:
+        type: integer
+      reward:
+        type: integer
+      shipping_id:
+        type: integer
+      sku:
+        type: string
+      weight:
+        type: integer
+      width:
+        type: integer
+    required:
+    - manufacturer_id
+    - model
+    - price
+    - product_category
+    - product_description
+    - quantity
+    - sku
+    type: object
+  domain.ProductDescription:
+    properties:
+      description:
+        type: string
+      language_id:
+        type: integer
+      meta_description:
+        type: string
+      meta_keyword:
+        type: string
+      meta_title:
+        type: string
+      name:
+        type: string
+      tag:
+        type: string
+    type: object
+  domain.ProductSeoUrl:
+    properties:
+      keyword:
+        type: string
+      language_id:
+        type: integer
+      store_id:
+        type: integer
+    type: object
+  responses.MessageResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  responses.ProductMessage:
+    properties:
+      product:
+        $ref: '#/definitions/domain.Product'
+    type: object
+  responses.ProductsMessage:
+    properties:
+      products:
+        items:
+          $ref: '#/definitions/domain.Product'
+        type: array
+    type: object
 host: localhost:8001
 info:
   contact:
@@ -17,15 +116,93 @@ paths:
     get:
       consumes:
       - application/json
-      description: API to check products-admin health
+      description: products get API
       produces:
-      - plain/text
+      - application/json
       responses:
         "200":
           description: OK
           schema:
-            type: string
-      summary: Health Check Route
+            $ref: '#/definitions/responses.ProductsMessage'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+      summary: Get All Products
       tags:
-      - Health
+      - Products
+  /{id}:
+    get:
+      consumes:
+      - application/json
+      description: products get API
+      parameters:
+      - description: productID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ProductMessage'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+      summary: Get Product By ID
+      tags:
+      - Products
+  /category/{id}:
+    get:
+      consumes:
+      - application/json
+      description: product search API
+      parameters:
+      - description: categoryID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ProductsMessage'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+      summary: Search Products by CategoryID
+      tags:
+      - Products
 swagger: "2.0"

@@ -1,7 +1,7 @@
 package main
 
 import (
-	pb "common/pkg/protos"
+	pb "common/protos/products"
 	"context"
 
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-FrontStore/internal/client"

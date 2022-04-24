@@ -1,7 +1,7 @@
 package services
 
 import (
-	pb "common/pkg/protos"
+	pb "common/protos/products"
 	"context"
 	"encoding/json"
 	"log"

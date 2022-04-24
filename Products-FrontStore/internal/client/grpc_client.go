@@ -3,7 +3,7 @@ package client
 import (
 	"log"
 
-	pb "common/pkg/protos"
+	pb "common/protos/products"
 
 	"google.golang.org/grpc"
 )

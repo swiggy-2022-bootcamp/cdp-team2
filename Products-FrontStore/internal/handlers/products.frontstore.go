@@ -34,6 +34,17 @@ func (ph *ProductsHandlers) Health(gctx *gin.Context) {
 	gctx.Data(http.StatusOK, contentType, []byte(literals.HEALTH_MESSAGE))
 }
 
+// GetUser godoc
+// @Summary      Get All Products
+// @Description  products get API
+// @Tags         Products
+// @Accept       json
+// @Produce      json
+// @Success      200  {object} 	responses.ProductsMessage
+// @Failure      400  {object} 	responses.MessageResponse
+// @Failure      500  {object} 	responses.MessageResponse
+// @Failure      502  {object} 	responses.MessageResponse
+// @Router       / [get]
 func (ph *ProductsHandlers) GetProductList(gctx *gin.Context) {
 	_products, err := ph.ProductsServices.GetProductList()
 	if err != nil {
@@ -43,6 +54,18 @@ func (ph *ProductsHandlers) GetProductList(gctx *gin.Context) {
 	gctx.JSON(http.StatusOK, gin.H{"message": _products})
 }
 
+// GetUser godoc
+// @Summary      Get Product By ID
+// @Description  products get API
+// @Tags         Products
+// @Accept       json
+// @Produce      json
+// @Param        id path string true "productID"
+// @Success      200  {object} 	responses.ProductMessage
+// @Failure      400  {object} 	responses.MessageResponse
+// @Failure      500  {object} 	responses.MessageResponse
+// @Failure      502  {object} 	responses.MessageResponse
+// @Router       /{id} [get]
 func (ph *ProductsHandlers) GetProductById(gctx *gin.Context) {
 	productIDStr := gctx.Param("id")
 	productID, err := strconv.Atoi(productIDStr)
@@ -58,6 +81,18 @@ func (ph *ProductsHandlers) GetProductById(gctx *gin.Context) {
 	gctx.JSON(http.StatusOK, gin.H{"product": product})
 }
 
+// GetUser godoc
+// @Summary      Search Products by CategoryID
+// @Description  product search API
+// @Tags         Products
+// @Accept       json
+// @Produce      json
+// @Param        id path string true "categoryID"
+// @Success      200  {object} 	responses.ProductsMessage
+// @Failure      400  {object} 	responses.MessageResponse
+// @Failure      500  {object} 	responses.MessageResponse
+// @Failure      502  {object} 	responses.MessageResponse
+// @Router       /category/{id} [get]
 func (ph *ProductsHandlers) GetProductListByCategoryId(gctx *gin.Context) {
 	categoryIDStr := gctx.Param("id")
 	categoryID, err := strconv.Atoi(categoryIDStr)
