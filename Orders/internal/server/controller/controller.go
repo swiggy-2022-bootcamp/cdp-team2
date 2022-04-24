@@ -2,10 +2,11 @@ package controller
 
 import (
 	"fmt"
-	"github.com/swiggy-2022-bootcamp/cdp-team2/Order/dao/models"
-	"github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/api"
 	"net/http"
 	"strconv"
+
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Order/dao/models"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/api"
 
 	"github.com/gin-gonic/gin"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/literals"
@@ -51,17 +52,17 @@ func BindCustomer(c *gin.Context) {
 }
 
 func BindOrder(c *gin.Context) {
-	cat := models.Order{}
-	if err := c.BindJSON(&cat); err != nil {
+	order := models.Order{}
+	if err := c.BindJSON(&order); err != nil {
 		fmt.Println(err)
 		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderBodyKey})
 		return
 	}
 
-	//if cat.Status > 3 || cat.Status <= 0 {
+	//if order.Status > 3 || order.Status <= 0 {
 	//	c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.StatusNotValid})
 	//	return
 	//}
-	c.Set(literals.OrderBodyKey, cat)
+	c.Set(literals.OrderBodyKey, order)
 	c.Next()
 }

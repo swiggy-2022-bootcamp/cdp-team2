@@ -32,13 +32,13 @@ func (cs *OrderService) GetAll() ([]models.Order, error) {
 }
 
 //
-func (cs *OrderService) Create(cat models.Order) (*models.Order, error) {
-	return cs.Dao.Create(cat)
+func (cs *OrderService) Create(order models.Order) (*models.Order, error) {
+	return cs.Dao.Create(order)
 }
 
 //
-func (cs *OrderService) UpdateByID(id string, cat models.Order) (*models.Order, error) {
-	return cs.Dao.UpdateByID(id, cat)
+func (cs *OrderService) UpdateByID(id string, order models.Order) (*models.Order, error) {
+	return cs.Dao.UpdateByID(id, order)
 }
 
 func (cs *OrderService) DeleteByID(id string) error {

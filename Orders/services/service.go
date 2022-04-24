@@ -2,7 +2,7 @@ package services
 
 import "github.com/swiggy-2022-bootcamp/cdp-team2/Order/dao/models"
 
-//interface for category service
+//interface for order service
 //go:generate mockgen --destination=../mocks/mock_services/service.go github.com/swiggy-2022-bootcamp/cdp-team2/Order/services IService
 type IService interface {
 	GetByID(string) (*models.Order, error)

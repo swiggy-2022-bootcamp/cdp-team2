@@ -31,9 +31,6 @@ func MockJsonPost(c *gin.Context /* the test context */, method string, content 
 		panic(err)
 	}
 
-	// the request body must be an io.ReadCloser
-	// the bytes buffer though doesn't implement io.Closer,
-	// so you wrap it in a no-op closer
 	c.Request.Body = io.NopCloser(bytes.NewBuffer(jsonbytes))
 }
 
@@ -55,9 +52,6 @@ func TestGetByID(t *testing.T) {
 	ctx.Keys = map[string]interface{}{
 		literals.OrderIdKey: res.OrderId,
 	}
-	// q := ctx.Request.URL.Query()
-	// q.Add("")
-	//MockJsonPost(ctx, map[string]interface{}{"foo": "bar"})
 
 	cont.GetByID(ctx)
 	assert.EqualValues(t, http.StatusOK, w.Code)
@@ -88,12 +82,8 @@ func TestGetByCustomerId(t *testing.T) {
 	ctx.Keys = map[string]interface{}{
 		literals.CustomerIdKey: res[0].CustomerId,
 	}
-	// q := ctx.Request.URL.Query()
-	// q.Add("")
-	//MockJsonPost(ctx, map[string]interface{}{"foo": "bar"})
 
 	cont.GetByCustomer(ctx)
-	//assert.EqualValues(t, http.StatusOK, w.Code)
 
 	actual := []models.Order{}
 	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
@@ -121,12 +111,8 @@ func TestGetByStatus(t *testing.T) {
 	ctx.Keys = map[string]interface{}{
 		literals.StatusKey: int(res[0].Status),
 	}
-	// q := ctx.Request.URL.Query()
-	// q.Add("")
-	//MockJsonPost(ctx, map[string]interface{}{"foo": "bar"})
 
 	cont.GetByStatus(ctx)
-	//assert.EqualValues(t, http.StatusOK, w.Code)
 
 	actual := []models.Order{}
 	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
@@ -243,23 +229,6 @@ func TestDelete(t *testing.T) {
 
 	cont.Delete(ctx)
 	assert.EqualValues(t, http.StatusOK, w.Code)
-}
-
-func TestBindCategory(t *testing.T) {
-	cat := getDummyOrder()
-
-	w := httptest.NewRecorder()
-	ctx, _ := gin.CreateTestContext(w)
-	ctx.Request = &http.Request{
-		Header: make(http.Header),
-	}
-
-	MockJsonPost(ctx, "POST", *cat)
-
-	BindOrder(ctx)
-	actual, exist := ctx.Get(literals.OrderBodyKey)
-	assert.True(t, exist)
-	assert.Equal(t, *cat, actual.(models.Order))
 }
 
 func TestBindId(t *testing.T) {

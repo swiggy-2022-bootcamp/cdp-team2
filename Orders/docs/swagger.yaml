@@ -1,16 +1,11 @@
-basePath: /
 definitions:
   api.ApiResponseWithErr:
     properties:
       error:
         type: string
     type: object
-host: localhost:8002
 info:
   contact: {}
-  description: This is for creating orders during checkout.
-  title: Order Microservice
-  version: "1.0"
 paths:
   /orders:
     get:
@@ -136,11 +131,4 @@ paths:
       summary: Get a Order By Status
       tags:
       - Order
-securityDefinitions:
-  ApiKeyAuth:
-    in: header
-    name: Authorization
-    type: apiKey
-  BasicAuth:
-    type: basic
 swagger: "2.0"

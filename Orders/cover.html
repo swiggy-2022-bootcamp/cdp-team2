@@ -1,0 +1,765 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>dao: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/swiggy-2022-bootcamp/cdp-team2/Order/dao/order.dao.go (47.1%)</option>
+				
+				<option value="file1">github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/server/controller/controller.go (14.3%)</option>
+				
+				<option value="file2">github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/server/controller/health.go (100.0%)</option>
+				
+				<option value="file3">github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/server/controller/order.controller.go (65.9%)</option>
+				
+				<option value="file4">github.com/swiggy-2022-bootcamp/cdp-team2/Order/services/order.service.go (87.5%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package dao
+
+import (
+        "errors"
+        "fmt"
+        "log"
+
+        "github.com/aws/aws-sdk-go/service/dynamodb/expression"
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Order/dao/models"
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Order/db"
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/literals"
+
+        "github.com/aws/aws-sdk-go/aws"
+        "github.com/aws/aws-sdk-go/service/dynamodb"
+        "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+        "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbiface"
+        "github.com/google/uuid"
+)
+
+const (
+        customEpoch = 1300000000
+        tabelName   = "team-2-orders"
+)
+
+type OrderDao struct {
+        db dynamodbiface.DynamoDBAPI
+}
+
+func GetOrderDao() IDao <span class="cov0" title="0">{
+        return &amp;OrderDao{
+                db.GetInstance(),
+        }
+}</span>
+
+func ordersTableName() *string <span class="cov8" title="1">{
+        return aws.String(tabelName)
+}</span>
+
+func getKeyFilter(id string) map[string]*dynamodb.AttributeValue <span class="cov8" title="1">{
+        return map[string]*dynamodb.AttributeValue{
+                "orderId": {
+                        S: aws.String(id),
+                },
+        }
+}</span>
+
+func getKeyFilterStatus(status string) map[string]*dynamodb.AttributeValue <span class="cov0" title="0">{
+        return map[string]*dynamodb.AttributeValue{
+                "status": {
+                        S: aws.String(status),
+                },
+        }
+}</span>
+
+/**
+ * Get uuid key for orderId
+ * @param id Number
+ */
+func getRandomKey() string <span class="cov8" title="1">{
+        uuid := uuid.New()
+        fmt.Println(uuid.String())
+        return uuid.String()
+}</span>
+
+/**
+ * Get order details of given orderId
+ * @param id String
+ */
+func (cd *OrderDao) GetByID(id string) (*models.Order, error) <span class="cov8" title="1">{
+
+        res, err := cd.db.GetItem(&amp;dynamodb.GetItemInput{
+                TableName: ordersTableName(),
+                Key:       getKeyFilter(id),
+        })
+
+        if err != nil </span><span class="cov0" title="0">{
+                log.Printf("Error Fetching Order: %s", err)
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">order := models.Order{}
+
+        if res.Item == nil </span><span class="cov0" title="0">{
+                return nil, errors.New(literals.OrderNotFound)
+        }</span>
+
+        <span class="cov8" title="1">if err = dynamodbattribute.UnmarshalMap(res.Item, &amp;order); err != nil </span><span class="cov0" title="0">{
+                log.Printf("Error unMarshalling Order: %s", err)
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">return &amp;order, nil</span>
+}
+
+/**
+ * Get order details of given status
+ * @param statusId Number
+ */
+func (cd *OrderDao) GetByStatus(status int) ([]models.Order, error) <span class="cov0" title="0">{
+
+        filt := expression.Name("status").Equal(expression.Value(status))
+
+        expr, err := expression.NewBuilder().
+                WithFilter(filt).
+                Build()
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">input := &amp;dynamodb.ScanInput{
+                TableName:                 ordersTableName(),
+                ExpressionAttributeNames:  expr.Names(),
+                ExpressionAttributeValues: expr.Values(),
+                FilterExpression:          expr.Filter(),
+        }
+
+        res, err := cd.db.Scan(input)
+
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">var results []models.Order
+
+        if len(res.Items) == 0 </span><span class="cov0" title="0">{
+                return nil, errors.New(literals.OrderNotFound)
+        }</span>
+
+        <span class="cov0" title="0">if err = dynamodbattribute.UnmarshalListOfMaps(res.Items, &amp;results); err != nil </span><span class="cov0" title="0">{
+                log.Printf("Error unMarshalling Order: %s", err)
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return results, nil</span>
+}
+
+/**
+ * Get order details of given customerId
+ * @param customerId String
+ */
+
+func (cd *OrderDao) GetByCustomerId(customerId string) ([]models.Order, error) <span class="cov0" title="0">{
+
+        filt := expression.Name("customerId").Equal(expression.Value(customerId))
+
+        expr, err := expression.NewBuilder().
+                WithFilter(filt).
+                Build()
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">input := &amp;dynamodb.ScanInput{
+                TableName:                 ordersTableName(),
+                ExpressionAttributeNames:  expr.Names(),
+                ExpressionAttributeValues: expr.Values(),
+                FilterExpression:          expr.Filter(),
+        }
+
+        res, err := cd.db.Scan(input)
+
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">var results []models.Order
+
+        if len(res.Items) == 0 </span><span class="cov0" title="0">{
+                return nil, errors.New(literals.OrderNotFound)
+        }</span>
+
+        <span class="cov0" title="0">if err = dynamodbattribute.UnmarshalListOfMaps(res.Items, &amp;results); err != nil </span><span class="cov0" title="0">{
+                log.Printf("Error unMarshalling Order: %s", err)
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return results, nil</span>
+}
+
+/**
+ * Get all created orders
+ * @param
+ */
+func (cd *OrderDao) GetAll() ([]models.Order, error) <span class="cov8" title="1">{
+
+        var results []models.Order
+
+        res, err := cd.db.Scan(&amp;dynamodb.ScanInput{
+                TableName: ordersTableName(),
+        })
+
+        if err != nil </span><span class="cov0" title="0">{
+                log.Printf("Error Fetching Orders %s", err.Error())
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">if res.Items == nil </span><span class="cov0" title="0">{
+                return results, errors.New(literals.OrderNotFound)
+        }</span>
+
+        <span class="cov8" title="1">err = dynamodbattribute.UnmarshalListOfMaps(res.Items, &amp;results)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Printf("Failed to unmarshal Orders, %v", err)
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">return results, nil</span>
+}
+
+/**
+ * Create a order
+ * @param order models.Order
+ */
+func (cd *OrderDao) Create(order models.Order) (*models.Order, error) <span class="cov8" title="1">{
+
+        newId := getRandomKey()
+
+        log.Printf("new order %+v", order)
+
+        var exp expression.UpdateBuilder
+        exp = exp.Set(expression.Name("productDesc"), expression.Value(order.ProductDesc))
+        exp = exp.Set(expression.Name("status"), expression.Value(order.Status))
+        exp = exp.Set(expression.Name("customerId"), expression.Value(order.CustomerId))
+        exp = exp.Set(expression.Name("totalPrice"), expression.Value(order.TotalPrice))
+        exp = exp.Set(expression.Name("payedPrice"), expression.Value(order.PayedPrice))
+
+        express, _ := expression.NewBuilder().WithUpdate(exp).Build()
+
+        createItemIn := dynamodb.UpdateItemInput{
+                TableName:                 ordersTableName(),
+                Key:                       getKeyFilter(newId),
+                ExpressionAttributeNames:  express.Names(),
+                ExpressionAttributeValues: express.Values(),
+                UpdateExpression:          express.Update(),
+                ReturnValues:              aws.String("ALL_NEW"),
+        }
+
+        log.Printf("create item input : %+v", createItemIn)
+
+        resp, err := cd.db.UpdateItem(&amp;createItemIn)
+
+        if err != nil </span><span class="cov0" title="0">{
+                log.Printf("error while creating order %s", err.Error())
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">log.Printf("Order create resp %v", resp)
+
+        savedOrder := models.Order{}
+        if err = dynamodbattribute.UnmarshalMap(resp.Attributes, &amp;savedOrder); err != nil </span><span class="cov0" title="0">{
+                log.Printf("error while creating order %s", err.Error())
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">return &amp;savedOrder, nil</span>
+}
+
+/**
+ * Update order of given orderId
+ * @param customerId String
+ * @param order models.Order
+ */
+func (cd *OrderDao) UpdateByID(id string, order models.Order) (*models.Order, error) <span class="cov8" title="1">{
+
+        toUpd, err := getOrderUpdExp(order)
+
+        if err != nil </span><span class="cov0" title="0">{
+                log.Printf("error while creating expression %s", err)
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">updItemIn := dynamodb.UpdateItemInput{
+                TableName:                 ordersTableName(),
+                Key:                       getKeyFilter(id),
+                ExpressionAttributeNames:  toUpd.Names(),
+                ExpressionAttributeValues: toUpd.Values(),
+                UpdateExpression:          toUpd.Update(),
+                ReturnValues:              aws.String("ALL_NEW"),
+                ConditionExpression:       toUpd.Condition(),
+        }
+
+        log.Printf("update item input : %+v", updItemIn)
+
+        resp, err := cd.db.UpdateItem(&amp;updItemIn)
+
+        if err != nil </span><span class="cov0" title="0">{
+                log.Printf("error while updating orders %s", err.Error())
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">log.Printf("Order update resp %v", resp)
+
+        updatedAttributes := models.Order{}
+        if err = dynamodbattribute.UnmarshalMap(resp.Attributes, &amp;updatedAttributes); err != nil </span><span class="cov0" title="0">{
+                log.Printf("error while updating orders %s", err.Error())
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">return &amp;updatedAttributes, nil</span>
+}
+
+/**
+ * Delete order of given orderId
+ * @param id String
+ */
+func (cd *OrderDao) DeleteByID(id string) error <span class="cov0" title="0">{
+
+        res, err := cd.db.GetItem(&amp;dynamodb.GetItemInput{
+                TableName: ordersTableName(),
+                Key:       getKeyFilter(id),
+        })
+
+        if err != nil </span><span class="cov0" title="0">{
+                log.Printf("Error Fetching Order: %s", err)
+                return err
+        }</span>
+
+        <span class="cov0" title="0">if res.Item == nil </span><span class="cov0" title="0">{
+                return errors.New(literals.OrderNotFound)
+        }</span>
+
+        <span class="cov0" title="0">resp, err := cd.db.DeleteItem(&amp;dynamodb.DeleteItemInput{
+                TableName: ordersTableName(),
+                Key:       getKeyFilter(id),
+        })
+
+        log.Printf("delete Order resp %+v", resp)
+
+        if err != nil </span><span class="cov0" title="0">{
+                log.Printf("delete Order err %s", err.Error())
+                return err
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+
+// getOrderUpdExp creates a Expression from OrderUpdateInput
+// this iterates through all fields and form update expression
+func getOrderUpdExp(order models.Order) (expression.Expression, error) <span class="cov8" title="1">{
+        var updateExp expression.UpdateBuilder
+
+        desc := order.ProductDesc
+        if len(desc) != 0 </span><span class="cov8" title="1">{
+                updateExp = updateExp.Set(expression.Name("productDesc"), expression.Value(desc))
+        }</span>
+
+        <span class="cov8" title="1">if order.Status != 0 </span><span class="cov8" title="1">{
+                updateExp = updateExp.Set(expression.Name("status"), expression.Value(order.Status))
+        }</span>
+
+        <span class="cov8" title="1">if order.AddressId != 0 </span><span class="cov8" title="1">{
+                updateExp = updateExp.Set(expression.Name("addressId"), expression.Value(order.AddressId))
+        }</span>
+
+        <span class="cov8" title="1">if order.PayedPrice != 0 </span><span class="cov8" title="1">{
+                updateExp = updateExp.Set(expression.Name("payedPrice"), expression.Value(order.PayedPrice))
+        }</span>
+
+        <span class="cov8" title="1">exp, err := expression.
+                NewBuilder().
+                WithCondition(expression.AttributeExists(expression.Name("orderId"))).
+                WithUpdate(updateExp).
+                Build()
+
+        return exp, err</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package controller
+
+import (
+        "fmt"
+        "net/http"
+        "strconv"
+
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Order/dao/models"
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/api"
+
+        "github.com/gin-gonic/gin"
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/literals"
+)
+
+func BindId(c *gin.Context) <span class="cov8" title="1">{
+        id := c.Param(literals.OrderIdKey)
+        if id == "" </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderNotFound})
+                return
+        }</span>
+
+        <span class="cov8" title="1">c.Set(literals.OrderIdKey, id)
+        c.Next()</span>
+}
+
+func BindStatus(c *gin.Context) <span class="cov0" title="0">{
+        status, _ := strconv.Atoi(c.Param(literals.StatusKey))
+        if status == 0 </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderNotFound})
+                return
+        }</span>
+
+        <span class="cov0" title="0">if status &gt; 3 || status &lt; 0 </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.StatusNotValid})
+                return
+
+        }</span>
+
+        <span class="cov0" title="0">c.Set(literals.StatusKey, status)
+        c.Next()</span>
+}
+
+func BindCustomer(c *gin.Context) <span class="cov0" title="0">{
+        id := c.Param(literals.CustomerIdKey)
+        if id == "" </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderNotFound})
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.Set(literals.CustomerIdKey, id)
+        c.Next()</span>
+}
+
+func BindOrder(c *gin.Context) <span class="cov0" title="0">{
+        order := models.Order{}
+        if err := c.BindJSON(&amp;order); err != nil </span><span class="cov0" title="0">{
+                fmt.Println(err)
+                c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.OrderBodyKey})
+                return
+        }</span>
+
+        //if order.Status &gt; 3 || order.Status &lt;= 0 {
+        //        c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.StatusNotValid})
+        //        return
+        //}
+        <span class="cov0" title="0">c.Set(literals.OrderBodyKey, order)
+        c.Next()</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package controller
+
+import (
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/literals"
+        "net/http"
+
+        "github.com/gin-gonic/gin"
+)
+
+func Health(c *gin.Context) <span class="cov8" title="1">{
+        c.String(http.StatusOK, literals.Health_OK)
+}</span>
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package controller
+
+import (
+        "net/http"
+
+        "github.com/gin-gonic/gin"
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Order/dao/models"
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/api"
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/literals"
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Order/services"
+)
+
+type OrderController struct {
+        service services.IService
+}
+
+func NewOrderController() *OrderController <span class="cov0" title="0">{
+        return &amp;OrderController{
+                services.NewOrderService(),
+        }
+}</span>
+
+// Get Order By ID
+// @Summary Get a Order By Id
+// @Tags Order
+// @Param orderId path string true "orderId"
+// @Success 200
+// @Failure 500 {object} api.ApiResponseWithErr
+// @Router /orders/{orderId} [get]
+func (cc *OrderController) GetByID(c *gin.Context) <span class="cov8" title="1">{
+        id := c.GetString(literals.OrderIdKey)
+        order, err := cc.service.GetByID(id)
+        if err != nil </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(api.ServerErr(err))
+                return
+        }</span>
+        <span class="cov8" title="1">c.JSON(http.StatusOK, order)</span>
+}
+
+// Get Order By status
+// @Summary Get a Order By Status
+// @Tags Order
+// @Param statusId path int true "statusId"
+// @Success 200
+// @Failure 500 {object} api.ApiResponseWithErr
+// @Router /orders/status/{statusId} [get]
+func (cc *OrderController) GetByStatus(c *gin.Context) <span class="cov8" title="1">{
+        status := c.GetInt(literals.StatusKey)
+        order, err := cc.service.GetByStatus(status)
+        if err != nil </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(api.ServerErr(err))
+                return
+        }</span>
+        <span class="cov8" title="1">c.JSON(http.StatusOK, order)</span>
+}
+
+// Get Order By status
+// @Summary Get a Order By CustomerId
+// @Tags Order
+// @Param customerId path int true "customerId"
+// @Success 200
+// @Failure 500 {object} api.ApiResponseWithErr
+// @Router /orders/customer/{customerId} [get]
+func (cc *OrderController) GetByCustomer(c *gin.Context) <span class="cov8" title="1">{
+        customerId := c.GetString(literals.CustomerIdKey)
+
+        order, err := cc.service.GetByCustomerId(customerId)
+        if err != nil </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(api.ServerErr(err))
+                return
+        }</span>
+        <span class="cov8" title="1">c.JSON(http.StatusOK, order)</span>
+}
+
+// Get All Orders
+// @Summary Get All Orders
+// @Tags Order
+// @Success 200
+// @Failure 500 {object} api.ApiResponseWithErr
+// @Router /orders [get]
+func (cc *OrderController) GetAll(c *gin.Context) <span class="cov8" title="1">{
+        res, err := cc.service.GetAll()
+        if err != nil </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(api.ServerErr(err))
+                return
+        }</span>
+        <span class="cov8" title="1">c.JSON(http.StatusOK, res)</span>
+}
+
+// Create Order
+// @Summary Create new Order, id is auto-assigned uuid.
+// @Tags Order
+// @Param  order body object true  "order"
+// @Success 200
+// @Failure 500 {object} api.ApiResponseWithErr
+// @Router /orders [post]
+func (cc *OrderController) Create(c *gin.Context) <span class="cov8" title="1">{
+        nc, _ := c.Get(literals.OrderBodyKey)
+        newOrder := nc.(models.Order)
+        saved, err := cc.service.Create(newOrder)
+        if err != nil </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(api.ServerErr(err))
+                return
+        }</span>
+        <span class="cov8" title="1">c.JSON(http.StatusOK, saved)</span>
+}
+
+// Update Order By ID
+// @Summary Update Order By Id
+// @Tags Order
+// @Param orderId path string true "orderId"
+// @Param   order body  object true  "order"
+// @Success 200
+// @Failure 500 {object} api.ApiResponseWithErr
+// @Router /orders/{orderId} [put]
+func (cc *OrderController) Update(c *gin.Context) <span class="cov8" title="1">{
+
+        id := c.GetString(literals.OrderIdKey)
+        nc, _ := c.Get(literals.OrderBodyKey)
+        newOrder := nc.(models.Order)
+
+        saved, err := cc.service.UpdateByID(id, newOrder)
+        if err != nil </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(api.ServerErr(err))
+                return
+        }</span>
+        <span class="cov8" title="1">c.JSON(http.StatusOK, saved)</span>
+}
+
+// Delete Order By ID
+// @Summary Delete Single Order By Id
+// @Tags Order
+// @Param orderId path string true "orderId"
+// @Success 200
+// @Failure 500 {object} api.ApiResponseWithErr
+// @Router /orders/{orderId} [delete]
+func (cc *OrderController) Delete(c *gin.Context) <span class="cov8" title="1">{
+        id := c.GetString(literals.OrderIdKey)
+        if err := cc.service.DeleteByID(id); err != nil </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(api.ServerErr(err))
+                return
+        }</span>
+        <span class="cov8" title="1">c.Status(http.StatusOK)</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package services
+
+import (
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Order/dao"
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Order/dao/models"
+)
+
+type OrderService struct {
+        Dao dao.IDao
+}
+
+func NewOrderService() IService <span class="cov0" title="0">{
+        return &amp;OrderService{
+                dao.GetOrderDao(),
+        }
+}</span>
+
+func (cs *OrderService) GetByID(id string) (*models.Order, error) <span class="cov8" title="1">{
+        return cs.Dao.GetByID(id)
+}</span>
+
+func (cs *OrderService) GetByStatus(status int) ([]models.Order, error) <span class="cov8" title="1">{
+        return cs.Dao.GetByStatus(status)
+}</span>
+
+func (cs *OrderService) GetByCustomerId(customerId string) ([]models.Order, error) <span class="cov8" title="1">{
+        return cs.Dao.GetByCustomerId(customerId)
+}</span>
+
+func (cs *OrderService) GetAll() ([]models.Order, error) <span class="cov8" title="1">{
+        return cs.Dao.GetAll()
+}</span>
+
+//
+func (cs *OrderService) Create(order models.Order) (*models.Order, error) <span class="cov8" title="1">{
+        return cs.Dao.Create(order)
+}</span>
+
+//
+func (cs *OrderService) UpdateByID(id string, order models.Order) (*models.Order, error) <span class="cov8" title="1">{
+        return cs.Dao.UpdateByID(id, order)
+}</span>
+
+func (cs *OrderService) DeleteByID(id string) error <span class="cov8" title="1">{
+        return cs.Dao.DeleteByID(id)
+}</span>
+
+//
+//func (cs *OrderService) DeleteMultiple(ids []int) []error {
+//        var errorList []error
+//        for _, id := range ids {
+//                if err := cs.Dao.DeleteByID(id); err != nil {
+//                        errorList = append(errorList, err)
+//                }
+//        }
+//        return errorList
+//}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

@@ -24,7 +24,7 @@ func TestGetRandomKey(t *testing.T) {
 func TestGetByID(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	mdb := mock_dynamodbiface.NewMockDynamoDBAPI(ctrl)
-	catservice := &OrderDao{mdb}
+	orderService := &OrderDao{mdb}
 
 	res := getDummyOrder()
 	output, err := dynamodbattribute.MarshalMap(res)
@@ -35,7 +35,7 @@ func TestGetByID(t *testing.T) {
 		Key:       getKeyFilter(res.OrderId),
 	}).Times(1).Return(&dynamodb.GetItemOutput{Item: output}, nil)
 
-	actual, err := catservice.GetByID(res.OrderId)
+	actual, err := orderService.GetByID(res.OrderId)
 	assert.NoError(t, err)
 	assert.Equal(t, res, actual)
 }
@@ -43,7 +43,7 @@ func TestGetByID(t *testing.T) {
 //func TestGetByCustomerId(t *testing.T) {
 //	ctrl := gomock.NewController(t)
 //	mdb := mock_dynamodbiface.NewMockDynamoDBAPI(ctrl)
-//	catservice := &OrderDao{mdb}
+//	orderService := &OrderDao{mdb}
 //
 //	res := []models.Order{*getDummyOrder()}
 //	output, err := dynamodbattribute.MarshalMap(res)
@@ -62,7 +62,7 @@ func TestGetByID(t *testing.T) {
 //		FilterExpression:          expr.Filter(),
 //	}).Times(1).Return(&dynamodb.GetItemOutput{Item: output}, nil)
 //
-//	actual, err := catservice.GetByCustomerId(res[0].CustomerId)
+//	actual, err := orderService.GetByCustomerId(res[0].CustomerId)
 //	assert.NoError(t, err)
 //	assert.Equal(t, res, actual)
 //}
@@ -70,7 +70,7 @@ func TestGetByID(t *testing.T) {
 //func TestGetByStatus(t *testing.T) {
 //	ctrl := gomock.NewController(t)
 //	mdb := mock_dynamodbiface.NewMockDynamoDBAPI(ctrl)
-//	catservice := &OrderDao{mdb}
+//	orderService := &OrderDao{mdb}
 //
 //	res := []models.Order{*getDummyOrder()}
 //	output, err := dynamodbattribute.MarshalMap(res)
@@ -89,7 +89,7 @@ func TestGetByID(t *testing.T) {
 //		FilterExpression:          expr.Filter(),
 //	}).Times(1).Return(&dynamodb.GetItemOutput{Item: output}, nil)
 //
-//	actual, err := catservice.GetByStatus(int(res[0].Status))
+//	actual, err := orderService.GetByStatus(int(res[0].Status))
 //	assert.NoError(t, err)
 //	assert.Equal(t, res, actual)
 //}
@@ -97,7 +97,7 @@ func TestGetByID(t *testing.T) {
 func TestGetAll(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	mdb := mock_dynamodbiface.NewMockDynamoDBAPI(ctrl)
-	catservice := &OrderDao{mdb}
+	orderService := &OrderDao{mdb}
 
 	res := getDummyOrder()
 	output, err := dynamodbattribute.MarshalMap(res)
@@ -107,7 +107,7 @@ func TestGetAll(t *testing.T) {
 		TableName: ordersTableName(),
 	}).Times(1).Return(&dynamodb.ScanOutput{Items: []map[string]*dynamodb.AttributeValue{output}}, nil)
 
-	actual, err := catservice.GetAll()
+	actual, err := orderService.GetAll()
 	assert.NoError(t, err)
 	assert.Equal(t, 1, len(actual))
 	assert.Equal(t, *res, actual[0])
@@ -116,7 +116,7 @@ func TestGetAll(t *testing.T) {
 func TestCreate(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	mdb := mock_dynamodbiface.NewMockDynamoDBAPI(ctrl)
-	catservice := &OrderDao{mdb}
+	orderService := &OrderDao{mdb}
 
 	res := getDummyOrder()
 	output, err := dynamodbattribute.MarshalMap(res)
@@ -124,7 +124,7 @@ func TestCreate(t *testing.T) {
 
 	mdb.EXPECT().UpdateItem(gomock.Any()).Times(1).Return(&dynamodb.UpdateItemOutput{Attributes: output}, nil)
 
-	actual, err := catservice.Create(*res)
+	actual, err := orderService.Create(*res)
 	assert.NoError(t, err)
 	assert.Equal(t, res, actual)
 }
@@ -132,7 +132,7 @@ func TestCreate(t *testing.T) {
 func TestUpdateByID(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	mdb := mock_dynamodbiface.NewMockDynamoDBAPI(ctrl)
-	catservice := &OrderDao{mdb}
+	orderService := &OrderDao{mdb}
 
 	res := getDummyOrder()
 	output, err := dynamodbattribute.MarshalMap(res)
@@ -140,7 +140,7 @@ func TestUpdateByID(t *testing.T) {
 
 	mdb.EXPECT().UpdateItem(gomock.Any()).Times(1).Return(&dynamodb.UpdateItemOutput{Attributes: output}, nil)
 
-	actual, err := catservice.UpdateByID(res.OrderId, *res)
+	actual, err := orderService.UpdateByID(res.OrderId, *res)
 	assert.NoError(t, err)
 	assert.Equal(t, res, actual)
 }
@@ -148,13 +148,13 @@ func TestUpdateByID(t *testing.T) {
 //func TestDeleteByID(t *testing.T) {
 //	ctrl := gomock.NewController(t)
 //	mdb := mock_dynamodbiface.NewMockDynamoDBAPI(ctrl)
-//	catservice := &OrderDao{mdb}
+//	orderService := &OrderDao{mdb}
 //
 //	mdb.EXPECT().DeleteItem(&dynamodb.DeleteItemInput{
 //		TableName: ordersTableName(),
 //		Key:       getKeyFilter("1"),
 //	}).Times(1).Return(nil, nil)
 //
-//	err := catservice.DeleteByID("1")
+//	err := orderService.DeleteByID("1")
 //	assert.NoError(t, err)
 //}

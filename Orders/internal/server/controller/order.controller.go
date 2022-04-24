@@ -29,12 +29,12 @@ func NewOrderController() *OrderController {
 // @Router /orders/{orderId} [get]
 func (cc *OrderController) GetByID(c *gin.Context) {
 	id := c.GetString(literals.OrderIdKey)
-	cat, err := cc.service.GetByID(id)
+	order, err := cc.service.GetByID(id)
 	if err != nil {
 		c.AbortWithStatusJSON(api.ServerErr(err))
 		return
 	}
-	c.JSON(http.StatusOK, cat)
+	c.JSON(http.StatusOK, order)
 }
 
 // Get Order By status
@@ -46,12 +46,12 @@ func (cc *OrderController) GetByID(c *gin.Context) {
 // @Router /orders/status/{statusId} [get]
 func (cc *OrderController) GetByStatus(c *gin.Context) {
 	status := c.GetInt(literals.StatusKey)
-	cat, err := cc.service.GetByStatus(status)
+	order, err := cc.service.GetByStatus(status)
 	if err != nil {
 		c.AbortWithStatusJSON(api.ServerErr(err))
 		return
 	}
-	c.JSON(http.StatusOK, cat)
+	c.JSON(http.StatusOK, order)
 }
 
 // Get Order By status
@@ -64,12 +64,12 @@ func (cc *OrderController) GetByStatus(c *gin.Context) {
 func (cc *OrderController) GetByCustomer(c *gin.Context) {
 	customerId := c.GetString(literals.CustomerIdKey)
 
-	cat, err := cc.service.GetByCustomerId(customerId)
+	order, err := cc.service.GetByCustomerId(customerId)
 	if err != nil {
 		c.AbortWithStatusJSON(api.ServerErr(err))
 		return
 	}
-	c.JSON(http.StatusOK, cat)
+	c.JSON(http.StatusOK, order)
 }
 
 // Get All Orders
@@ -96,8 +96,8 @@ func (cc *OrderController) GetAll(c *gin.Context) {
 // @Router /orders [post]
 func (cc *OrderController) Create(c *gin.Context) {
 	nc, _ := c.Get(literals.OrderBodyKey)
-	newCat := nc.(models.Order)
-	saved, err := cc.service.Create(newCat)
+	newOrder := nc.(models.Order)
+	saved, err := cc.service.Create(newOrder)
 	if err != nil {
 		c.AbortWithStatusJSON(api.ServerErr(err))
 		return
@@ -117,9 +117,9 @@ func (cc *OrderController) Update(c *gin.Context) {
 
 	id := c.GetString(literals.OrderIdKey)
 	nc, _ := c.Get(literals.OrderBodyKey)
-	newCat := nc.(models.Order)
+	newOrder := nc.(models.Order)
 
-	saved, err := cc.service.UpdateByID(id, newCat)
+	saved, err := cc.service.UpdateByID(id, newOrder)
 	if err != nil {
 		c.AbortWithStatusJSON(api.ServerErr(err))
 		return

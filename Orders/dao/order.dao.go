@@ -52,12 +52,20 @@ func getKeyFilterStatus(status string) map[string]*dynamodb.AttributeValue {
 	}
 }
 
+/**
+ * Get uuid key for orderId
+ * @param id Number
+ */
 func getRandomKey() string {
 	uuid := uuid.New()
 	fmt.Println(uuid.String())
 	return uuid.String()
 }
 
+/**
+ * Get order details of given orderId
+ * @param id String
+ */
 func (cd *OrderDao) GetByID(id string) (*models.Order, error) {
 
 	res, err := cd.db.GetItem(&dynamodb.GetItemInput{
@@ -66,35 +74,29 @@ func (cd *OrderDao) GetByID(id string) (*models.Order, error) {
 	})
 
 	if err != nil {
-		log.Printf("Error Fetching Category: %s", err)
+		log.Printf("Error Fetching Order: %s", err)
 		return nil, err
 	}
 
-	cat := models.Order{}
+	order := models.Order{}
 
 	if res.Item == nil {
 		return nil, errors.New(literals.OrderNotFound)
 	}
 
-	if err = dynamodbattribute.UnmarshalMap(res.Item, &cat); err != nil {
-		log.Printf("Error unMarshalling Category: %s", err)
+	if err = dynamodbattribute.UnmarshalMap(res.Item, &order); err != nil {
+		log.Printf("Error unMarshalling Order: %s", err)
 		return nil, err
 	}
 
-	return &cat, nil
+	return &order, nil
 }
 
+/**
+ * Get order details of given status
+ * @param statusId Number
+ */
 func (cd *OrderDao) GetByStatus(status int) ([]models.Order, error) {
-
-	//res, err := cd.db.Query(&dynamodb.QueryInput{
-	//	TableName:     ordersTableName(),
-	//	KeyConditionExpression:*("status = :status")
-	//
-	//})
-
-	//keyCond := expression.Key(
-	//	expression.Key("status").Equal(expression.Value("INVOICE#" + invoiceID)),
-	//)
 
 	filt := expression.Name("status").Equal(expression.Value(status))
 
@@ -125,12 +127,17 @@ func (cd *OrderDao) GetByStatus(status int) ([]models.Order, error) {
 	}
 
 	if err = dynamodbattribute.UnmarshalListOfMaps(res.Items, &results); err != nil {
-		log.Printf("Error unMarshalling Category: %s", err)
+		log.Printf("Error unMarshalling Order: %s", err)
 		return nil, err
 	}
 
 	return results, nil
 }
+
+/**
+ * Get order details of given customerId
+ * @param customerId String
+ */
 
 func (cd *OrderDao) GetByCustomerId(customerId string) ([]models.Order, error) {
 
@@ -163,13 +170,17 @@ func (cd *OrderDao) GetByCustomerId(customerId string) ([]models.Order, error) {
 	}
 
 	if err = dynamodbattribute.UnmarshalListOfMaps(res.Items, &results); err != nil {
-		log.Printf("Error unMarshalling Category: %s", err)
+		log.Printf("Error unMarshalling Order: %s", err)
 		return nil, err
 	}
 
 	return results, nil
 }
 
+/**
+ * Get all created orders
+ * @param
+ */
 func (cd *OrderDao) GetAll() ([]models.Order, error) {
 
 	var results []models.Order
@@ -179,7 +190,7 @@ func (cd *OrderDao) GetAll() ([]models.Order, error) {
 	})
 
 	if err != nil {
-		log.Printf("Error Fetching Categories %s", err.Error())
+		log.Printf("Error Fetching Orders %s", err.Error())
 		return nil, err
 	}
 
@@ -189,14 +200,17 @@ func (cd *OrderDao) GetAll() ([]models.Order, error) {
 
 	err = dynamodbattribute.UnmarshalListOfMaps(res.Items, &results)
 	if err != nil {
-		log.Printf("Failed to unmarshal categories, %v", err)
+		log.Printf("Failed to unmarshal Orders, %v", err)
 		return nil, err
 	}
 
 	return results, nil
 }
 
-//
+/**
+ * Create a order
+ * @param order models.Order
+ */
 func (cd *OrderDao) Create(order models.Order) (*models.Order, error) {
 
 	newId := getRandomKey()
@@ -208,6 +222,7 @@ func (cd *OrderDao) Create(order models.Order) (*models.Order, error) {
 	exp = exp.Set(expression.Name("status"), expression.Value(order.Status))
 	exp = exp.Set(expression.Name("customerId"), expression.Value(order.CustomerId))
 	exp = exp.Set(expression.Name("totalPrice"), expression.Value(order.TotalPrice))
+	exp = exp.Set(expression.Name("payedPrice"), expression.Value(order.PayedPrice))
 
 	express, _ := expression.NewBuilder().WithUpdate(exp).Build()
 
@@ -229,20 +244,25 @@ func (cd *OrderDao) Create(order models.Order) (*models.Order, error) {
 		return nil, err
 	}
 
-	log.Printf("category create resp %v", resp)
+	log.Printf("Order create resp %v", resp)
 
-	savedCat := models.Order{}
-	if err = dynamodbattribute.UnmarshalMap(resp.Attributes, &savedCat); err != nil {
-		log.Printf("error while creating cateogory %s", err.Error())
+	savedOrder := models.Order{}
+	if err = dynamodbattribute.UnmarshalMap(resp.Attributes, &savedOrder); err != nil {
+		log.Printf("error while creating order %s", err.Error())
 		return nil, err
 	}
 
-	return &savedCat, nil
+	return &savedOrder, nil
 }
 
-func (cd *OrderDao) UpdateByID(id string, cat models.Order) (*models.Order, error) {
+/**
+ * Update order of given orderId
+ * @param customerId String
+ * @param order models.Order
+ */
+func (cd *OrderDao) UpdateByID(id string, order models.Order) (*models.Order, error) {
 
-	toUpd, err := getOrderUpdExp(cat)
+	toUpd, err := getOrderUpdExp(order)
 
 	if err != nil {
 		log.Printf("error while creating expression %s", err)
@@ -264,22 +284,25 @@ func (cd *OrderDao) UpdateByID(id string, cat models.Order) (*models.Order, erro
 	resp, err := cd.db.UpdateItem(&updItemIn)
 
 	if err != nil {
-		log.Printf("error while updating cateogories %s", err.Error())
+		log.Printf("error while updating orders %s", err.Error())
 		return nil, err
 	}
 
-	log.Printf("category update resp %v", resp)
+	log.Printf("Order update resp %v", resp)
 
 	updatedAttributes := models.Order{}
 	if err = dynamodbattribute.UnmarshalMap(resp.Attributes, &updatedAttributes); err != nil {
-		log.Printf("error while updating cateogories %s", err.Error())
+		log.Printf("error while updating orders %s", err.Error())
 		return nil, err
 	}
 
 	return &updatedAttributes, nil
 }
 
-//
+/**
+ * Delete order of given orderId
+ * @param id String
+ */
 func (cd *OrderDao) DeleteByID(id string) error {
 
 	res, err := cd.db.GetItem(&dynamodb.GetItemInput{
@@ -288,7 +311,7 @@ func (cd *OrderDao) DeleteByID(id string) error {
 	})
 
 	if err != nil {
-		log.Printf("Error Fetching Category: %s", err)
+		log.Printf("Error Fetching Order: %s", err)
 		return err
 	}
 
@@ -301,48 +324,42 @@ func (cd *OrderDao) DeleteByID(id string) error {
 		Key:       getKeyFilter(id),
 	})
 
-	log.Printf("delete category resp %+v", resp)
+	log.Printf("delete Order resp %+v", resp)
 
 	if err != nil {
-		log.Printf("delete category err %s", err.Error())
+		log.Printf("delete Order err %s", err.Error())
 		return err
 	}
 	return nil
 }
 
-////getCategoryUpdExp creates a Expression from CategoryUpdateInput
-////this iterates through all fields
-func getOrderUpdExp(cat models.Order) (expression.Expression, error) {
+// getOrderUpdExp creates a Expression from OrderUpdateInput
+// this iterates through all fields and form update expression
+func getOrderUpdExp(order models.Order) (expression.Expression, error) {
 	var updateExp expression.UpdateBuilder
 
-	desc := cat.ProductDesc
-	// descPrefix := "category_description."
-	//category description
+	desc := order.ProductDesc
 	if len(desc) != 0 {
 		updateExp = updateExp.Set(expression.Name("productDesc"), expression.Value(desc))
 	}
 
-	if cat.Status != 0 {
-		updateExp = updateExp.Set(expression.Name("statusId"), expression.Value(cat.Status))
+	if order.Status != 0 {
+		updateExp = updateExp.Set(expression.Name("status"), expression.Value(order.Status))
 	}
 
-	if cat.AddressId != 0 {
-		updateExp = updateExp.Set(expression.Name("addressId"), expression.Value(cat.AddressId))
+	if order.AddressId != 0 {
+		updateExp = updateExp.Set(expression.Name("addressId"), expression.Value(order.AddressId))
 	}
 
-	if cat.PayedPrice != 0 {
-		updateExp = updateExp.Set(expression.Name("payedPrice"), expression.Value(cat.PayedPrice))
+	if order.PayedPrice != 0 {
+		updateExp = updateExp.Set(expression.Name("payedPrice"), expression.Value(order.PayedPrice))
 	}
 
-	log.Printf("order update expression %+v", updateExp)
 	exp, err := expression.
 		NewBuilder().
 		WithCondition(expression.AttributeExists(expression.Name("orderId"))).
 		WithUpdate(updateExp).
 		Build()
 
-	// log.Printf("%+v", exp.Names())
-	// log.Println(exp.Values())
-	// log.Println(*exp.Update())
 	return exp, err
 }

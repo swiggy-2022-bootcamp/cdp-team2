@@ -1,13 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is for creating orders during checkout.",
-        "title": "Order Microservice",
-        "contact": {},
-        "version": "1.0"
+        "contact": {}
     },
-    "host": "localhost:8002",
-    "basePath": "/",
     "paths": {
         "/orders": {
             "get": {
@@ -210,16 +205,6 @@
                     "type": "string"
                 }
             }
-        }
-    },
-    "securityDefinitions": {
-        "ApiKeyAuth": {
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header"
-        },
-        "BasicAuth": {
-            "type": "basic"
         }
     }
 }

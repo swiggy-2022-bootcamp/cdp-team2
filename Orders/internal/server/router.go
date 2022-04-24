@@ -14,15 +14,15 @@ func InitRouter() *gin.Engine {
 
 	cont := controller.NewOrderController()
 
-	catGrp := r.Group("/orders")
+	orderGrp := r.Group("/orders")
 	{
-		catGrp.GET("/", cont.GetAll)
-		catGrp.GET("/:id", controller.BindId, cont.GetByID)
-		catGrp.POST("/", controller.BindOrder, cont.Create)
-		catGrp.GET("/status/:status", controller.BindStatus, cont.GetByStatus)
-		catGrp.PUT("/:id", controller.BindId, controller.BindOrder, cont.Update)
-		catGrp.DELETE("/:id", controller.BindId, cont.Delete)
-		catGrp.GET("/customer/:customerId", controller.BindCustomer, cont.GetByCustomer)
+		orderGrp.GET("/", cont.GetAll)
+		orderGrp.GET("/:id", controller.BindId, cont.GetByID)
+		orderGrp.POST("/", controller.BindOrder, cont.Create)
+		orderGrp.GET("/status/:status", controller.BindStatus, cont.GetByStatus)
+		orderGrp.PUT("/:id", controller.BindId, controller.BindOrder, cont.Update)
+		orderGrp.DELETE("/:id", controller.BindId, cont.Delete)
+		orderGrp.GET("/customer/:customerId", controller.BindCustomer, cont.GetByCustomer)
 	}
 
 	return r
