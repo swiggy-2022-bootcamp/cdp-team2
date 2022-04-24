@@ -1,0 +1,71 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is shipping address service.",
+        "title": "Shipping Address Microservice",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8003",
+    "basePath": "/",
+    "paths": {
+        "/shipping-address/": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "add shipping address to a customer",
+                "operationId": "Create",
+                "parameters": [
+                    {
+                        "description": "address",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/shipping-address/customer/{customerId}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "get shipping address of a customer",
+                "operationId": "GetByCustomer",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "customerId",
+                        "name": "customerId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        },
+        "BasicAuth": {
+            "type": "basic"
+        }
+    }
+}

@@ -1,13 +1,14 @@
 package controller
 
 import (
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/services"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/dao/models"
+	_ "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/docs"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/internal/api"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/internal/literals"
-	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/services"
 )
 
 type ShippingAddressController struct {
@@ -20,6 +21,12 @@ func NewOShippingAddressController() *ShippingAddressController {
 	}
 }
 
+// @Summary get shipping address of a customer
+// @ID GetByCustomer
+// @Param customerId path string true "customerId"
+// @Produce json
+// @Success 200
+// @Router /shipping-address/customer/{customerId} [get]
 func (cc *ShippingAddressController) GetByCustomer(c *gin.Context) {
 	customerId := c.GetInt(literals.CustomerIdKey)
 
@@ -31,6 +38,12 @@ func (cc *ShippingAddressController) GetByCustomer(c *gin.Context) {
 	c.JSON(http.StatusOK, cat)
 }
 
+// @Summary add shipping address to a customer
+// @ID Create
+// @Param data body object true "address"
+// @Produce json
+// @Success 200
+// @Router /shipping-address/ [post]
 func (cc *ShippingAddressController) Create(c *gin.Context) {
 	nc, _ := c.Get(literals.AddressBodyKey)
 	newCat := nc.(models.ShippingAddress)

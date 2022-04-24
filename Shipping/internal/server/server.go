@@ -2,21 +2,24 @@ package server
 
 import (
 	"fmt"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 	"google.golang.org/grpc"
 	"net"
 	"net/http"
 
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/config"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/docs"
 	pb "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/protos/shipping"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/services/grpc_services"
 	"log"
 )
 
-// @title Checkout Api
+// @title Shipping Address Microservice
 // @version 1.0
-// @description This is order service.
+// @description This is shipping address service.
 
-// @host localhost:7451
+// @host localhost:8003
 // @BasePath /
 
 // @securityDefinitions.basic BasicAuth
@@ -32,6 +35,8 @@ type server struct {
 func Start() {
 	router := InitRouter()
 
+	docs.SwaggerInfo.Title = "Shipping Address Microservice"
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	endPoint := fmt.Sprintf(":%s", config.Server["PORT"])
 
 	server := &http.Server{

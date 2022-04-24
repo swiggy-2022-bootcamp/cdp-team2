@@ -1,0 +1,47 @@
+basePath: /
+host: localhost:8003
+info:
+  contact: {}
+  description: This is shipping address service.
+  title: Shipping Address Microservice
+  version: "1.0"
+paths:
+  /shipping-address/:
+    post:
+      operationId: Create
+      parameters:
+      - description: address
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: add shipping address to a customer
+  /shipping-address/customer/{customerId}:
+    get:
+      operationId: GetByCustomer
+      parameters:
+      - description: customerId
+        in: path
+        name: customerId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: get shipping address of a customer
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+  BasicAuth:
+    type: basic
+swagger: "2.0"
