@@ -15,6 +15,8 @@ import (
 	// "customers/config"
 	"strconv"
 	"time"
+	"crypto/sha1"
+	"encoding/hex"
 )
 
 var (
@@ -48,6 +50,17 @@ func (cd *CustomerDao) Create(customer models.Customer) (models.Customer, error)
 	if customer.DateAdded!="test"{
 		customer.DateAdded=time.Now().String()
 	}
+
+	if customer.Id!="test"{
+		h := sha1.New()
+		h.Write([]byte(customer.Password))
+		customer.Password = hex.EncodeToString(h.Sum(nil))
+	
+		h = sha1.New()
+		h.Write([]byte(customer.Confirm))
+		customer.Confirm = hex.EncodeToString(h.Sum(nil))
+	}
+	
 	
 	info, err := dynamodbattribute.MarshalMap(customer)
  
@@ -131,11 +144,40 @@ func Validate(obj models.Customer,customer models.Customer)(models.Customer,erro
 func (cd *CustomerDao)Update(id_string string,customer models.Customer)(models.Customer,error){
 
 	obj:=util.GetItems(id_string,cd.Db)
+	if obj.Id==""{
+		return obj,errors.New("Invalid User id")
+	}
+ 
 	var err1 error
 	obj,err1=Validate(obj,customer)
-	if err1!=nil{
+ 	if err1!=nil{
 		return obj,err1
 	}
+
+	if customer.Password!=customer.Confirm && len(customer.Password)<8{
+		return models.Customer{},errors.New("Password and Confirm does not match or len of password is less than 8 chars")
+	} else if len(customer.Password)>=8{
+
+		if(customer.Password!=customer.Confirm){
+			return models.Customer{},errors.New("Password and Confirm does not match or len of password is less than 8 chars")
+		}
+		h := sha1.New()
+		h.Write([]byte(customer.Password))
+		obj.Password = hex.EncodeToString(h.Sum(nil))
+		h = sha1.New()
+		h.Write([]byte(customer.Confirm))
+		obj.Confirm = hex.EncodeToString(h.Sum(nil))
+		customer.Password=obj.Password
+		customer.Confirm=obj.Confirm
+	}else{
+		obj.Password=customer.Password
+		obj.Confirm=customer.Confirm	
+	}
+ 
+
+	 
+
+
 	if len(customer.Address)==1 && customer.Address[0].AddressLine1!="" && customer.Address[0].Firstname!="" && customer.Address[0].CountryCode!=""{
 		grpc.SendAddress(customer.Address[0],customer.Id)
 	}

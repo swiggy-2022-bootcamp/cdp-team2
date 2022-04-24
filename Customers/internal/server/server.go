@@ -19,7 +19,7 @@ import (
 // @contact.name API Support
 // @contact.url http://demo.com/support
 
-// @host localhost:8091
+// @host localhost:config.Server["PORT"]
 // @BasePath /
 
 // @securityDefinitions.basic  BasicAuth
@@ -28,7 +28,6 @@ import (
 // @in                          header
 // @name                        Authorization
 func RunServer()error{
-	config.FromEnv()
  	server:=gin.Default()
 
 	customerRoute:=server.Group("/customers")
