@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/products-admin-service/internal/core/ports"
-	"github.com/products-admin-service/internal/handlers"
-	"github.com/products-admin-service/internal/server"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/core/ports"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/handlers"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/server"
 )
 
 var (

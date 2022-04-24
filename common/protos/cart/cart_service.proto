@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package cart;
+option go_package = "github.com/swiggy-2022-bootcamp/cdp-team2/common/protos/cart";
+
+message Product {
+    string productId = 1;
+    int32 quantity = 2;
+}
+
+message Cart {
+    string customerId = 1;
+    repeated Product products = 2;
+}
+
+message CartRequest {
+    string customerId = 1;
+}
+
+message CartResponse {
+    Cart cart = 1;
+}
+
+message EmptyCartResponse{
+}
+
+service CartService {
+    rpc GetCart(CartRequest) returns (CartResponse);
+    rpc EmptyCart(CartRequest) returns (EmptyCartResponse);
+}
