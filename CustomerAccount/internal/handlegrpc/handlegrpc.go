@@ -15,7 +15,7 @@ func CheckCredentials(email string,password string) (string,bool){
 	db:=db.GetInstance()
 	// create the api params
 	params := &dynamodb.QueryInput{
-		TableName: aws.String("Customer"),
+		TableName: aws.String("team-2-Customers"),
         IndexName: aws.String("email-index"),
         KeyConditions: map[string]*dynamodb.Condition{
             "email": {
@@ -58,6 +58,3 @@ func CheckCredentials(email string,password string) (string,bool){
 }
 
 
-func main(){
-	fmt.Println(CheckCredentials("uday","kiranbakka"))
-}

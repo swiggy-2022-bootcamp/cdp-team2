@@ -4,7 +4,7 @@ import (
 	"context"
 
 	pb "customer-account/internal/proto/grpc"
-	// pbc "customer-account/internal/proto/cart"
+	"customer-account/internal/handlegrpc"
 	"fmt"
 	"net"
 	// "strconv"
@@ -49,8 +49,8 @@ func (*server)  CredentialService(ctx context.Context,req *pb.CredentialRequest)
 	h.Write([]byte(password))
 	hash_password := hex.EncodeToString(h.Sum(nil))
 	fmt.Println("Credential Service called username and password are :",username,hash_password)
- 	// customer_id,ispresent:=handlegrpc.CheckCredentials(username,hash_password)
-	 customer_id,ispresent:="123",true
+ 	customer_id,ispresent:=handlegrpc.CheckCredentials(username,hash_password)
+	
 	 return &(pb.CredentialResponse{Ispresent:ispresent,Customerid:customer_id}),nil
 }
 // 	products := []*pbc.Product{}

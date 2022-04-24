@@ -42,9 +42,9 @@ API Requests:
 2) GET    /account/{id}                       => Gets the detials of the customer along with Cart list and Reward </br>
 3) PUT    /account/{id}                       => Updates a new User </br>
 
-==================================
+==================================</br>
 Starting Go Customer-Account-Fronststore server:</br>
------------------------------
+-----------------------------</br>
               go run cmd/server/main.go </br>
 
 
