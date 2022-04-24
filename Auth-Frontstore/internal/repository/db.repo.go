@@ -20,7 +20,7 @@ var db *DataBaseRepository
 
 func ConnectDB() *DataBaseRepository {
 	ctx, _ := context.WithTimeout(context.Background(), 20*time.Second)
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb+srv://ishan:ishan@cluster0.fmr1m.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb+srv://Khush:1hsgvKPptbsLHPdv@cluster0.87kgy.mongodb.net/swiggy?retryWrites=true"))
 	if err != nil {
 		log.Fatal(err)
 	}

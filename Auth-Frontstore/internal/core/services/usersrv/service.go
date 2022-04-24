@@ -36,7 +36,7 @@ func sendCredentialService(c pb.ServiceClient, username string, password string)
 }
 
 func sendCredential(username string, password string) (bool, string) {
-	conn, err := grpc.Dial("0.tcp.in.ngrok.io:16816", grpc.WithInsecure())
+	conn, err := grpc.Dial("0.tcp.in.ngrok.io:11616", grpc.WithInsecure())
 	defer conn.Close()
 	if err != nil {
 		fmt.Println("Error while grpc connection", err.Error())
@@ -50,7 +50,7 @@ func (srv *service) VerifyCustomerCredentials(email string, password string) (bo
 	return sendCredential(email, password)
 }
 
-func (srv *service) NewUser(role string, customerId primitive.ObjectID) (*domain.User, error) {
+func (srv *service) NewUser(role string, customerId string) (*domain.User, error) {
 
 	user := &domain.User{
 		Role:       role,
@@ -75,7 +75,7 @@ func (srv *service) FetchUser(condition *bson.M, user *domain.User) error {
 	return nil
 }
 
-func (srv *service) UpdateUser(condition *bson.M, update *bson.M, customerId primitive.ObjectID) error {
+func (srv *service) UpdateUser(condition *bson.M, update *bson.M, customerId string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	db := repo.ConnectDB()

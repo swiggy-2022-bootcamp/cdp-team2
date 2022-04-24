@@ -47,7 +47,7 @@ func (manager *jwtManager) GenerateBasicToken(user *domain.User) (string, error)
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(manager.tokenDuration).Unix(),
 		},
-		ID: user.CustomerId.Hex(),
+		ID: user.CustomerId,
 	}
 
 	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(manager.secretKey))
@@ -60,7 +60,7 @@ func (manager *jwtManager) GenerateBasicToken(user *domain.User) (string, error)
 
 func (manager *jwtManager) Generate(user *domain.User) (string, error) {
 	claims := userClaims{
-		ID: user.CustomerId.Hex(),
+		ID: user.CustomerId,
 	}
 	key, err := jwt.ParseRSAPrivateKeyFromPEM(manager.privateKey)
 	if err != nil {
