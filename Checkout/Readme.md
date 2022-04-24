@@ -13,7 +13,7 @@ swagger page
 
 docker build image
 ```sh
-docker build -t cdp-team2/checkout .
+docker build -t cdp-team2/checkout -f Dockerfile ../
 ```
 
 docker run

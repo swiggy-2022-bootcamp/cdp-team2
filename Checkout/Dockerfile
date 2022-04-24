@@ -4,15 +4,19 @@
 
 FROM golang:1.16-alpine AS build
 
-WORKDIR /app
+WORKDIR /common
+COPY common/ .
 
-COPY go.mod .
-COPY go.sum .
+WORKDIR /app
+COPY Checkout/go.mod .
+COPY Checkout/go.sum .
 RUN go mod download
 
-COPY . .
+COPY Checkout/ .
 
 RUN go build -o checkout-app cmd/server/main.go
+
+# ENTRYPOINT ["/bin/sh"]
 
 ##
 ## Deploy
