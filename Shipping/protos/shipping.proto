@@ -1,0 +1,48 @@
+syntax = "proto3";
+package proto;
+option go_package="/shipping";
+
+
+
+
+
+
+
+message Address{
+    string customerId=1;
+    string firstname=2;
+    string lastname=3;
+    string addressLine1=4;
+    string addressLine2=5;
+    string city=6;
+    int32  postCode=7;
+    string countryCode=8;
+}
+
+
+
+
+message AddressstuRequest{
+    string customerId=1;
+}
+message AddressstuResponse{
+    repeated Address address=1;
+}
+
+message AddressutsRequest{
+    Address address=1;
+}
+
+message AddressutsResponse{
+    bool response=1;
+}
+ 
+
+ 
+
+ 
+
+service Service{
+    rpc AddressutsService(AddressutsRequest)returns (AddressutsResponse){};
+    rpc AddressstuService(AddressstuRequest)returns (AddressstuResponse){};
+ }

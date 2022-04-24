@@ -1,0 +1,19 @@
+{
+    "TableName": "team-2-shippingAddress",
+    "AttributeDefinitions": [
+      {
+        "AttributeName": "addressId",
+        "AttributeType": "N"
+      }
+    ],
+    "KeySchema": [
+      {
+        "AttributeName": "addressId",
+        "KeyType": "HASH"
+      }
+    ],
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 5,
+      "WriteCapacityUnits": 5
+    }
+  }
