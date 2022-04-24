@@ -18,7 +18,7 @@ type healthCheckService struct {
 	config *util.RouterConfig
 }
 
-func InithHealthCheckService(config *util.RouterConfig) HealthCheckService {
+func InitHealthCheckService(config *util.RouterConfig) HealthCheckService {
 	healthCheckServiceOnce.Do(func() {
 		healthCheckServiceStruct = &healthCheckService{
 			config: config,

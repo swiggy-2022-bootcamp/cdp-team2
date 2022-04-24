@@ -48,7 +48,7 @@ func RunServer() error {
 	dynamodao := dao.InitDynamoDAO(dynamoClient, webServerConfig)
 
 	// Initialize services
-	services.InithHealthCheckService(&routerConfigs)
+	services.InitHealthCheckService(&routerConfigs)
 	services.InitAddCartItemService(&routerConfigs, dynamodao)
 	services.InitGetCartService(&routerConfigs, dynamodao)
 	services.InitUpdateCartItemService(&routerConfigs, dynamodao)

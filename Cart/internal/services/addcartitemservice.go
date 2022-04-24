@@ -3,6 +3,7 @@ package services
 import (
 	"sync"
 
+	log "github.com/sirupsen/logrus"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/internal/dao"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/internal/dao/models"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/internal/errors"
@@ -10,7 +11,7 @@ import (
 )
 
 type AddCartItemService interface {
-	ValidateRequest() *errors.ServerError
+	ValidateRequest(product models.Product) *errors.ServerError
 	ProcessRequest(product models.Product) *errors.ServerError
 }
 
@@ -41,7 +42,17 @@ func GetAddCartItemService() AddCartItemService {
 	return addCartItemServiceStruct
 }
 
-func (s *addCartItemService) ValidateRequest() *errors.ServerError {
+func (s *addCartItemService) ValidateRequest(product models.Product) *errors.ServerError {
+	if product.ProductId == "" {
+		log.Error("product id can not be empty")
+		return &errors.ParametersMissingError
+	}
+
+	if product.Quantity == 0 {
+		log.Error("product quantity can not be zero")
+		return &errors.ParametersMissingError
+	}
+
 	return nil
 }
 
