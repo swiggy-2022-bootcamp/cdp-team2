@@ -9,6 +9,7 @@ import (
 
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Checkout/config"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 type ProductClient struct {
@@ -17,7 +18,7 @@ type ProductClient struct {
 }
 
 func NewProductClient(ctx context.Context) (*ProductClient, error) {
-	conn, err := grpc.Dial(config.GrpcAdd["PRODUCT_SERVICE"], grpc.WithInsecure())
+	conn, err := grpc.Dial(config.GrpcAdd["PRODUCT_SERVICE"], grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Printf("Error creating grpc product Client : %s", err.Error())
 		return nil, err

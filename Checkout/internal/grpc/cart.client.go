@@ -9,6 +9,7 @@ import (
 
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Checkout/config"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 type CartClient struct {
@@ -17,7 +18,7 @@ type CartClient struct {
 }
 
 func NewCartClient(ctx context.Context) (*CartClient, error) {
-	conn, err := grpc.Dial(config.GrpcAdd["CART_SERVICE"], grpc.WithInsecure())
+	conn, err := grpc.Dial(config.GrpcAdd["CART_SERVICE"], grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Printf("Error creating grpc cart Client : %s", err.Error())
 		return nil, err
