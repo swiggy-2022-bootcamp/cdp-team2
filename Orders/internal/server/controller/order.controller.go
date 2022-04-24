@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -21,13 +20,13 @@ func NewOrderController() *OrderController {
 	}
 }
 
-// Get Category By ID
-// @Summary Get Single Category By Id
-// @Tags Category
-// @Param _id path string true "category_id"
-// @Success 200 {object} models.Category
+// Get Order By ID
+// @Summary Get a Order By Id
+// @Tags Order
+// @Param orderId path string true "orderId"
+// @Success 200
 // @Failure 500 {object} api.ApiResponseWithErr
-// @Router /categories/{_id} [get]
+// @Router /orders/{orderId} [get]
 func (cc *OrderController) GetByID(c *gin.Context) {
 	id := c.GetString(literals.OrderIdKey)
 	cat, err := cc.service.GetByID(id)
@@ -38,9 +37,15 @@ func (cc *OrderController) GetByID(c *gin.Context) {
 	c.JSON(http.StatusOK, cat)
 }
 
+// Get Order By status
+// @Summary Get a Order By Status
+// @Tags Order
+// @Param statusId path int true "statusId"
+// @Success 200
+// @Failure 500 {object} api.ApiResponseWithErr
+// @Router /orders/status/{statusId} [get]
 func (cc *OrderController) GetByStatus(c *gin.Context) {
 	status := c.GetInt(literals.StatusKey)
-	fmt.Println("status---", status)
 	cat, err := cc.service.GetByStatus(status)
 	if err != nil {
 		c.AbortWithStatusJSON(api.ServerErr(err))
@@ -49,6 +54,13 @@ func (cc *OrderController) GetByStatus(c *gin.Context) {
 	c.JSON(http.StatusOK, cat)
 }
 
+// Get Order By status
+// @Summary Get a Order By CustomerId
+// @Tags Order
+// @Param customerId path int true "customerId"
+// @Success 200
+// @Failure 500 {object} api.ApiResponseWithErr
+// @Router /orders/customer/{customerId} [get]
 func (cc *OrderController) GetByCustomer(c *gin.Context) {
 	customerId := c.GetString(literals.CustomerIdKey)
 
@@ -60,12 +72,12 @@ func (cc *OrderController) GetByCustomer(c *gin.Context) {
 	c.JSON(http.StatusOK, cat)
 }
 
-// Get All Categories
-// @Summary Get All Categories
-// @Tags Category
-// @Success 200 {array} models.Category
+// Get All Orders
+// @Summary Get All Orders
+// @Tags Order
+// @Success 200
 // @Failure 500 {object} api.ApiResponseWithErr
-// @Router /categories [get]
+// @Router /orders [get]
 func (cc *OrderController) GetAll(c *gin.Context) {
 	res, err := cc.service.GetAll()
 	if err != nil {
@@ -75,13 +87,13 @@ func (cc *OrderController) GetAll(c *gin.Context) {
 	c.JSON(http.StatusOK, res)
 }
 
-// Create Category
-// @Summary Create new Category, id is auto-assigned based on timestamp.
-// @Tags Category
-// @Param   category body models.Category true  "category"
-// @Success 200 {object} models.Category
+// Create Order
+// @Summary Create new Order, id is auto-assigned uuid.
+// @Tags Order
+// @Param  order body object true  "order"
+// @Success 200
 // @Failure 500 {object} api.ApiResponseWithErr
-// @Router /categories [post]
+// @Router /orders [post]
 func (cc *OrderController) Create(c *gin.Context) {
 	nc, _ := c.Get(literals.OrderBodyKey)
 	newCat := nc.(models.Order)
@@ -93,14 +105,14 @@ func (cc *OrderController) Create(c *gin.Context) {
 	c.JSON(http.StatusOK, saved)
 }
 
-// Update Category By ID
-// @Summary Update Category By Id, Updated Category is returned
-// @Tags Category
-// @Param _id path string true "category_id"
-// @Param   category body models.Category false  "category"
-// @Success 200 {object} models.Category
+// Update Order By ID
+// @Summary Update Order By Id
+// @Tags Order
+// @Param orderId path string true "orderId"
+// @Param   order body  object true  "order"
+// @Success 200
 // @Failure 500 {object} api.ApiResponseWithErr
-// @Router /categories/{_id} [put]
+// @Router /orders/{orderId} [put]
 func (cc *OrderController) Update(c *gin.Context) {
 
 	id := c.GetString(literals.OrderIdKey)
@@ -115,13 +127,13 @@ func (cc *OrderController) Update(c *gin.Context) {
 	c.JSON(http.StatusOK, saved)
 }
 
-// Delete Category By ID
-// @Summary Delete Single Category By Id
-// @Tags Category
-// @Param _id path string true "category_id"
+// Delete Order By ID
+// @Summary Delete Single Order By Id
+// @Tags Order
+// @Param orderId path string true "orderId"
 // @Success 200
 // @Failure 500 {object} api.ApiResponseWithErr
-// @Router /categories/{_id} [delete]
+// @Router /orders/{orderId} [delete]
 func (cc *OrderController) Delete(c *gin.Context) {
 	id := c.GetString(literals.OrderIdKey)
 	if err := cc.service.DeleteByID(id); err != nil {
@@ -130,25 +142,3 @@ func (cc *OrderController) Delete(c *gin.Context) {
 	}
 	c.Status(http.StatusOK)
 }
-
-// Delete Multiple Categories
-// @Summary Delete Multiple Categories
-// @Tags Category
-// @Param   category_ids body []int true  "category_ids"
-// @Success 200
-// @Failure 500 {object} api.ApiResponseWithErrors
-// @Router /categories [delete]
-//func (cc *CategoryController) DeleteMultiple(c *gin.Context) {
-//	var ids []int
-//	if err := c.BindJSON(&ids); err != nil {
-//		c.AbortWithStatusJSON(api.ServerErr(err))
-//		return
-//	}
-//
-//	if errs := cc.service.DeleteMultiple(ids); errs != nil {
-//		c.AbortWithStatusJSON(api.ServerErrs(errs))
-//		return
-//	}
-//
-//	c.Status(http.StatusOK)
-//}

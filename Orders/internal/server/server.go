@@ -2,20 +2,24 @@ package server
 
 import (
 	"fmt"
-	"github.com/swiggy-2022-bootcamp/cdp-team2/Order/config"
-	pb "github.com/swiggy-2022-bootcamp/cdp-team2/Order/protos/order"
-	"github.com/swiggy-2022-bootcamp/cdp-team2/Order/services/grpc_services"
-	"google.golang.org/grpc"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"log"
 	"net"
 	"net/http"
+
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Order/config"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Order/docs"
+	pb "github.com/swiggy-2022-bootcamp/cdp-team2/Order/protos/order"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Order/services/grpc_services"
+	"google.golang.org/grpc"
 )
 
-// @title Checkout Api
+// @title Order Microservice
 // @version 1.0
-// @description This is order service.
+// @description This is for creating orders during checkout.
 
-// @host localhost:7451
+// @host localhost:8002
 // @BasePath /
 
 // @securityDefinitions.basic BasicAuth
@@ -26,6 +30,9 @@ import (
 
 func Start() {
 	router := InitRouter()
+
+	docs.SwaggerInfo.Title = "Order Microservice"
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	endPoint := fmt.Sprintf(":%s", config.Server["PORT"])
 
