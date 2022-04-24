@@ -237,3 +237,23 @@ func (ps *ProductsServices) CheckoutProducts(productIDQntys []*domain.ProductIDA
 
 	return availableProductIDs, failedProductIDs, nil
 }
+
+func (ps *ProductsServices) SearchByStartPrice(price string) ([]*domain.Product, *errors.AppError) {
+
+	// Define filter
+	filter := expression.Name("price").LessThanEqual(expression.Value(price))
+
+	// Build condition from filter
+	condition, err := expression.NewBuilder().WithFilter(filter).Build()
+	if err != nil {
+		return []*domain.Product{}, errors.New(err.Error(), http.StatusInternalServerError)
+	}
+
+	// Get products from repostiry
+	_products, err2 := ps.ProductsRepository.GetProductsByCondition(condition)
+	if err2 != nil {
+		return []*domain.Product{}, err2
+	}
+
+	return _products, nil
+}

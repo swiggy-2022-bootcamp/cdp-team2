@@ -35,8 +35,8 @@ func NewServer(handlers ports.IProductsHandlers) *Server {
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host localhost:8000
-// @BasePath /products
+// @host localhost:8001
+// @BasePath /api/rest_admin/products/
 func (s *Server) Initialize() {
 	server := gin.Default()
 
@@ -73,10 +73,7 @@ func (s *Server) Initialize() {
 	searchRoutes.GET("/category/:id", s.Handlers.SearchByCategoryID)
 	searchRoutes.GET("/manufacturer/:id", s.Handlers.SearchByManufacturerID)
 	searchRoutes.GET("/tag/:tag", nil)
-	searchRoutes.GET("/date_added_from/:date", nil)
-	searchRoutes.GET("/date_added_to/:date", nil)
-	searchRoutes.GET("/date_modified_from/:date", nil)
-	searchRoutes.GET("/date_modified_to/:date", nil)
+	searchRoutes.GET("/start/:price", s.Handlers.SearchByStartPrice)
 
 	/*
 	*	SwaggerUI Docs route

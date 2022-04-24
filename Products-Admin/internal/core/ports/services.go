@@ -17,4 +17,5 @@ type IProductsServices interface {
 	SearchByKeyword(string) ([]*domain.Product, *errors.AppError)
 	SearchByManufacturerID(int64) ([]*domain.Product, *errors.AppError)
 	CheckoutProducts([]*domain.ProductIDAndQnty) ([]*domain.ProductIDMsg, []*domain.ProductIDMsg, *errors.AppError)
+	SearchByStartPrice(string) ([]*domain.Product, *errors.AppError)
 }

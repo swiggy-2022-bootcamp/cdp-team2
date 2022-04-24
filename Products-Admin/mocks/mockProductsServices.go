@@ -185,6 +185,21 @@ func (mr *MockIProductsServicesMockRecorder) SearchByManufacturerID(arg0 interfa
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SearchByManufacturerID", reflect.TypeOf((*MockIProductsServices)(nil).SearchByManufacturerID), arg0)
 }
 
+// SearchByStartPrice mocks base method.
+func (m *MockIProductsServices) SearchByStartPrice(arg0 string) ([]*domain.Product, *errors.AppError) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SearchByStartPrice", arg0)
+	ret0, _ := ret[0].([]*domain.Product)
+	ret1, _ := ret[1].(*errors.AppError)
+	return ret0, ret1
+}
+
+// SearchByStartPrice indicates an expected call of SearchByStartPrice.
+func (mr *MockIProductsServicesMockRecorder) SearchByStartPrice(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SearchByStartPrice", reflect.TypeOf((*MockIProductsServices)(nil).SearchByStartPrice), arg0)
+}
+
 // UpdateProduct mocks base method.
 func (m *MockIProductsServices) UpdateProduct(arg0 int64, arg1 *domain.Product) *errors.AppError {
 	m.ctrl.T.Helper()

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package protos;
 
-option go_package = "github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/pkg/protos";
+option go_package = "github.com/swiggy-2022-bootcamp/cdp-team2/pkg/protos";
 
 message ProductDescription {
     int64 LanguageID = 1;

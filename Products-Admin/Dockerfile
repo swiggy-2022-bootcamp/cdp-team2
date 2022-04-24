@@ -1,9 +1,9 @@
 # Builder Image
-FROM golang:1.13-alpine3.11 as builder
+FROM golang:1.17 as builder
 RUN mkdir /app
 ADD . /app
 WORKDIR /app
-RUN CGO_ENABLED=0 GOOS=linux go build -a -o ./build/main ./cmd
+RUN CGO_ENABLED=0 GOOS=linux go build -a -o ./build/main ./cmd/server
 
 # Final Image
 FROM alpine:latest

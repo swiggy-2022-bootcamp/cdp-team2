@@ -12,4 +12,5 @@ type IProductsHandlers interface {
 	SearchByKeyword(*gin.Context)
 	SearchByCategoryID(*gin.Context)
 	SearchByManufacturerID(*gin.Context)
+	SearchByStartPrice(*gin.Context)
 }

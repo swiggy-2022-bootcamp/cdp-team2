@@ -663,3 +663,103 @@ func TestSearchProductsByManufacturerIDError(t *testing.T) {
 	assert.NotNil(t, err, "Failed products search should return any error.")
 	assert.Equal(t, len(products), 0, "Failed products search should not return products.")
 }
+
+func TestCheckoutProducts(t *testing.T) {
+	p1 := &domain.ProductIDAndQnty{
+		ProductID: int64(20),
+		Quantity:  uint64(2),
+	}
+
+	inputs := []*domain.ProductIDAndQnty{p1}
+
+	// Gomock controller
+	productsMockCtrl := gomock.NewController(t)
+	defer productsMockCtrl.Finish()
+
+	// Initialize mock product reposity
+	mockProductRepository := mocks.NewMockIProductsRepository(productsMockCtrl)
+
+	// Initialize mock product services
+	mockProductsServices := NewProductsServices(mockProductRepository)
+
+	for _, p := range inputs {
+		// Define filters
+		filter1 := expression.Name("_id").Equal(expression.Value(p.ProductID))
+		filter2 := expression.Name("minimum").LessThanEqual(expression.Value(p.Quantity))
+		filter3 := expression.Name("quantity").GreaterThanEqual(expression.Value(p.Quantity))
+		filter := filter1.And(filter2).And(filter3)
+
+		// building condtions
+		condition, _ := expression.NewBuilder().WithFilter(filter).Build()
+
+		// Define expected behavior of product repository
+		mockProductRepository.EXPECT().GetProductsByCondition(condition).Return([]*domain.Product{&_mockProduct}, nil)
+		mockProductRepository.EXPECT().UpdateProduct(&_mockProduct).Return(&_mockProduct, nil)
+
+		// Test method
+		availPro, failedPro, err := mockProductsServices.CheckoutProducts(inputs)
+
+		// asserts
+		assert.Equal(t, len(availPro), 1, "All Successfull checkout should return all the productsIDs to available products list.")
+		assert.Equal(t, len(failedPro), 0, "All Successfull checkout should not return any productsIDs to failed products list.")
+		assert.Nil(t, err, "Successfull checkout should not return any error.")
+	}
+}
+
+func TestSearchProductsByStartPrice(t *testing.T) {
+
+	// Define filter expression
+	startPrice := "1000"
+	filter := expression.Name("price").LessThanEqual(expression.Value(startPrice))
+
+	// Build condition from above filter
+	condition, _ := expression.NewBuilder().WithFilter(filter).Build()
+
+	// Gomock controller
+	productsMockCtrl := gomock.NewController(t)
+	defer productsMockCtrl.Finish()
+
+	// Initialize mock product reposity
+	mockProductRepository := mocks.NewMockIProductsRepository(productsMockCtrl)
+
+	// Initialize mock product services
+	mockProductsServices := NewProductsServices(mockProductRepository)
+
+	// Define expected behavior of product repository
+	mockProductRepository.EXPECT().GetProductsByCondition(condition).Return([]*domain.Product{&_mockProduct}, nil)
+
+	// Call test function
+	products, err := mockProductsServices.SearchByStartPrice(startPrice)
+
+	assert.Nil(t, err, "Successfull products search should not return any error.")
+	assert.NotNil(t, products, " Successfull products search should return products.")
+}
+
+func TestSearchProductsByStartingPriceError(t *testing.T) {
+
+	// Define filter expression
+	startPrice := "1000"
+	filter := expression.Name("price").LessThanEqual(expression.Value(startPrice))
+
+	// Build condition from above filter
+	condition, _ := expression.NewBuilder().WithFilter(filter).Build()
+
+	// Gomock controller
+	productsMockCtrl := gomock.NewController(t)
+	defer productsMockCtrl.Finish()
+
+	// Initialize mock product reposity
+	mockProductRepository := mocks.NewMockIProductsRepository(productsMockCtrl)
+
+	// Initialize mock product services
+	mockProductsServices := NewProductsServices(mockProductRepository)
+
+	// Define expected behavior of product repository
+	mockProductRepository.EXPECT().GetProductsByCondition(condition).Return(nil, errors.New("Something went wrong.", http.StatusInternalServerError))
+
+	// Call test function
+	products, err := mockProductsServices.SearchByStartPrice(startPrice)
+
+	assert.NotNil(t, err, "Failed products search should return any error.")
+	assert.Equal(t, len(products), 0, "Failed products search should not return products.")
+}

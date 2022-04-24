@@ -589,3 +589,73 @@ func TestSearchByKeyword(t *testing.T) {
 		t.Error("Successfull keyword should return ok response.")
 	}
 }
+
+func TestSearchByStartPriceError(t *testing.T) {
+
+	startPrice := "dfdfd"
+
+	// Test context
+	gin.SetMode(gin.TestMode)
+	response := httptest.NewRecorder()
+	context, _ := gin.CreateTestContext(response)
+	context.Request = httptest.NewRequest(http.MethodGet, "/api/rest_admin/products/search/start/", nil)
+	context.Params = []gin.Param{
+		{
+			Key:   "price",
+			Value: startPrice,
+		},
+	}
+
+	// setting up mock services
+	productsMockCtrl := gomock.NewController(t)
+	defer productsMockCtrl.Finish()
+
+	productsMockServices := mocks.NewMockIProductsServices(productsMockCtrl)
+
+	productsHandlers := NewHandlers(productsMockServices)
+
+	// define expected behavior
+	productsMockServices.EXPECT().SearchByStartPrice(startPrice).Return(nil, errors.New("Please provide keyword.", http.StatusBadRequest))
+
+	// funtion to test
+	productsHandlers.SearchByStartPrice(context)
+
+	if response.Code != http.StatusBadRequest {
+		t.Error("Invalid start price should return bad request response.")
+	}
+}
+
+func TestSearchByStartPrice(t *testing.T) {
+
+	startPrice := "1000"
+
+	// Test context
+	gin.SetMode(gin.TestMode)
+	response := httptest.NewRecorder()
+	context, _ := gin.CreateTestContext(response)
+	context.Request = httptest.NewRequest(http.MethodGet, "/api/rest_admin/products/search/start/", nil)
+	context.Params = []gin.Param{
+		{
+			Key:   "price",
+			Value: startPrice,
+		},
+	}
+
+	// setting up mock services
+	productsMockCtrl := gomock.NewController(t)
+	defer productsMockCtrl.Finish()
+
+	productsMockServices := mocks.NewMockIProductsServices(productsMockCtrl)
+
+	productsHandlers := NewHandlers(productsMockServices)
+
+	// define expected behavior
+	productsMockServices.EXPECT().SearchByStartPrice(startPrice).Return([]*domain.Product{&_mockProduct}, nil)
+
+	// funtion to test
+	productsHandlers.SearchByStartPrice(context)
+
+	if response.Code != http.StatusOK {
+		t.Error("Successfull keyword should return ok response.")
+	}
+}
