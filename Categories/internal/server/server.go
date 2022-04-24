@@ -48,12 +48,12 @@ type GrpcServer struct {
 func StartGrpcServer() {
 	lis, err := net.Listen("tcp", ":7459")
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		log.Fatalf("GRPC failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
 	pb.RegisterCategoryServiceServer(s, &GrpcServer{})
-	log.Printf("server listening at %v", lis.Addr())
+	log.Printf("GRPC server listening at %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+		log.Fatalf("GRPC failed to serve: %v", err)
 	}
 }

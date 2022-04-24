@@ -4,13 +4,16 @@
 
 FROM golang:1.16-alpine AS build
 
+WORKDIR /common
+COPY common/ .
+
 WORKDIR /app
 
-COPY go.mod .
-COPY go.sum .
+COPY Categories/go.mod .
+COPY Categories/go.sum .
 RUN go mod download
 
-COPY . .
+COPY Categories/ .
 
 RUN go build -o categories-app cmd/server/main.go
 

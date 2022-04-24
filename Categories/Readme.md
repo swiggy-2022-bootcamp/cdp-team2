@@ -25,7 +25,7 @@ swagger page
 
 docker build image
 ```sh
-docker build -t cdp-team2/categories .
+docker build -t cdp-team2/categories -f Dockerfile ../
 ```
 
 docker run

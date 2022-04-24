@@ -54,7 +54,7 @@ pipeline {
 				sh script:'''
                     pwd
                     cd ./Categories
-                    docker build -t swiggyteam2/categories:latest .
+                    docker build -t swiggyteam2/categories:latest -f Dockerfile ../
                 '''
 			}
 		}
