@@ -4,10 +4,11 @@ Customer-Account Frontstore
 Architecture Diagram
 ====================
 </br>
-
- <img src="https://github.com/swiggy-2022-bootcamp/training-i-plus-plus/blob/main/uday/mini-project/MicroServices_ShoppingCartProject/aserviceProvider/diagram.PNG" width="800" height="500">
+ <img src="https://github.com/swiggy-2022-bootcamp/cdp-team2/blob/customer-account/CustomerAccount/images/arc1.PNG" width="800" height="500">
 </br>
-
+</br>
+ <img src="https://github.com/swiggy-2022-bootcamp/cdp-team2/blob/customer-account/CustomerAccount/images/arc2.PNG" width="800" height="500">
+</br>
 
 -------------------------------------------------------
 Technologies/tools Used:
