@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -53,9 +52,24 @@ func (ph *ProductsHandlers) GetProductById(gctx *gin.Context) {
 	}
 	product, Err := ph.ProductsServices.GetProductById(int64(productID))
 	if Err != nil {
-		fmt.Println(Err)
 		gctx.JSON(Err.GetErrCode(), gin.H{"message": Err.Error()})
 		return
 	}
 	gctx.JSON(http.StatusOK, gin.H{"product": product})
+}
+
+func (ph *ProductsHandlers) GetProductListByCategoryId(gctx *gin.Context) {
+	categoryIDStr := gctx.Param("id")
+	categoryID, err := strconv.Atoi(categoryIDStr)
+	if err != nil {
+		gctx.JSON(http.StatusBadRequest, gin.H{"message": "Please provide valid category id."})
+		return
+	}
+
+	_products, err2 := ph.ProductsServices.GetProductsByCategoryId(int64(categoryID))
+	if err2 != nil {
+		gctx.JSON(err2.GetErrCode(), gin.H{"message": err2.Error()})
+		return
+	}
+	gctx.JSON(http.StatusOK, gin.H{"message": _products})
 }

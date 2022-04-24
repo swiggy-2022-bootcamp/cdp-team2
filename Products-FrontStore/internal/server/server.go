@@ -42,6 +42,8 @@ func (s *Server) Initialize() {
 	productsRoutes.GET("/health", s.Handlers.Health)
 	productsRoutes.GET("/", s.Handlers.GetProductList)
 	productsRoutes.GET("/:id", s.Handlers.GetProductById)
+	productsRoutes.GET("/category/:id", s.Handlers.GetProductListByCategoryId)
+
 	productsRoutes.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	log.Fatal(server.Run(config.Config["PORT"]))

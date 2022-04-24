@@ -6,4 +6,5 @@ type IProductsHandlers interface {
 	Health(*gin.Context)
 	GetProductList(*gin.Context)
 	GetProductById(*gin.Context)
+	GetProductListByCategoryId(*gin.Context)
 }

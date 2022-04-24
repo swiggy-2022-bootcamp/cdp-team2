@@ -5,9 +5,9 @@ import (
 )
 
 type ProductSeoUrl struct {
-	Keyword    string `json:"keyword" bson:"keyword"`
-	LanguageID int64  `json:"language_id" bson:"langauge_id"`
-	StoreID    int64  `json:"store_id" bson:"store_id"`
+	Keyword    string `json:"keyword"     dynamodbav:"keyword"`
+	LanguageID int64  `json:"language_id" dynamodbav:"langauge_id"`
+	StoreID    int64  `json:"store_id"    dynamodbav:"store_id"`
 }
 
 func (p *ProductSeoUrl) GetPbProductSeoUrl() *pb.ProductSeoUrl {

@@ -4,6 +4,7 @@ import (
 	pb "common/pkg/protos"
 	"context"
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-FrontStore/internal/core/domain"
@@ -68,4 +69,38 @@ func (ps *ProductsServices) GetProductById(productID int64) (*domain.Product, *e
 	_product.ProductRelated = res.Product.ProductRelated
 
 	return _product, nil
+}
+
+func (ps *ProductsServices) GetProductsByCategoryId(categoryID int64) ([]*domain.Product, *errors.AppError) {
+	res, err := ps.ProductsGRPCClient.GetProductsByCategoryId(ps.Ctx, &pb.CategoryIDRequest{
+		CategoryID: categoryID,
+	})
+	if err != nil {
+		return nil, errors.New(err.Error(), http.StatusInternalServerError)
+	}
+	var _products []*domain.Product
+	for _, _gPRCProduct := range res.Products {
+		var _product domain.Product
+		_product.BindGprcProduct(_gPRCProduct)
+		_products = append(_products, &_product)
+	}
+
+	// Testing
+	p1 := &pb.ProductsIDAndQnty{
+		ProductID: int64(350449726),
+		Quantity:  2,
+	}
+	p2 := &pb.ProductsIDAndQnty{
+		ProductID: int64(350449658),
+		Quantity:  10,
+	}
+	res1, err2 := ps.ProductsGRPCClient.DeductProductsQuantity(ps.Ctx, &pb.CheckoutRequest{
+		ProductsIDAndQnty: []*pb.ProductsIDAndQnty{p1, p2},
+	})
+	if err2 != nil {
+		log.Println(err2)
+	}
+	log.Println(res1.AvailableProducts)
+	log.Println(res1.FailedProducts)
+	return _products, nil
 }

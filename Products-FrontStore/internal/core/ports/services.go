@@ -8,4 +8,5 @@ import (
 type IProductsServices interface {
 	GetProductList() ([]*domain.Product, *errors.AppError)
 	GetProductById(int64) (*domain.Product, *errors.AppError)
+	GetProductsByCategoryId(int64) ([]*domain.Product, *errors.AppError)
 }

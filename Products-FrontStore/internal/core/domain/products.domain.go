@@ -5,25 +5,25 @@ import (
 )
 
 type Product struct {
-	ID                 int64                 `json:"_id"                 bson:"_id"`
-	Model              string                `json:"model"               bson:"model"               binding:"required"`
-	Quantity           uint                  `json:"quantity"            bson:"quantity"            binding:"required"`
-	Price              string                `json:"price"               bson:"price"               binding:"required"`
-	ManufacturerID     int                   `json:"manufacturer_id"     bson:"manufacturer_id"     binding:"required"`
-	Sku                string                `json:"sku"                 bson:"sku"                 binding:"required"`
-	ProductSeoUrl      *ProductSeoUrl        `json:"product_seo_url"     bson:"product_seo_url"     binding:"requried"`
-	Points             uint                  `json:"points"              bson:"points"              binding:"requried"`
-	Rewards            uint                  `json:"reward"              bson:"reward"              binding:"requried"`
-	Image              string                `json:"image"               bson:"image"               binding:"requried"`
-	ShippingID         int                   `json:"shipping_id"         bson:"shipping_id"         binding:"requried"`
-	Weight             uint                  `json:"weight"              bson:"weight"              binding:"requried"`
-	Length             uint                  `json:"length"              bson:"length"              binding:"requried"`
-	Width              uint                  `json:"width"               bson:"width"               binding:"requried"`
-	Height             uint                  `json:"height"              bson:"height"              binding:"requried"`
-	Minimum            uint                  `json:"minimum"             bson:"minimum"             binding:"requried"`
-	ProductRelated     []int64               `json:"product_related"     bson:"product_related"     binding:"requried"`
-	ProductDescription []*ProductDescription `json:"product_description" bson:"product_description" binding:"required"`
-	ProductCategory    []int64               `json:"product_category"    bson:"product_category"    binding:"required"`
+	ID                 int64                 `json:"_id"                 dynamodbav:"_id"`
+	Model              string                `json:"model"               dynamodbav:"model"               binding:"required"`
+	Quantity           uint                  `json:"quantity"            dynamodbav:"quantity"            binding:"required"`
+	Price              string                `json:"price"               dynamodbav:"price"               binding:"required"`
+	ManufacturerID     int                   `json:"manufacturer_id"     dynamodbav:"manufacturer_id"     binding:"required"`
+	Sku                string                `json:"sku"                 dynamodbav:"sku"                 binding:"required"`
+	ProductSeoUrl      *ProductSeoUrl        `json:"product_seo_url"     dynamodbav:"product_seo_url"     binding:"requried"`
+	Points             uint                  `json:"points"              dynamodbav:"points"              binding:"requried"`
+	Rewards            uint                  `json:"reward"              dynamodbav:"reward"              binding:"requried"`
+	Image              string                `json:"image"               dynamodbav:"image"               binding:"requried"`
+	ShippingID         int                   `json:"shipping_id"         dynamodbav:"shipping_id"         binding:"requried"`
+	Weight             uint                  `json:"weight"              dynamodbav:"weight"              binding:"requried"`
+	Length             uint                  `json:"length"              dynamodbav:"length"              binding:"requried"`
+	Width              uint                  `json:"width"               dynamodbav:"width"               binding:"requried"`
+	Height             uint                  `json:"height"              dynamodbav:"height"              binding:"requried"`
+	Minimum            uint                  `json:"minimum"             dynamodbav:"minimum"             binding:"requried"`
+	ProductRelated     []int64               `json:"product_related"     dynamodbav:"product_related"     binding:"requried"`
+	ProductDescription []*ProductDescription `json:"product_description" dynamodbav:"product_description" binding:"required"`
+	ProductCategory    []int64               `json:"product_category"    dynamodbav:"product_category"    binding:"required"`
 }
 
 func GetPbProductDescriptions(_productDesc []*ProductDescription) (_pbProductDesc []*pb.ProductDescription) {

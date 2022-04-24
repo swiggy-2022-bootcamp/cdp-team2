@@ -5,13 +5,13 @@ import (
 )
 
 type ProductDescription struct {
-	LanguageID      int64  `json:"language_id"      bson:"language_id"`
-	Name            string `json:"name"             bson:"name"`
-	Description     string `json:"description"      bson:"description"`
-	MetaTitle       string `json:"meta_title"       bson:"meta_title"`
-	MetaDescription string `json:"meta_description" bson:"meta_description"`
-	MetaKeyword     string `json:"meta_keyword"     bson:"meta_keyword"`
-	Tag             string `json:"tag"              bson:"tag"`
+	LanguageID      int64  `json:"language_id"      dynamodbav:"language_id"`
+	Name            string `json:"name"             dynamodbav:"name"`
+	Description     string `json:"description"      dynamodbav:"description"`
+	MetaTitle       string `json:"meta_title"       dynamodbav:"meta_title"`
+	MetaDescription string `json:"meta_description" dynamodbav:"meta_description"`
+	MetaKeyword     string `json:"meta_keyword"     dynamodbav:"meta_keyword"`
+	Tag             string `json:"tag"              dynamodbav:"tag"`
 }
 
 func (p *ProductDescription) GetPbProductDescription() *pb.ProductDescription {
