@@ -8,35 +8,30 @@ import (
 	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/internal/dao"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/reward/internal/dao/models"
 	pb "github.com/swiggy-2022-bootcamp/cdp-team2/reward/protos"
+	orderpb "github.com/swiggy-2022-bootcamp/cdp-team2/reward/protos/order"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 func (s *Server) RedeemReward(ctx context.Context, reward *pb.RedeemRewardRequest) (*pb.RedeemRewardResponse, error) {
-	// orderReqpb := &pb.GetOrderRequest{
-	// 	OrderId: reward.OrderId,
-	// }
+	orderReqpb := &orderpb.GetOrderRequest{
+		OrderId: reward.OrderId,
+	}
 
 	// call to Order MS to get list of products
-	//orderResppb, err :=
+	conn, grpcErr := grpc.Dial("0.tcp.in.ngrok.io:19361", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if grpcErr != nil {
+		log.WithError(grpcErr).Error("unable to establish grpc connection")
+		return nil, errors.New("an internal error occurred")
+	}
 
-	orderResppb := &pb.GetOrderResponse{
-		Order: &pb.OrderResponse{
-			CustomerId: "1223",
-			TotalPrice: 567.30,
-			ProductDesc: []*pb.ProductDesc{
-				{
-					ProductId: 123,
-					Points:    32,
-					Reward:    5,
-					Quantity:  2,
-				},
-				{
-					ProductId: 321,
-					Points:    10,
-					Reward:    10,
-					Quantity:  1,
-				},
-			},
-		},
+	defer conn.Close()
+	client := orderpb.NewServiceClient(conn)
+
+	orderResppb, grpcErr := client.GetOrderService(context.Background(), orderReqpb)
+	if grpcErr != nil {
+		log.WithError(grpcErr).Error("an error occurred while getting the proto response from order ms")
+		return nil, grpcErr
 	}
 
 	totalRewardInOrder := 0
@@ -82,8 +77,16 @@ func (s *Server) RedeemReward(ctx context.Context, reward *pb.RedeemRewardReques
 	}
 
 	// call to Order MS to update the finalPrice of the order
-	//updateFinalPriceOrderReq := pb.
+	updateFinalPriceOrderReq := &orderpb.OrderPayedPriceUpdateRequest{
+		OrderId:    reward.OrderId,
+		PayedPrice: float32(finalPrice),
+	}
 
+	_, grpcErr = client.OrderPayedPriceUpdateService(context.Background(), updateFinalPriceOrderReq)
+	if grpcErr != nil {
+		log.WithError(grpcErr).Error("an error occurred while getting the proto response from order ms")
+		return nil, grpcErr
+	}
 	redeemRewardResp := &pb.RedeemRewardResponse{
 		FinalPrice: int32(finalPrice),
 	}

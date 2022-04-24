@@ -1,6 +1,10 @@
 syntax = "proto3";
 
-option go_package = "./;protos";
+package proto;
+
+option go_package="/order";
+
+
 
 message ProductDesc{
   int32 productId=1;
@@ -27,6 +31,24 @@ message OrderStatusUpdateRequest{
 }
 
 message OrderStatusUpdateResponse{
+  bool response=1;
+}
+
+message OrderPayedPriceUpdateRequest{
+  string orderId =1;
+  float payedPrice=2;
+}
+
+message OrderPayedPriceUpdateResponse{
+  bool response=1;
+}
+
+message OrderAddressUpdateRequest{
+  string orderId =1;
+  int32 addressId=2;
+}
+
+message OrderAddressUpdateResponse{
   bool response=1;
 }
 
@@ -61,7 +83,10 @@ message GetOrderResponse{
 
 
 service Service{
-  rpc OrderCreateService(OrderCreateRequest)returns (OrderCreateResponse){};
+rpc OrderCreateService(OrderCreateRequest)returns (OrderCreateResponse){};
   rpc OrderStatusUpdateService(OrderStatusUpdateRequest)returns (OrderStatusUpdateResponse){};
   rpc GetOrderService(GetOrderRequest)returns (GetOrderResponse){};
+  rpc OrderAddressUpdateService(OrderAddressUpdateRequest)returns (OrderAddressUpdateResponse){};
+  rpc OrderPayedPriceUpdateService(OrderPayedPriceUpdateRequest)returns (OrderPayedPriceUpdateResponse){};
+
 }
