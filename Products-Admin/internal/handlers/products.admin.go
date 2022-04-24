@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/products-admin-service/internal/literals"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/literals"
 )
 
 type HandlersImpl struct {
