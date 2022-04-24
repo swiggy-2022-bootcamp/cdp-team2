@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+package products;
+
+option go_package = "github.com/swiggy-2022-bootcamp/cdp-team2/common/protos/products";
+
+message ProductDescription {
+    int64 LanguageID = 1;
+    string Name = 2;
+    string Description = 3;
+    string MetaTitle = 4;
+    string MetaDescriptio = 5;
+    string MetaKeyword = 6;
+    string Tag = 7;
+}
+
+message ProductSeoUrl {
+    string Keyword = 1;
+    int64 LanguageID = 2;
+    int64 StoreID = 3;
+}
+
+message Product {
+    int64 ID = 1;
+    string Model = 2;
+    int64 Quantity = 3;
+    string Price = 4;
+    int64 ManufacturerID = 5;
+    string Sku = 6;
+    ProductSeoUrl ProductSeoUrl = 7;
+    int64 Points = 8;
+    int64 Rewards = 9;
+    string Image = 10;
+    int64 ShippingID = 11;
+    int64 Weight = 12;
+    int64 Length = 13;
+    int64 Width = 14;
+    int64 Height = 15;
+    int64 Minimum = 16;
+    repeated int64 ProductRelated = 17;
+    repeated ProductDescription ProductDescription = 18;
+    repeated int64 ProductCategory = 19;
+}
+
+message ProductsResponse {
+    repeated Product Products = 1;
+}
+
+message EmptyRequest {
+
+}
+
+message CategoryIDRequest {
+    int64 categoryID = 1;
+}
+
+message BoolResponse {
+    bool Exists = 1;
+}
+
+message ProductIDRequest {
+    int64 ProductID = 1;
+}
+
+message ProductResponse {
+    Product Product = 1;
+}
+
+message ProductsIDAndQnty {
+    int64 ProductID = 1;
+    uint64 Quantity = 2;
+}
+
+message CheckoutRequest {
+    repeated ProductsIDAndQnty ProductsIDAndQnty = 1;
+}
+
+message ProductIDMessage {
+    int64 ProductID = 1;
+}
+
+message CheckoutResponse {
+    repeated ProductIDMessage AvailableProducts = 1;
+    repeated ProductIDMessage FailedProducts = 2;
+}
+
+service ProductsServices {
+    rpc GetAvailableProducts(EmptyRequest) returns (ProductsResponse);
+    rpc CheckProductsWithCategory(CategoryIDRequest) returns (BoolResponse);
+    rpc IsProductExists(ProductIDRequest) returns (BoolResponse);
+    rpc GetProductById(ProductIDRequest) returns (ProductResponse);
+    rpc GetProductsByCategoryId(CategoryIDRequest) returns (ProductsResponse);
+    rpc DeductProductsQuantity(CheckoutRequest) returns (CheckoutResponse);
+}
