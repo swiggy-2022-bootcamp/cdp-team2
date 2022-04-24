@@ -43,7 +43,7 @@ func (cd *CustomerDao) Create(customer models.Customer) (models.Customer, error)
  		return models.Customer{},err
 	}
 	if customer.Id!="test"{
-		customer.Id="0"
+		customer.Id=util.Generate()
 	}
 	if customer.DateAdded!="test"{
 		customer.DateAdded=time.Now().String()
