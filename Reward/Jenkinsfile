@@ -81,6 +81,9 @@ pipeline {
     post {
 		always {
 		    sh 'docker logout'
+            mail to: 'team2.swiggy@gmail.com',
+            subject: "Status of pipeline: ${currentBuild.fullDisplayName}",
+            body: "${env.BUILD_URL} has result ${currentBuild.result}"
 		}
 	}
 }
