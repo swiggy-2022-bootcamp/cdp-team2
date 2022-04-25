@@ -14,8 +14,7 @@ import (
 */
 func GetDynamoDBClient() *dynamodb.DynamoDB {
 	dbSession := session.New(&aws.Config{
-		Region:   aws.String("asia-pacific"),
-		Endpoint: aws.String("http://localhost:8000"),
+		Region: aws.String("us-west-2"),
 	})
 
 	return dynamodb.New(dbSession)
