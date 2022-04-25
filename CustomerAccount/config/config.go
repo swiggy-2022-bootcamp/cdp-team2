@@ -2,11 +2,11 @@ package config
 
 
 var Server = map[string]string{
-"PORT":"8092",
+"PORT":"8091",
 "CART_PORT":"9010",
 "REWARD_PORT":"9011",
 "AUTH_PORT":"9012",
-"GRPC_PORT":"9000",
+"GRPC_PORT":"8092",
 }
 var AWS = map[string]string{
 "region":"us-west-2",
