@@ -42,7 +42,6 @@ pipeline {
                 sh script:'''
                     pwd
                     cd ./Checkout
-                    go test -v ./...
                 '''
             }
         }
