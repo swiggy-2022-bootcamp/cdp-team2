@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
+	cors "github.com/rs/cors/wrapper/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/config"
@@ -40,6 +41,8 @@ func NewServer(handlers ports.IProductsHandlers) *Server {
 func (s *Server) Initialize() {
 	server := gin.Default()
 
+	// Enabling Cors
+	server.Use(cors.Default())
 	baseRoutes := server.Group("/api/rest_admin")
 
 	/*
