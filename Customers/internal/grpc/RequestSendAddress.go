@@ -16,12 +16,12 @@ import (
 
 func SendAddress(address model.Address, customer_id string) bool {
 	// conn, _ := grpc.Dial("localhost:9010", grpc.WithInsecure())
-conn,err:=grpc.Dial("localhost:"+config.Server["ADDRESS_PORT"],grpc.WithTransportCredentials(insecure.NewCredentials()))
+    conn,err:=grpc.Dial("localhost:"+config.Server["ADDRESS_PORT"],grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err!=nil{
 		fmt.Println(err)
+		 
 	}
 	fmt.Println(err)
-	// conn, _ := grpc.Dial("13b3-49-37-152-145.in.ngrok.io", grpc.WithInsecure())
 
 	defer conn.Close()
 	c := pb.NewServiceClient(conn)
