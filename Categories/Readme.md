@@ -37,3 +37,9 @@ docker sh into container
 ```sh
 docker exec -it categories /bin/sh
 ```
+
+
+GRPCurl 
+```
+grpcurl -plaintext -d '{"category_id":10}' 127.0.0.1:7459 category.CategoryService/GetCategory
+```

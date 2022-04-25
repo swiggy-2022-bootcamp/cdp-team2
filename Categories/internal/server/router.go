@@ -6,19 +6,24 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	_ "github.com/swiggy-2022-bootcamp/cdp-team2/Categories/docs"
 
+	"github.com/gin-contrib/cors"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Categories/internal/server/controllers"
 )
 
-func InitRouter() *gin.Engine {
+func InitRouter() (*gin.Engine, error) {
 
 	r := gin.Default()
 	// r.Use(gin.Logger())
+	r.Use(cors.Default())
 	r.Use(gin.Recovery())
 
 	//health Check
 	r.GET("/health", controllers.Health)
 
-	cont := controllers.NewCategoryController()
+	cont, err := controllers.NewCategoryController()
+	if err != nil {
+		return nil, err
+	}
 
 	catGrp := r.Group("/categories")
 	{
@@ -33,5 +38,5 @@ func InitRouter() *gin.Engine {
 	//swagger
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	return r
+	return r, nil
 }

@@ -5,6 +5,7 @@ go 1.16
 require (
 	common v0.0.0-00010101000000-000000000000
 	github.com/aws/aws-sdk-go v1.43.40
+	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.7.7
 	github.com/golang/mock v1.6.0
 	github.com/stretchr/testify v1.7.0

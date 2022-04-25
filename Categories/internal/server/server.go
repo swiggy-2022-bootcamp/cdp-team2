@@ -9,7 +9,9 @@ import (
 	pb "common/protos/category"
 
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Categories/config"
+	catGrpc "github.com/swiggy-2022-bootcamp/cdp-team2/Categories/internal/grpc/service"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 // @title Categories Api
@@ -25,7 +27,13 @@ import (
 // @in header
 // @name Authorization
 func Start() {
-	router := InitRouter()
+	router, err := InitRouter()
+
+	if err != nil {
+		log.Println("Error starting server")
+		log.Println(err.Error())
+		return
+	}
 
 	endPoint := fmt.Sprintf(":%s", config.Server["PORT"])
 
@@ -41,17 +49,21 @@ func Start() {
 	_ = server.ListenAndServe()
 }
 
-type GrpcServer struct {
-	pb.UnimplementedCategoryServiceServer
-}
-
 func StartGrpcServer() {
 	lis, err := net.Listen("tcp", ":7459")
 	if err != nil {
 		log.Fatalf("GRPC failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
-	pb.RegisterCategoryServiceServer(s, &GrpcServer{})
+	cats, err := catGrpc.NewCategoryGrpcServer()
+	if err != nil {
+		log.Fatalf("GRPC failed to start grpc service: %v", err)
+		return
+	}
+	pb.RegisterCategoryServiceServer(s, cats)
+	// Register reflection service on gRPC server.
+	reflection.Register(s)
+
 	log.Printf("GRPC server listening at %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("GRPC failed to serve: %v", err)

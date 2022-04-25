@@ -14,10 +14,11 @@ type CategoryController struct {
 	service services.IService
 }
 
-func NewCategoryController() *CategoryController {
+func NewCategoryController() (*CategoryController, error) {
+	s, err := services.NewCategoryService()
 	return &CategoryController{
-		services.NewCategoryService(),
-	}
+		s,
+	}, err
 }
 
 // Get Category By ID

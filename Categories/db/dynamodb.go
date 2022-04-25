@@ -18,7 +18,7 @@ func GetInstance() *dynamodb.DynamoDB {
 		db = dynamodb.New(session.New(&aws.Config{
 			Region: aws.String(config.AWS["region"]),
 			// Credentials: credentials.NewEnvCredentials(),
-			Endpoint: aws.String(config.AWS["endpoint"]),
+			// Endpoint: aws.String(config.AWS["endpoint"]),
 		}))
 	}
 

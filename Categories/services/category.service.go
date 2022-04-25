@@ -1,18 +1,28 @@
 package services
 
 import (
+	"context"
+
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Categories/dao"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Categories/dao/models"
+	gc "github.com/swiggy-2022-bootcamp/cdp-team2/Categories/internal/grpc/client"
 )
 
 type CategoryService struct {
-	Dao dao.IDao
+	Dao           dao.IDao
+	productClient *gc.ProductClient
 }
 
-func NewCategoryService() IService {
+func NewCategoryService() (IService, error) {
+	pc, err := gc.NewProductClient(context.Background())
+	if err != nil {
+		return nil, err
+	}
+
 	return &CategoryService{
 		dao.GetCategoryDao(),
-	}
+		pc,
+	}, nil
 }
 
 func (cs *CategoryService) GetByID(id int) (*models.Category, error) {
