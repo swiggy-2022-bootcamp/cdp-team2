@@ -32,8 +32,8 @@ Features included in this Project:
 =================================
 1) CRUD using dynaomoDB
 2) gRPC for service to service communication
-3) Get Cart details of the Customer
-4) Get Reward details of the Customer
+3) Get Cart details of the Customer using gRPC request
+4) Get Reward details of the Customer using gRPC request
 -------------------------------------------------------
 
 
@@ -61,7 +61,7 @@ swag init -g ./internal/server/server.go
 ```
 
 swagger page
-> http://localhost:8050/swagger/index.html
+> http://localhost:8091/swagger/index.html
 
 docker build image
 ```sh
@@ -70,7 +70,7 @@ docker build -t cdp-team2/customer-account .
 
 docker run
 ```sh
-docker run -p 8050:8050 --name customer-account cdp-team2/customer-account
+docker run -p 8091:8091 --name customer-account cdp-team2/customer-account
 ```
 
 docker sh into container

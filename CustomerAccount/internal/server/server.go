@@ -7,6 +7,8 @@ import (
 	_ "customer-account/docs"
 	"customer-account/config"
 	"fmt"
+	// "github.com/gin-contrib/cors"
+
 )
 
 
@@ -18,7 +20,7 @@ import (
 
 // @contact.name API Support
  
-// @host localhost:config.Server["PORT"]
+// @host localhost:8091
 // @BasePath /
 
 // @securityDefinitions.basic BasicAuth
@@ -29,6 +31,7 @@ import (
 func RunServer(){
 	fmt.Println("Server:Config",config.Server,config.AWS)
 	server:=gin.Default()
+	// server.Use(cors.Default())
 	createRoute:=server.Group("/register")
 	{
 		CreateRoute(createRoute.Group("/"))

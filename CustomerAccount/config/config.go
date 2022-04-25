@@ -31,7 +31,6 @@ var AWS = map[string]string{
 // 	Server["AUTH_PORT"]="9000"
 // 	//os.Getenv("AUTH_PORT")
 // 	//os.Getenv("endpoint")
-
 // }
 
 
