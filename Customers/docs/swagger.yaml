@@ -52,7 +52,7 @@ definitions:
       telephone:
         type: string
     type: object
-host: localhost:8091
+host: localhost:8093
 info:
   contact:
     name: API Support
@@ -195,6 +195,21 @@ paths:
       summary: Customer Get By Email Route
       tags:
       - Customer Get
+  /health:
+    get:
+      consumes:
+      - application/json
+      description: API to check Customer-Admin's health
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/string'
+      summary: Health Check Route
+      tags:
+      - Health
 securityDefinitions:
   ApiKeyAuth:
     in: header

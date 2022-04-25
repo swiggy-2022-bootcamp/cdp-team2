@@ -21,7 +21,7 @@ Technologies/tools Used:
 =================
     Golang
     gRPC
-    SwaggerUI
+    Swagger
     Microservices
     Dynamodb
     Gin
@@ -29,8 +29,8 @@ Technologies/tools Used:
     Docker
     Jenkins
     Kubernetes
-    Mock testing
-
+    Testing
+    
 -------------------------------------------------------
 Features included in this Project:</br>
 =================================</br>
@@ -65,7 +65,7 @@ swag init -g ./internal/server/server.go
 ```
 
 swagger page
-> http://localhost:8080/swagger/index.html
+> http://localhost:8093/swagger/index.html
 
 docker build image
 ```sh
@@ -74,7 +74,7 @@ docker build -t cdp-team2/customers .
 
 docker run
 ```sh
-docker run -p 8080:8080 --name customers cdp-team2/customers
+docker run -p 8093:8093 --name customers cdp-team2/customers
 ```
 
 docker sh into container

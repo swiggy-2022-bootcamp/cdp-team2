@@ -7,6 +7,7 @@ import (
 	"github.com/swaggo/gin-swagger/swaggerFiles"	//swagger embed files
 	_ "customers/docs"
 	// model "customers/config"
+	"github.com/gin-contrib/cors"
 	"customers/config"
 )
 
@@ -19,7 +20,7 @@ import (
 // @contact.name API Support
 // @contact.url http://demo.com/support
 
-// @host localhost:config.Server["PORT"]
+// @host localhost:8093
 // @BasePath /
 
 // @securityDefinitions.basic  BasicAuth
@@ -29,6 +30,7 @@ import (
 // @name                        Authorization
 func RunServer()error{
  	server:=gin.Default()
+    server.Use(cors.Default())
 
 	customerRoute:=server.Group("/customers")
 	{

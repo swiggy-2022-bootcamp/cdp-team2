@@ -51,7 +51,14 @@ func CustomerRoute(g *gin.RouterGroup){
 
 }
 
-
+// Health godoc
+// @Summary      Health Check Route
+// @Description  API to check Customer-Admin's health
+// @Tags         Health
+// @Accept       json
+// @Produce      json
+// @Success      200  {object} 	string
+// @Router       /health [get]
 func HealthRoute(g *gin.RouterGroup){
 	g.GET("/",func(ctx *gin.Context){
 		// status,message:=handler.Health(ctx)

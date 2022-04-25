@@ -11,7 +11,7 @@
         "license": {},
         "version": "1.0"
     },
-    "host": "localhost:8091",
+    "host": "localhost:8093",
     "basePath": "/",
     "paths": {
         "/customers": {
@@ -206,6 +206,29 @@
                     },
                     "500": {
                         "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/string"
+                        }
+                    }
+                }
+            }
+        },
+        "/health": {
+            "get": {
+                "description": "API to check Customer-Admin's health",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Health"
+                ],
+                "summary": "Health Check Route",
+                "responses": {
+                    "200": {
+                        "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/string"
                         }
