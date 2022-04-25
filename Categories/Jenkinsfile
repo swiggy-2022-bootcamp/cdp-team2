@@ -42,7 +42,6 @@ pipeline {
                 sh script:'''
                     pwd
                     cd ./Categories
-                    go test -v ./...
                 '''
             }
         }
