@@ -4,7 +4,6 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	cors "github.com/rs/cors/wrapper/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-FrontStore/config"
@@ -38,8 +37,6 @@ func NewServer(handlers ports.IProductsHandlers) *Server {
 // @BasePath /api/rest/products
 func (s *Server) Initialize() {
 	server := gin.Default()
-
-	server.Use(cors.Default())
 	productsRoutes := server.Group("/api/rest/products/")
 	productsRoutes.GET("/health", s.Handlers.Health)
 	productsRoutes.GET("/", s.Handlers.GetProductList)
