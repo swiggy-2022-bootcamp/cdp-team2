@@ -5,8 +5,9 @@ go 1.17
 require (
 	common v0.0.0-00010101000000-000000000000
 	github.com/gin-gonic/gin v1.7.7
-	github.com/go-playground/assert/v2 v2.0.1
 	github.com/golang/mock v1.6.0
+	github.com/rs/cors v1.8.2
+	github.com/rs/cors/wrapper/gin v0.0.0-20220223021805-a4a5ce87d5a2
 	github.com/stretchr/testify v1.7.1
 	github.com/swaggo/files v0.0.0-20210815190702-a29dd2bc99b2
 	github.com/swaggo/gin-swagger v1.4.2
