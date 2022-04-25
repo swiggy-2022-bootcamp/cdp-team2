@@ -47,8 +47,14 @@ func AddRewardHandler(config *util.RouterConfig) http.HandlerFunc {
 		// reward.CustomerId = customerId
 		service := services.GetAddRewardService()
 
+		err := service.ValidateRequest(reward)
+		if err != nil {
+			http.Error(w, err.ErrorMessage, err.HttpResponseCode)
+			return
+		}
+
 		// Process the request
-		err := service.ProcessRequest(reward)
+		err = service.ProcessRequest(reward)
 		if err != nil {
 			http.Error(w, err.ErrorMessage, err.HttpResponseCode)
 			return

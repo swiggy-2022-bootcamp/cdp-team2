@@ -48,7 +48,7 @@ func RunServer() error {
 	dynamodao := dao.InitDynamoDAO(dynamoClient, webServerConfig)
 
 	// Initialize services
-	services.InithHealthCheckService(&routerConfigs)
+	services.InitHealthCheckService(&routerConfigs)
 	services.InitAddRewardService(&routerConfigs, dynamodao)
 
 	server := NewServer(webServerConfig)
