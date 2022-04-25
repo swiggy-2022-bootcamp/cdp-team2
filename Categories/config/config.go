@@ -10,8 +10,8 @@ var AWS = map[string]string{
 }
 
 var GrpcAdd = map[string]string{
-	"CART_SERVICE":    "localhost:7550",
-	"ORDER_SERVICE":   "localhost:7551",
-	"PRODUCT_SERVICE": "localhost:7552",
-	"REWARD_SERVICE":  "localhost:7553",
+	"CART_SERVICE":    "10.50.2.224:30202",
+	"ORDER_SERVICE":   "10.50.2.224:30202",
+	"PRODUCT_SERVICE": "10.50.2.224:30202",
+	"REWARD_SERVICE":  "10.50.2.224:30202",
 }
