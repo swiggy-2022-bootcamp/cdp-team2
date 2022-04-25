@@ -3,17 +3,16 @@
 This microservice handles all the operations related to reward associated with a customer.
 
 1. **Rest API Endpoints** available: <br>
-   i. `/reward/v1/healthcheck`
+   i. GET `/reward/v1/healthcheck`
 
    - Checks the health of the given microservice.
    - Returns the json stating the status of the service.
    - In case of internal error, http error is sent with `internal error message` and HTTP Response code 500 is set. <br>
 
-   ii. `/reward/v1/reward/{customerId}`
+   ii. POST `/reward/v1/reward`
 
    - Allows user with role **admin** to give the reward for a given a customer.
-   - Path Parameter - customerId is required
-   - Request Body - Description of type String and reward points of type int are required.
+   - Request Body - CustomerId of type string, Description of type String and reward points of type int are required.
    - Returns - HTTP StatusCode `200 OK`
    - This API adds the reward given by admin to the given customer reward total balance. <br>
 
