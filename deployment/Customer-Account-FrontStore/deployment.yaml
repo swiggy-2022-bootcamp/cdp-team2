@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-account-frontstore-deployment
+  labels:
+    app: customer-account-frontstore
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customer-account-frontstore
+  template:
+    metadata:
+      labels:
+        app: customer-account-frontstore
+    spec:
+      containers:
+      - name: customer-account-frontstore
+        image: swiggyteam2/customer-account:latest
+        ports:
+        - containerPort: 8091
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-account-frontstore-grpc-deployment
+  labels:
+    app: customer-account-frontstore-grpc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customer-account-frontstore-grpc
+  template:
+    metadata:
+      labels:
+        app: customer-account-frontstore-grpc
+    spec:
+      containers:
+      - name: customer-account-frontstore-grpc
+        image: swiggyteam2/customers-account:latest
+        ports:
+        - containerPort: 8092

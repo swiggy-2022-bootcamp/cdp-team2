@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: category-deployment
+  labels:
+    app: category
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: category
+  template:
+    metadata:
+      labels:
+        app: category
+    spec:
+      containers:
+      - name: category
+        image: swiggyteam2/categories:latest
+        ports:
+        - containerPort: 7450
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: category-grpc-deployment
+  labels:
+    app: category-grpc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: category-grpc
+  template:
+    metadata:
+      labels:
+        app: category-grpc
+    spec:
+      containers:
+      - name: category-grpc
+        image: swiggyteam2/categories:latest
+        ports:
+        - containerPort: 7459

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cart-deployment
+  labels:
+    app: cart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cart
+  template:
+    metadata:
+      labels:
+        app: cart
+    spec:
+      containers:
+      - name: cart
+        image: swiggyteam2/cart:latest
+        ports:
+        - containerPort: 8001 # TODO
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cart-gprc-deployment
+  labels:
+    app: cart-grpc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cart-grpc
+  template:
+    metadata:
+      labels:
+        app: cart-grpc
+    spec:
+      containers:
+      - name: cart-grpc
+        image: swiggyteam2/cart:latest
+        ports:
+        - containerPort: 8002 # TODO

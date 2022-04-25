@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: products-frontstore-deployment
+  labels:
+    app: products-frontstore
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: products-frontstore
+  template:
+    metadata:
+      labels:
+        app: products-frontstore
+    spec:
+      containers:
+      - name: products-frontstore
+        image: swiggyteam2/products-frontstore:latest
+        ports:
+        - containerPort: 8003

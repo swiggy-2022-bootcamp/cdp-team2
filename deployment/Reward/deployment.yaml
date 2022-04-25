@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reward-deployment
+  labels:
+    app: reward
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reward
+  template:
+    metadata:
+      labels:
+        app: reward
+    spec:
+      containers:
+      - name: reward
+        image: swiggyteam2/reward:latest
+        ports:
+        - containerPort: 8001 # Need to update
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reward-gprc-deployment
+  labels:
+    app: reward-grpc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reward-grpc
+  template:
+    metadata:
+      labels:
+        app: reward-grpc
+    spec:
+      containers:
+      - name: products-admin
+        image: swiggyteam2/reward:latest
+        ports:
+        - containerPort: 8002 # Need to update
