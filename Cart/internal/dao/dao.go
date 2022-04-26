@@ -164,12 +164,12 @@ func (dao *dynamoDAO) GetCart(customerId string) (models.Cart, *errors.ServerErr
 	})
 
 	if err != nil {
-		cart.CustomerId = customerId
 		log.WithField("Error: ", err).Error("got error while calling GetItem API of dynamo db")
 		return cart, &errors.DatabaseQueryFailed
 	}
 
 	if result.Item == nil {
+		cart.CustomerId = customerId
 		errMsg := "Could not find cart for customer: '" + customerId + "'"
 		log.WithField("Error: ", errMsg).Error("record not found")
 		return cart, nil
