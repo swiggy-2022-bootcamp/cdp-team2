@@ -21,6 +21,13 @@ func NewAuthController() (AuthController, error) {
 }
 
 func (ac *AuthController) CheckAuth(c *gin.Context) {
+
+	if len(c.Request.Header["Token"]) == 0 {
+		log.Printf("[Error] token not found")
+		c.AbortWithStatusJSON(api.UserErr(fmt.Errorf("Token not found")))
+		return
+	}
+
 	token := c.Request.Header["Token"][0]
 
 	res, err := ac.AuthClient.Verify(ac.AuthClient.CtxWithTimeOut(), &authpb.VerifyRequest{
