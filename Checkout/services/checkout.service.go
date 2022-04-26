@@ -75,6 +75,12 @@ func (cs *CheckoutService) StartCheckout(customerId string) (*orderpb.OrderRespo
 	//Deduct Cart Products from Invertory [Product MS]
 	var cartItems []*productpb.ProductsIDAndQnty
 
+	if cartresp.Cart == nil || cartresp.Cart.Products == nil || len(cartresp.Cart.Products) == 0 {
+		e := fmt.Errorf("cart is empty")
+		log.Printf("[INFO] %s", e.Error())
+		return nil, e
+	}
+
 	for _, p := range cartresp.Cart.Products {
 
 		pid, err := strconv.Atoi(p.ProductId)
