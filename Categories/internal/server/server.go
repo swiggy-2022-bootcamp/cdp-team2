@@ -18,7 +18,7 @@ import (
 // @version 1.0
 // @description This is categories crud service.
 
-// @host localhost:7450
+// @host 35.84.28.237:30204
 // @BasePath /
 
 // @securityDefinitions.basic BasicAuth
