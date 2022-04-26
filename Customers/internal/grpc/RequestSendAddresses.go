@@ -13,7 +13,7 @@ import (
 
 func GetAddress( customerId string)([]models.Address) {
  	// conn, _ := grpc.Dial("localhost:"+strconv.Itoa(literals.ADDRESS_PORT), grpc.WithInsecure())
-	 	conn, err := grpc.Dial("http://35.84.28.237:30210", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	 	conn, err := grpc.Dial("35.84.28.237:30210", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err!=nil{
 		fmt.Println(err)
 	}

@@ -15,7 +15,7 @@ import (
 
 func SendAddress(address model.Address, customer_id string) bool {
 	// conn, _ := grpc.Dial("localhost:9010", grpc.WithInsecure())
-    conn,err:=grpc.Dial("http://35.84.28.237:30210",grpc.WithTransportCredentials(insecure.NewCredentials()))
+    conn,err:=grpc.Dial("35.84.28.237:30210",grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err!=nil{
 		fmt.Println(err)
 		 
