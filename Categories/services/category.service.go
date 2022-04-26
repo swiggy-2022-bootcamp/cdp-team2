@@ -2,6 +2,10 @@ package services
 
 import (
 	"context"
+	"fmt"
+	"log"
+
+	productpb "common/protos/products"
 
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Categories/dao"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Categories/dao/models"
@@ -42,6 +46,21 @@ func (cs *CategoryService) UpdateByID(id int, cat models.Category) (*models.Cate
 }
 
 func (cs *CategoryService) DeleteByID(id int) error {
+
+	prodres, err := cs.productClient.GetProductsByCategoryId(cs.productClient.CtxWithTimeOut(), &productpb.CategoryIDRequest{CategoryID: int64(id)})
+	if err != nil {
+		log.Printf("[Error] fetching product in category %d . error = %s", id, err.Error())
+		return err
+	}
+
+	log.Printf("[GRPC call] product resp : %+v", prodres)
+
+	if len(prodres.Products) > 0 {
+		e := fmt.Errorf("Category %d has products in it, hence cannot be deleted", id)
+		log.Println(e)
+		return err
+	}
+
 	return cs.Dao.DeleteByID(id)
 }
 

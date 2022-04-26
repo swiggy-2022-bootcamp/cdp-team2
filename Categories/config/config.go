@@ -9,9 +9,11 @@ var AWS = map[string]string{
 	"endpoint": "http://localhost:8000",
 }
 
+var base = "35.84.28.237"
+
 var GrpcAdd = map[string]string{
-	"CART_SERVICE":    "10.50.2.224:30202",
-	"ORDER_SERVICE":   "10.50.2.224:30202",
-	"PRODUCT_SERVICE": "10.50.2.224:30202",
-	"REWARD_SERVICE":  "10.50.2.224:30202",
+	"CART_SERVICE":    base + ":30217",
+	"ORDER_SERVICE":   base + ":30208",
+	"PRODUCT_SERVICE": base + ":30201",
+	"REWARD_SERVICE":  base + ":30219",
 }

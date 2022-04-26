@@ -17,7 +17,7 @@ func getDummycat() *models.Category {
 func TestGetAll(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	mdao := mock_dao.NewMockIDao(ctrl)
-	catservice := &CategoryService{mdao}
+	catservice := &CategoryService{Dao: mdao}
 
 	res := []models.Category{*getDummycat()}
 
@@ -31,7 +31,7 @@ func TestGetAll(t *testing.T) {
 func TestGetById(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	mdao := mock_dao.NewMockIDao(ctrl)
-	catservice := &CategoryService{mdao}
+	catservice := &CategoryService{Dao: mdao}
 	res := getDummycat()
 
 	mdao.EXPECT().GetByID(res.CategoryId).Times(1).Return(res, nil)
@@ -44,7 +44,7 @@ func TestGetById(t *testing.T) {
 func TestCreate(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	mdao := mock_dao.NewMockIDao(ctrl)
-	catservice := &CategoryService{mdao}
+	catservice := &CategoryService{Dao: mdao}
 	res := getDummycat()
 	toCreate := models.Category{CategoryDesc: res.CategoryDesc}
 	mdao.EXPECT().Create(toCreate).Times(1).Return(res, nil)
@@ -57,7 +57,7 @@ func TestCreate(t *testing.T) {
 func TestUpdateByID(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	mdao := mock_dao.NewMockIDao(ctrl)
-	catservice := &CategoryService{mdao}
+	catservice := &CategoryService{Dao: mdao}
 	res := getDummycat()
 	mdao.EXPECT().UpdateByID(res.CategoryId, *res).Times(1).Return(res, nil)
 
@@ -69,7 +69,7 @@ func TestUpdateByID(t *testing.T) {
 func TestDeleteByID(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	mdao := mock_dao.NewMockIDao(ctrl)
-	catservice := &CategoryService{mdao}
+	catservice := &CategoryService{Dao: mdao}
 	mdao.EXPECT().DeleteByID(1).Times(1).Return(nil)
 
 	err := catservice.DeleteByID(1)
@@ -79,7 +79,7 @@ func TestDeleteByID(t *testing.T) {
 func TestDeleteMultiple(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	mdao := mock_dao.NewMockIDao(ctrl)
-	catservice := &CategoryService{mdao}
+	catservice := &CategoryService{Dao: mdao}
 
 	gomock.InOrder(
 		mdao.EXPECT().DeleteByID(1).Return(nil),

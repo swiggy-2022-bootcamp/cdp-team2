@@ -42,4 +42,7 @@ docker exec -it categories /bin/sh
 GRPCurl 
 ```
 grpcurl -plaintext -d '{"category_id":10}' 127.0.0.1:7459 category.CategoryService/GetCategory
+
+grpcurl -plaintext -d '{"categoryID":10}' 35.84.28.237:30201 products.ProductsServices/GetProductsByCategoryId
+
 ```
