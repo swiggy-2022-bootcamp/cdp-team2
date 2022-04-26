@@ -29,7 +29,8 @@ func InitRouter() (*gin.Engine, error) {
 	}
 
 	// r.GET("/test", auth.CheckAuth)
-	r.POST("/checkout/:customer_id", auth.CheckAuth, cont.StartCheckout)
+	// r.POST("/checkout/:customer_id", auth.CheckAuth, cont.StartCheckout)
+	r.POST("/checkout", auth.CheckAuth, cont.StartCheckout)
 	r.PUT("/rewards", auth.CheckAuth, cont.ApplyReward)
 	r.POST("/pay", auth.CheckAuth, cont.Pay)
 	r.GET("/order/:order_id", auth.CheckAuth, cont.GetOrder)
