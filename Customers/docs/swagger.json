@@ -11,7 +11,7 @@
         "license": {},
         "version": "1.0"
     },
-    "host": "localhost:8093",
+    "host": "35.84.28.237:30212",
     "basePath": "/",
     "paths": {
         "/customers": {

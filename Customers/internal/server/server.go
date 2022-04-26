@@ -20,7 +20,7 @@ import (
 // @contact.name API Support
 // @contact.url http://demo.com/support
 
-// @host localhost:8093
+// @host 35.84.28.237:30212
 // @BasePath /
 
 // @securityDefinitions.basic  BasicAuth

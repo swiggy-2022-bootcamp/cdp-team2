@@ -52,7 +52,7 @@ definitions:
       telephone:
         type: string
     type: object
-host: localhost:8093
+host: 35.84.28.237:30212
 info:
   contact:
     name: API Support
