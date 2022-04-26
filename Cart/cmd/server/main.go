@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"runtime"
 	"strings"
 
@@ -37,17 +36,14 @@ func init() {
 	}
 	log.SetFormatter(formatter)
 
-	// read the key files before starting http handlers
-	verifyKeyByte, err := ioutil.ReadFile(util.PubKeyPath)
+	publicKey := []byte("MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCTd0I0EhRo7Kjh7oOch2w/hOZRBNgsi4eYa/PoHGE6EqihrVzRf6iQ/snmyfn+nTxeGdQ+StiLBl6eBcSJh0mrtfKvB41wm4Vvh+YUhvf+5Bl6ifaKHeLJl1d32gi/c+ZgSg3B/yVm5hZ8i3s/oud6qqk/+t/wU0MwOZlle06q7QIDAQAB")
+	verifykey, err := jwt.ParseRSAPublicKeyFromPEM(publicKey)
 	if err != nil {
 		log.Fatal("Error reading public key")
 		return
 	}
-	util.VerifyKey, err = jwt.ParseRSAPublicKeyFromPEM(verifyKeyByte)
-	if err != nil {
-		log.Fatal("Error reading public key")
-		return
-	}
+
+	util.VerifyKey = verifykey
 }
 
 func formatFilePath(path string) string {
