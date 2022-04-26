@@ -18,7 +18,7 @@ import (
 
 // @contact.name API Support
 
-// @host localhost:8091
+// @host 35.84.28.237:30214
 // @BasePath /
 
 // @securityDefinitions.basic BasicAuth
