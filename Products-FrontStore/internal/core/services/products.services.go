@@ -76,7 +76,9 @@ func (ps *ProductsServices) GetProductById(productID int64) (*domain.Product, *e
 	_product.ProductSeoUrl.LanguageID = res.Product.ProductSeoUrl.LanguageID
 
 	for i, des := range res.Product.ProductDescription {
-		_product.ProductDescription[i].LanguageID = des.LanguageID
+		if i < len(_product.ProductDescription) {
+			_product.ProductDescription[i].LanguageID = des.LanguageID
+		}
 	}
 
 	return _product, nil
