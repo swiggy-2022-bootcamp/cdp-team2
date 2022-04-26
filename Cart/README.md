@@ -2,7 +2,7 @@
 
 This microservice handles all the operations related to cart associated with a customer.
 
-1. Rest API Endpoints available:
+1. Rest API Endpoints available: <br>
    i. GET `/cart/v1/healthcheck`
 
    - Checks the health of the given microservice.
@@ -31,7 +31,7 @@ This microservice handles all the operations related to cart associated with a c
    - Allows the customer to remove the particular product from the cart.
    - Returns - 200 OK on successful deletion
 
-2. gRPC services available:
+2. gRPC services available: <br>
    i. `GetCart`
 
    - Gives the cart details of the customer to the microservice calling this gRPC function.
@@ -85,6 +85,8 @@ This section contains the list of tools and technology stack used while developi
 12. SonarQube
 
 ## Flow Diagram of Cart MS
+
+![Cart Service Diagram](./static/images/CartMS@2x.png)
 
 ## Local Setup for Development
 
