@@ -76,12 +76,6 @@ pipeline {
                 sh 'docker push swiggyteam2/cart:latest'
             }
         }
-
-        stage ("clean dangling docker image") {
-            steps {
-                sh "docker volume rm $(docker volume ls -qf dangling=true)"
-            }
-        }
     }
 
     post {
