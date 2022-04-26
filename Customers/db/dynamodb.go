@@ -1,7 +1,7 @@
 package db
 
 import (
-	// "github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	// "customers/config"
@@ -19,9 +19,12 @@ func GetInstance() *dynamodb.DynamoDB {
 		// 	// Credentials: credentials.NewEnvCredentials(),
 		// 	Endpoint: aws.String(config.AWS["endpoint"]),
 		// }))
-		sess := session.Must(session.NewSessionWithOptions(session.Options{
-			SharedConfigState: session.SharedConfigEnable,
-		}))
+		sess := session.New(&aws.Config{
+			Region: aws.String("us-west-2"),
+		})
+		// sess := session.Must(session.NewSessionWithOptions(session.Options{
+		// 	SharedConfigState: session.SharedConfigEnable,
+		// }))
 	
 		// Create DynamoDB client
 		db = dynamodb.New(sess)

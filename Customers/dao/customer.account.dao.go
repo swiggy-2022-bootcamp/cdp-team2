@@ -17,6 +17,8 @@ import (
 	"time"
 	"crypto/sha1"
 	"encoding/hex"
+	log "github.com/sirupsen/logrus"
+
 )
 
 var (
@@ -42,6 +44,7 @@ func (cd *CustomerDao) Create(customer models.Customer) (models.Customer, error)
 	account:=customer
  	err:=util.ValidateAccount(account,cd.Db)
   	if err!=nil{
+		log.WithField("Error: ", err).Error("Error while creating the user")
  		return models.Customer{},err
 	}
 	if customer.Id!="test"{
@@ -81,6 +84,7 @@ func (cd *CustomerDao) Create(customer models.Customer) (models.Customer, error)
  	}
 	 
 	if err!= nil {
+		log.WithField("Error: ", err).Error("Error while creating ther customer #2")
 		return models.Customer{},err
 	}
 	customer.Address=grpc.GetAddress(customer.Id)
@@ -151,6 +155,7 @@ func (cd *CustomerDao)Update(id_string string,customer models.Customer)(models.C
 	var err1 error
 	obj,err1=Validate(obj,customer)
  	if err1!=nil{
+		log.WithField("Error: ", err1).Error("Error while Updating the Customer")
 		return obj,err1
 	}
 
@@ -217,6 +222,8 @@ func (cd *CustomerDao)Update(id_string string,customer models.Customer)(models.C
 	resp, err := cd.Db.UpdateItem(params)
  
 	if err != nil {
+		log.WithField("Error: ", err).Error("error while updating the customer")
+
 		return models.Customer{},err
 	}
 	
@@ -249,12 +256,15 @@ func (cd *CustomerDao)Get(id_string string)(models.Customer,error){
  	// read the item
 	resp, err := cd.Db.GetItem(params)
  	if err != nil {
+		log.WithField("Error: ", err).Error("err while getting Email")
  		return models.Customer{},nil
 	}
  	// dump the response data
  	// unmarshal the dynamodb attribute values into a custom struct
 	err = dynamodbattribute.UnmarshalMap(resp.Item, &customer)
  	if err != nil {
+		log.WithField("Error: ", err).Error("Error while getting user")
+
  		return models.Customer{},err
 	}
 	if customer.Id==""{
@@ -287,6 +297,8 @@ func (cd *CustomerDao)GetByEmail(email string)(models.Customer,error){
 	resp, err := cd.Db.Query(params)
  
 	if err != nil {
+		log.WithField("Error: ", err).Error("Error while getting the email")
+
  		return models.Customer{},err
 	}
 
@@ -322,6 +334,7 @@ func (cd *CustomerDao)Delete(id_string string)(bool,error){
 	// delete the item
 	_, err := cd.Db.DeleteItem(params)
 	if err != nil {
+		log.WithField("Error: ", err).Error("Error while deleting the customer")
  		return false,err
 	}
 

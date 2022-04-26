@@ -9,6 +9,8 @@ import (
 	// model "customers/config"
 	"github.com/gin-contrib/cors"
 	"customers/config"
+	log "github.com/sirupsen/logrus"
+
 )
 
 
@@ -41,11 +43,14 @@ func RunServer()error{
 	{
 		HealthRoute(healthRoute.Group("/"))
 	}
-	 
+	
 	server.GET("/swagger/*any",ginSwagger.WrapHandler(swaggerFiles.Handler))
 	go GrpcServer()
 	err:=server.Run(":"+config.Server["PORT"])
+	log.Info("Server starting on PORT: ",8093)
+
 	if err!=nil{
+		log.WithField("Error: ", err).Error("error while starting the server")
 		return err
 	}
 	return nil;

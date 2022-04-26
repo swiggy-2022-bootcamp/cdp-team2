@@ -8,13 +8,12 @@ import (
 	grpc "google.golang.org/grpc"
 	// "customers/internal/literals"
 	// "strconv"
-	"customers/config"
-	"google.golang.org/grpc/credentials/insecure"
+ 	"google.golang.org/grpc/credentials/insecure"
 )
 
 func GetAddress( customerId string)([]models.Address) {
  	// conn, _ := grpc.Dial("localhost:"+strconv.Itoa(literals.ADDRESS_PORT), grpc.WithInsecure())
-	 	conn, err := grpc.Dial("localhost:"+config.Server["ADDRESS_PORT"], grpc.WithTransportCredentials(insecure.NewCredentials()))
+	 	conn, err := grpc.Dial("http://35.84.28.237:30210", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err!=nil{
 		fmt.Println(err)
 	}

@@ -8,7 +8,7 @@ import (
 	"strings"
  )
 
-func init() {
+func Init() {
 	// setting logger configurations
 	log.SetReportCaller(true)
 
@@ -25,6 +25,7 @@ func init() {
 
 
 func main(){
+	Init()
 	if err:=server.RunServer();err!=nil{
 		log.WithField("Error:",err).Fatalf("Server quiting....")
 	}
