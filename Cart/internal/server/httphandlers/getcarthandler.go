@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/internal/errors"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/internal/services"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/util"
@@ -19,8 +20,9 @@ import (
 // @Router /cart/v1/cart [get]
 func GetCartHandler(config *util.RouterConfig) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
+		params := mux.Vars(req)
+		customerId := params["key"]
 
-		customerId := util.ExtractDetailsFromToken(req)
 		service := services.GetGetCartService()
 
 		// Process the request

@@ -24,7 +24,6 @@ import (
 func AddCartItemHandler(config *util.RouterConfig) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 
-		customerId := util.ExtractDetailsFromToken(req)
 		// read request body
 		b, goErr := ioutil.ReadAll(req.Body)
 		defer req.Body.Close()
@@ -46,7 +45,7 @@ func AddCartItemHandler(config *util.RouterConfig) http.HandlerFunc {
 		service := services.GetAddCartItemService()
 
 		// Process the request
-		err := service.ProcessRequest(customerId, product)
+		err := service.ProcessRequest(product)
 		if err != nil {
 			http.Error(w, err.ErrorMessage, err.HttpResponseCode)
 			return

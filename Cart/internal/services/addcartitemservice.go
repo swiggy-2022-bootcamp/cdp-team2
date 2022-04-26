@@ -12,7 +12,7 @@ import (
 
 type AddCartItemService interface {
 	ValidateRequest(product models.Product) *errors.ServerError
-	ProcessRequest(customerId string, product models.Product) *errors.ServerError
+	ProcessRequest(product models.Product) *errors.ServerError
 }
 
 var addCartItemServiceStruct AddCartItemService
@@ -43,6 +43,11 @@ func GetAddCartItemService() AddCartItemService {
 }
 
 func (s *addCartItemService) ValidateRequest(product models.Product) *errors.ServerError {
+	if product.CustomerId == "" {
+		log.Error("customer id can not be empty")
+		return &errors.ParametersMissingError
+	}
+
 	if product.ProductId == "" {
 		log.Error("product id can not be empty")
 		return &errors.ParametersMissingError
@@ -56,6 +61,6 @@ func (s *addCartItemService) ValidateRequest(product models.Product) *errors.Ser
 	return nil
 }
 
-func (s *addCartItemService) ProcessRequest(customerId string, product models.Product) *errors.ServerError {
-	return s.dao.AddCartItem(customerId, product)
+func (s *addCartItemService) ProcessRequest(product models.Product) *errors.ServerError {
+	return s.dao.AddCartItem(product.CustomerId, product)
 }
