@@ -173,7 +173,7 @@ definitions:
           $ref: '#/definitions/domain.Product'
         type: array
     type: object
-host: 38.84.28.237:30201
+host: 35.84.28.237:30201
 info:
   contact:
     email: support@swagger.io

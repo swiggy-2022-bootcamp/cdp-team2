@@ -36,7 +36,7 @@ func NewServer(handlers ports.IProductsHandlers) *Server {
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host 38.84.28.237:30201
+// @host 35.84.28.237:30201
 // @BasePath /api/rest_admin/products/
 func (s *Server) Initialize() {
 	server := gin.Default()

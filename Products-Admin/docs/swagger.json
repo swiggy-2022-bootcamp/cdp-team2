@@ -15,7 +15,7 @@
         },
         "version": "1.0"
     },
-    "host": "38.84.28.237:30201",
+    "host": "35.84.28.237:30201",
     "basePath": "/api/rest_admin/products/",
     "paths": {
         "/": {
