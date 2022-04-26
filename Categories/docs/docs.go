@@ -242,10 +242,12 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "category_description": {
+                    "x-omitempty": true,
                     "$ref": "#/definitions/models.CategoryDesc"
                 },
                 "category_id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "x-omitempty": true
                 }
             }
         },
@@ -253,19 +255,24 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "x-omitempty": true
                 },
                 "meta_description": {
-                    "type": "string"
+                    "type": "string",
+                    "x-omitempty": true
                 },
                 "meta_keyword": {
-                    "type": "string"
+                    "type": "string",
+                    "x-omitempty": true
                 },
                 "meta_title": {
-                    "type": "string"
+                    "type": "string",
+                    "x-omitempty": true
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "x-omitempty": true
                 }
             }
         }
@@ -285,7 +292,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:7450",
+	Host:             "35.84.28.237:30204",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Categories Api",

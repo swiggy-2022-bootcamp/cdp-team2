@@ -6,7 +6,7 @@
         "contact": {},
         "version": "1.0"
     },
-    "host": "localhost:7450",
+    "host": "35.84.28.237:30204",
     "basePath": "/",
     "paths": {
         "/categories": {
@@ -235,10 +235,12 @@
             "type": "object",
             "properties": {
                 "category_description": {
+                    "x-omitempty": true,
                     "$ref": "#/definitions/models.CategoryDesc"
                 },
                 "category_id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "x-omitempty": true
                 }
             }
         },
@@ -246,19 +248,24 @@
             "type": "object",
             "properties": {
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "x-omitempty": true
                 },
                 "meta_description": {
-                    "type": "string"
+                    "type": "string",
+                    "x-omitempty": true
                 },
                 "meta_keyword": {
-                    "type": "string"
+                    "type": "string",
+                    "x-omitempty": true
                 },
                 "meta_title": {
-                    "type": "string"
+                    "type": "string",
+                    "x-omitempty": true
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "x-omitempty": true
                 }
             }
         }

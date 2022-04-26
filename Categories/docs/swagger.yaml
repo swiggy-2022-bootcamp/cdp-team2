@@ -17,23 +17,30 @@ definitions:
     properties:
       category_description:
         $ref: '#/definitions/models.CategoryDesc'
+        x-omitempty: true
       category_id:
         type: integer
+        x-omitempty: true
     type: object
   models.CategoryDesc:
     properties:
       description:
         type: string
+        x-omitempty: true
       meta_description:
         type: string
+        x-omitempty: true
       meta_keyword:
         type: string
+        x-omitempty: true
       meta_title:
         type: string
+        x-omitempty: true
       name:
         type: string
+        x-omitempty: true
     type: object
-host: localhost:7450
+host: 35.84.28.237:30204
 info:
   contact: {}
   description: This is categories crud service.
