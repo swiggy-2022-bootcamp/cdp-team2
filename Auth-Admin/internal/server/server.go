@@ -23,9 +23,9 @@ func NewServer(handlers ports.IHandlers, middlewares ports.IMiddlewares) *Server
 	}
 }
 
-// @title Swagger adminAuth Admin Microservice
+// @title Swagger Admin Auth Microservice
 // @version 1.0
-// @description Micorservice for handling admin adminAuth.
+// @description Micorservice for handling Admin Auth.
 // @termsOfService http://swagger.io/terms/
 
 // @contact.name API Support
@@ -35,8 +35,8 @@ func NewServer(handlers ports.IHandlers, middlewares ports.IMiddlewares) *Server
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host localhost:8000
-// @BasePath /adminAuth
+// @host 35.84.28.237:8000
+// @BasePath /auth
 func (s *Server) Initialize() {
 	server := gin.Default()
 

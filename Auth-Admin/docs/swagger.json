@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "Micorservice for handling admin auth.",
-        "title": "Swagger Auth Admin Microservice",
+        "description": "Micorservice for handling Admin Auth.",
+        "title": "Swagger Admin Auth Microservice",
         "termsOfService": "http://swagger.io/terms/",
         "contact": {
             "name": "API Support",
@@ -15,12 +15,12 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:8000",
-    "basePath": "/products",
+    "host": "35.84.28.237:8000",
+    "basePath": "/auth",
     "paths": {
         "/": {
             "get": {
-                "description": "API to check Auth-admin health",
+                "description": "API to check products-admin health",
                 "consumes": [
                     "application/json"
                 ],
@@ -31,6 +31,115 @@
                     "Health"
                 ],
                 "summary": "Health Check Route",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "description": "API to Login Users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "plain/text"
+                ],
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Login Route",
+                "parameters": [
+                    {
+                        "description": "Username/email of the user",
+                        "name": "username",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "Password of the user",
+                        "name": "password",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "post": {
+                "description": "API to delete acess token from user databse and logout user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "plain/text"
+                ],
+                "tags": [
+                    "Logout"
+                ],
+                "summary": "Logout Route",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003cAdd access token here\u003e",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/oAuth/token": {
+            "post": {
+                "description": "API to Generate access token using basic token provided by login API",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "plain/text"
+                ],
+                "tags": [
+                    "OAuth"
+                ],
+                "summary": "OAuth Access Token",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "Basic \u003cAdd access token here\u003e",
+                        "description": "Insert your basic token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",

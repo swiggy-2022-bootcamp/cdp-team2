@@ -29,5 +29,5 @@
 http://localhost:8000/products/swagger/index.html
 
 # Command to regenerate swagger docs
-> swag init ./internal/server/server.go
+> swag init -g internal/server/server.g
 ```
