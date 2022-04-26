@@ -79,5 +79,5 @@ paths:
           description: ""
       summary: Checks the health of the microservice
       tags:
-      - Healthcheck
+      - Cart
 swagger: "2.0"

@@ -99,7 +99,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Healthcheck"
+                    "Cart"
                 ],
                 "summary": "Checks the health of the microservice",
                 "responses": {
