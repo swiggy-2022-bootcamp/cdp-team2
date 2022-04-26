@@ -14,13 +14,13 @@ type DynamoDAO struct {
 	mock.Mock
 }
 
-// AddCartItem provides a mock function with given fields: product
-func (_m *DynamoDAO) AddCartItem(product models.Product) *errors.ServerError {
-	ret := _m.Called(product)
+// AddCartItem provides a mock function with given fields: customerId, product
+func (_m *DynamoDAO) AddCartItem(customerId string, product models.Product) *errors.ServerError {
+	ret := _m.Called(customerId, product)
 
 	var r0 *errors.ServerError
-	if rf, ok := ret.Get(0).(func(models.Product) *errors.ServerError); ok {
-		r0 = rf(product)
+	if rf, ok := ret.Get(0).(func(string, models.Product) *errors.ServerError); ok {
+		r0 = rf(customerId, product)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*errors.ServerError)

@@ -15,7 +15,7 @@ import (
 )
 
 type DynamoDAO interface {
-	AddCartItem(product models.Product) *errors.ServerError
+	AddCartItem(customerId string, product models.Product) *errors.ServerError
 	GetCart(customerId string) (models.Cart, *errors.ServerError)
 	DeleteCartItem(customerId string, productId string) *errors.ServerError
 	EmptyCart(customerId string) *errors.ServerError
@@ -50,11 +50,11 @@ func GetDynamoDAO() DynamoDAO {
 }
 
 // AddProduct add product details to the cart of the user
-func (dao *dynamoDAO) AddCartItem(product models.Product) *errors.ServerError {
+func (dao *dynamoDAO) AddCartItem(customerId string, product models.Product) *errors.ServerError {
 	cart, err := dao.GetCart("133")
 	if err != nil {
 		log.Info("cart not found for customer")
-		cart.CustomerId = "133"
+		cart.CustomerId = customerId
 	}
 
 	cart.Products = append(cart.Products, product)
