@@ -86,11 +86,11 @@ This section contains the list of tools and technology stack used while developi
 
 ## Swagger
 
-![Cart Service Swagger](./static/images/swagger@2x.png)
+![Cart Service Swagger](./static/images/swagger.png)
 
 ## Flow Diagram of Cart MS
 
-![Cart Service Diagram](./static/images/CartMS@2x.png)
+![Cart Service Diagram](./static/images/CartMS.png)
 
 ## Local Setup for Development
 
