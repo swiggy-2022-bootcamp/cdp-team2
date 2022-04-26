@@ -10,7 +10,7 @@ import (
 	// "strconv"
 )
 func GetCartByCustomerId(customer_id string)model.Cart{
-	conn,err:=grpc.Dial("http://35.84.28.237:30217",grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn,err:=grpc.Dial("35.84.28.237:30217",grpc.WithTransportCredentials(insecure.NewCredentials()))
 	// conn,err:=grpc.Dial("0.tcp.in.ngrok.io:11480",grpc.WithTransportCredentials(insecure.NewCredentials()))
  	if err!=nil{
 		fmt.Println(err)

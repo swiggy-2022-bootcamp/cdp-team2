@@ -11,7 +11,7 @@ import (
 )
 func GetRewardByCustomerId(customer_id string)model.Reward{
 	// conn,err:=grpc.Dial("localhost:"+strconv.Itoa(literals.REWARD_PORT),grpc.WithInsecure())
-	conn, err := grpc.Dial("http://35.84.28.237:30219", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial("35.84.28.237:30219", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	reward:=model.Reward{}
 
 	if err != nil {
