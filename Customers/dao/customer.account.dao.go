@@ -266,7 +266,7 @@ func (cd *CustomerDao)Get(id_string string)(models.Customer,error){
 		return customer,errors.New("Customer Not Found")
 	}
 	// print the response data
- 	customer.Address=grpc.GetAddress("0")
+ 	customer.Address=grpc.GetAddress(customer.Id)
 	
 	 return customer,nil
 }
