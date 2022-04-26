@@ -29,7 +29,7 @@ func NewOShippingAddressController() *ShippingAddressController {
 // @Success 200
 // @Router /shipping-address/customer/{customerId} [get]
 func (cc *ShippingAddressController) GetByCustomer(c *gin.Context) {
-	customerId := c.GetInt(literals.CustomerIdKey)
+	customerId := c.GetString(literals.CustomerIdKey)
 
 	shippingAddress, err := cc.service.GetByCustomerId(customerId)
 	if err != nil {

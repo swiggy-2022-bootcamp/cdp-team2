@@ -4,8 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"strconv"
-
 	pb "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/protos/shipping"
 
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/dao"
@@ -23,10 +21,8 @@ func (s *Server) AddressutsService(ctx context.Context, address *pb.AddressutsRe
 
 	fmt.Println(customerIdStr, firstName, lastName, addressLine1, addressLine2, city, countryId, postCode)
 
-	customerId, _ := strconv.Atoi(customerIdStr)
-
 	shippingAddress := models.ShippingAddress{
-		CustomerId:   customerId,
+		CustomerId:   customerIdStr,
 		FirstName:    firstName,
 		LastName:     lastName,
 		AddressLine1: addressLine1,
@@ -50,9 +46,7 @@ func (s *Server) AddressutsService(ctx context.Context, address *pb.AddressutsRe
 func (s *Server) AddressstuService(ctx context.Context, req *pb.AddressstuRequest) (*pb.AddressstuResponse, error) {
 	customerIdStr := req.CustomerId
 
-	customerId, _ := strconv.Atoi(customerIdStr)
-
-	addressResponse, err := dao.GetShippingDao().GetByCustomerId(customerId)
+	addressResponse, err := dao.GetShippingDao().GetByCustomerId(customerIdStr)
 
 	if err != nil {
 		return nil, errors.New("error occurred")
@@ -61,7 +55,7 @@ func (s *Server) AddressstuService(ctx context.Context, req *pb.AddressstuReques
 	addresses := []*pb.Address{}
 
 	for i := 0; i < len(addressResponse); i++ {
-		addresses = append(addresses, &pb.Address{CustomerId: string(rune(addressResponse[i].CustomerId)),
+		addresses = append(addresses, &pb.Address{CustomerId: addressResponse[i].CustomerId,
 			Firstname:    addressResponse[i].FirstName,
 			Lastname:     addressResponse[i].LastName,
 			AddressLine1: addressResponse[i].AddressLine1,

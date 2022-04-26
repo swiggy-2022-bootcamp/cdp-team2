@@ -17,7 +17,7 @@ func NewShippingAddressService() IService {
 	}
 }
 
-func (cs *ShippingAddressService) GetByCustomerId(customerId int) ([]models.ShippingAddress, error) {
+func (cs *ShippingAddressService) GetByCustomerId(customerId string) ([]models.ShippingAddress, error) {
 	return cs.Dao.GetByCustomerId(customerId)
 }
 

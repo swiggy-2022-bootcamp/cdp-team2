@@ -61,7 +61,7 @@ func getRandomKey() int {
  * Get shipping address of a customer
  * @param customerId int
  */
-func (cd *ShippingDao) GetByCustomerId(customerId int) ([]models.ShippingAddress, error) {
+func (cd *ShippingDao) GetByCustomerId(customerId string) ([]models.ShippingAddress, error) {
 
 	filt := expression.Name("customerId").Equal(expression.Value(customerId))
 

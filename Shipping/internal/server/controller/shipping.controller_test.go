@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -15,7 +16,7 @@ import (
 )
 
 func getDummyShipping() *models.ShippingAddress {
-	return &models.ShippingAddress{1, 2, "Taranjeet", "Singh", "Varanasi", "Zamania", "Ghazipur", "IN", 232331}
+	return &models.ShippingAddress{1, "2", "Taranjeet", "Singh", "Varanasi", "Zamania", "Ghazipur", "IN", 232331}
 }
 
 func TestGetByCustomerId(t *testing.T) {
@@ -24,7 +25,8 @@ func TestGetByCustomerId(t *testing.T) {
 	cont := &ShippingAddressController{mserv}
 
 	res := []models.ShippingAddress{*getDummyShipping()}
-	mserv.EXPECT().GetByCustomerId(2).Times(1).Return(res, nil)
+
+	mserv.EXPECT().GetByCustomerId("2").Times(1).Return(res, nil)
 
 	w := httptest.NewRecorder()
 	ctx, _ := gin.CreateTestContext(w)
@@ -47,6 +49,8 @@ func TestGetByCustomerId(t *testing.T) {
 	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 		t.Errorf("error unmarshing response json")
 	}
+
+	fmt.Println("res", res, actual)
 
 	assert.Equal(t, res, actual)
 }

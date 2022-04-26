@@ -2,7 +2,7 @@ package models
 
 type ShippingAddress struct {
 	AddressId    int    `json:"addressId,omitempty"  extensions:"x-omitempty"`
-	CustomerId   int    `json:"customerId,omitempty"  extensions:"x-omitempty"`
+	CustomerId   string `json:"customerId,omitempty"  extensions:"x-omitempty"`
 	FirstName    string `json:"firstName,omitempty" extensions:"x-omitempty"`
 	LastName     string `json:"lastName,omitempty" extensions:"x-omitempty"`
 	City         string `json:"city,omitempty" extensions:"x-omitempty"`

@@ -49,7 +49,7 @@ func (mr *MockIDaoMockRecorder) Create(arg0 interface{}) *gomock.Call {
 }
 
 // GetByCustomerId mocks base method
-func (m *MockIDao) GetByCustomerId(arg0 int) ([]models.ShippingAddress, error) {
+func (m *MockIDao) GetByCustomerId(arg0 string) ([]models.ShippingAddress, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetByCustomerId", arg0)
 	ret0, _ := ret[0].([]models.ShippingAddress)

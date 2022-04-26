@@ -13,7 +13,7 @@ import (
 )
 
 func getDummyShipping() *models.ShippingAddress {
-	return &models.ShippingAddress{1, 2, "Taranjeet", "Singh", "Varanasi", "Zamania", "Ghazipur", "IN", 232331}
+	return &models.ShippingAddress{1, "2", "Taranjeet", "Singh", "Varanasi", "Zamania", "Ghazipur", "IN", 232331}
 }
 
 func TestGetRandomKey(t *testing.T) {
