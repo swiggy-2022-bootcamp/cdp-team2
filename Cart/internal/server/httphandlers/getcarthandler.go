@@ -1,0 +1,48 @@
+package httphandlers
+
+import (
+	"encoding/json"
+	"net/http"
+
+	"github.com/gorilla/mux"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/internal/errors"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/internal/services"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/util"
+)
+
+// GetCart godoc
+// @Summary To get the cart details
+// @Description It returns the cart details with status code 200 OK.
+// @Tags Cart
+// @Produce json
+// @Success 200
+// @Failure 500
+// @Router /cart/v1/cart [get]
+func GetCartHandler(config *util.RouterConfig) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+		params := mux.Vars(req)
+		customerId := params["customerId"]
+
+		service := services.GetGetCartService()
+
+		// Process the request
+		response, err := service.ProcessRequest(customerId)
+		if err != nil {
+			http.Error(w, err.ErrorMessage, err.HttpResponseCode)
+			return
+		}
+
+		respBytes, goErr := json.Marshal(response)
+		if goErr != nil {
+			http.Error(w, errors.InternalError.ErrorMessage, errors.InternalError.HttpResponseCode)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		_, goErr = w.Write(respBytes)
+		if goErr != nil {
+			http.Error(w, errors.InternalError.ErrorMessage, errors.InternalError.HttpResponseCode)
+			return
+		}
+	}
+}

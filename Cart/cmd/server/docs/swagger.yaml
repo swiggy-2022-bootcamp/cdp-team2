@@ -1,0 +1,83 @@
+definitions:
+  models.HealthCheck:
+    properties:
+      status:
+        example: UP
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /cart/v1/cart:
+    get:
+      description: It returns the cart details with status code 200 OK.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "500":
+          description: ""
+      summary: To get the cart details
+      tags:
+      - Cart
+    post:
+      description: It accepts product id and quantity in the request url. If the product
+        id exists, then it adds to the cart otherwise return 404. On successful addition
+        of item to the cart, returns 200 OK, otherwise 500 Internal Server Error.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "500":
+          description: ""
+      summary: Add the cart item in the cart.
+      tags:
+      - Cart
+    put:
+      description: It accepts product id and updated count in request body, and return
+        200 OK in case of successful update. Otherwise return 500 Internal Server
+        Error, or 404 if the product id is not present in cart.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "500":
+          description: ""
+      summary: Updates the cart item count
+      tags:
+      - Cart
+  /cart/v1/cart/{key}:
+    delete:
+      description: Deletes the product from the cart of user. Product id is given
+        as path parameter in request URL. Status 200, returned on successful deletion
+        with no content.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "500":
+          description: ""
+      summary: Deletes the cart item
+      tags:
+      - Cart
+  /cart/v1/healthcheck:
+    get:
+      description: Returns json stating with pass status and http response code 200
+        OK, otherwise returns http response code 500 Internal Server Error.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.HealthCheck'
+        "500":
+          description: ""
+      summary: Checks the health of the microservice
+      tags:
+      - Cart
+swagger: "2.0"
