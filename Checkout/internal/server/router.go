@@ -23,7 +23,7 @@ func InitRouter() (*gin.Engine, error) {
 		return nil, err
 	}
 
-	r.POST("/checkout/:cart_id", cont.StartCheckout)
+	r.POST("/checkout/:customer_id", cont.StartCheckout)
 	r.PUT("/rewards", cont.ApplyReward)
 	r.POST("/pay", cont.Pay)
 	r.GET("/order/:order_id", cont.GetOrder)

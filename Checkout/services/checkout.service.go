@@ -68,6 +68,8 @@ func (cs *CheckoutService) StartCheckout(customerId string) (*orderpb.OrderRespo
 		return nil, err
 	}
 
+	log.Printf("[GRPC Call] cartresp %+v", cartresp)
+
 	quantityMap := make(map[int64]int32)
 
 	//Deduct Cart Products from Invertory [Product MS]
@@ -91,32 +93,41 @@ func (cs *CheckoutService) StartCheckout(customerId string) (*orderpb.OrderRespo
 		return nil, err
 	}
 
+	log.Printf("[GRPC Call] product reps %+v", res)
+
 	totalPrice := 0.0
 
 	var orderItems []*orderpb.ProductDesc
 
-	for _, prod := range res.AvailableProducts {
-		prodresp, err := cs.productClient.GetProductById(cs.productClient.CtxWithTimeOut(), &productpb.ProductIDRequest{ProductID: prod.ProductID})
-		if err != nil {
-			log.Printf("[Error] couldn't find product = %d", prod.ProductID)
-			return nil, err
+	if res.AvailableProducts != nil {
+
+		for _, prod := range res.AvailableProducts {
+			prodresp, err := cs.productClient.GetProductById(cs.productClient.CtxWithTimeOut(), &productpb.ProductIDRequest{ProductID: prod.ProductID})
+
+			log.Printf("[GRPC Call] product single reps %+v", prodresp)
+
+			if err != nil {
+				log.Printf("[Error] couldn't find product = %d", prod.ProductID)
+				return nil, err
+			}
+
+			p, err := strconv.ParseFloat(prodresp.Product.Price, 32)
+			if err != nil {
+				log.Printf("[Error] invalid product price = %s", prodresp.Product.Price)
+				return nil, err
+			}
+
+			orderItems = append(orderItems, &orderpb.ProductDesc{
+				ProductId: int32(prodresp.Product.ID),
+				Points:    int32(prodresp.Product.Points),
+				Reward:    int32(prodresp.Product.Rewards),
+				Quantity:  quantityMap[prodresp.Product.ID],
+				Price:     float32(p),
+			})
+
+			totalPrice += (p * float64(quantityMap[prodresp.Product.ID]))
 		}
 
-		p, err := strconv.ParseFloat(prodresp.Product.Price, 32)
-		if err == nil {
-			log.Printf("[Error] invalid product price = %s", prodresp.Product.Price)
-			return nil, err
-		}
-
-		orderItems = append(orderItems, &orderpb.ProductDesc{
-			ProductId: int32(prodresp.Product.ID),
-			Points:    int32(prodresp.Product.Points),
-			Reward:    int32(prodresp.Product.Rewards),
-			Quantity:  quantityMap[prodresp.Product.ID],
-			Price:     float32(p),
-		})
-
-		totalPrice += (p * float64(quantityMap[prodresp.Product.ID]))
 	}
 
 	//create order obj with status pending
@@ -134,17 +145,21 @@ func (cs *CheckoutService) StartCheckout(customerId string) (*orderpb.OrderRespo
 			},
 		})
 
-	if err == nil {
+	log.Printf("[GRPC Call] orderResp %+v", orderResp)
+
+	if err != nil {
 		log.Printf("[Error] couldn't create order = %s", err.Error())
 		return nil, err
 	}
 
 	//Clear Cart [Cart MS]
-	_, err = cs.cartClient.EmptyCart(cs.cartClient.CtxWithTimeOut(), &cartpb.CartRequest{CustomerId: customerId})
+	clearcartres, err := cs.cartClient.EmptyCart(cs.cartClient.CtxWithTimeOut(), &cartpb.CartRequest{CustomerId: customerId})
 	if err != nil {
 		log.Printf("[Error] Could not clear cart")
 		//don't exit because order is already created
 	}
+
+	log.Printf("[GRPC Call] clearcartres %+v", clearcartres)
 
 	//return order to user
 	return orderResp.Order, nil
@@ -154,6 +169,9 @@ func (cs *CheckoutService) ApplyReward(orderId string, points int) (*orderpb.Ord
 
 	//check order status = pending [Order MS]
 	iniorder, err := cs.GetOrder(orderId)
+
+	log.Printf("[GRPC Call] iniorder %+v", iniorder)
+
 	if err != nil {
 		log.Printf("[Error] invalid order id = %s", orderId)
 		return nil, err
@@ -168,6 +186,8 @@ func (cs *CheckoutService) ApplyReward(orderId string, points int) (*orderpb.Ord
 
 	//apply reward [Reward MS]
 	rewardResp, err := cs.rewardClient.RedeemReward(cs.rewardClient.CtxWithTimeOut(), &rewardpb.RedeemRewardRequest{})
+	log.Printf("[GRPC Call] rewardResp %+v", rewardResp)
+
 	if err != nil {
 		log.Printf("[Error] couldn't redeem reward = %s", err.Error())
 		return nil, err
@@ -179,6 +199,7 @@ func (cs *CheckoutService) ApplyReward(orderId string, points int) (*orderpb.Ord
 		orderResp, err := cs.orderClient.OrderStatusUpdateService(cs.orderClient.CtxWithTimeOut(),
 			&orderpb.OrderStatusUpdateRequest{OrderId: orderId, Status: ORDER_CONFIRMED})
 
+		log.Printf("[GRPC Call] orderResp %+v", orderResp)
 		if err != nil || !orderResp.Response {
 			log.Printf("[Error] couldn't mark order completed = %s", err.Error())
 		}
@@ -194,6 +215,7 @@ func (cs *CheckoutService) ConfirmOrder(orderId string) (*orderpb.OrderResponse,
 	if err != nil {
 		return nil, err
 	}
+	log.Printf("[GRPC Call] iniorder %+v", iniorder)
 
 	if iniorder.AddressId == 0 {
 		e := fmt.Errorf("Shipping address not set for order = %s", orderId)
@@ -204,6 +226,8 @@ func (cs *CheckoutService) ConfirmOrder(orderId string) (*orderpb.OrderResponse,
 	//change order status to Confirmed [Order MS]
 	orderResp, err := cs.orderClient.OrderStatusUpdateService(cs.orderClient.CtxWithTimeOut(),
 		&orderpb.OrderStatusUpdateRequest{OrderId: orderId, Status: ORDER_CONFIRMED})
+
+	log.Printf("[GRPC Call] orderResp %+v", orderResp)
 
 	if err != nil || !orderResp.Response {
 		log.Printf("[Error] couldn't mark order completed = %s", err.Error())
