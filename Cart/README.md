@@ -84,6 +84,10 @@ This section contains the list of tools and technology stack used while developi
 11. Postman
 12. SonarQube
 
+## Swagger
+
+![Cart Service Swagger](./static/images/swagger@2x.png)
+
 ## Flow Diagram of Cart MS
 
 ![Cart Service Diagram](./static/images/CartMS@2x.png)
