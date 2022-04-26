@@ -4,6 +4,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/internal/server/controller"
+	middlewares "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/internal/server/middleware"
 )
 
 func InitRouter() *gin.Engine {
@@ -18,9 +19,9 @@ func InitRouter() *gin.Engine {
 
 	shippingGrp := r.Group("/shipping-address")
 	{
-		shippingGrp.POST("/", controller.BindOrder, cont.Create)
-		shippingGrp.GET("/customer/:customerId", controller.BindCustomer, cont.GetByCustomer)
-		shippingGrp.POST("/set/address", controller.BindAddressOrder, cont.SetAddressToOrder)
+		shippingGrp.POST("/", middlewares.CheckAuthMiddleware, controller.BindOrder, cont.Create)
+		shippingGrp.GET("/customer/:customerId", middlewares.CheckAuthMiddleware, controller.BindCustomer, cont.GetByCustomer)
+		shippingGrp.POST("/set/address", middlewares.CheckAuthMiddleware, controller.BindAddressOrder, cont.SetAddressToOrder)
 	}
 
 	return r

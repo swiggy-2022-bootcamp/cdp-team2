@@ -6,4 +6,5 @@ var Server = map[string]string{
 
 var GrpcAdd = map[string]string{
 	"ORDER_SERVICE": "35.84.28.237:30208",
+	"AUTH_SERVICE":  "35.84.28.237:30220",
 }
