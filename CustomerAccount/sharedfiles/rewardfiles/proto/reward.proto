@@ -1,0 +1,26 @@
+syntax = "proto3";
+package proto;
+option go_package="/internal/proto";
+
+message Reward{
+    string customerId=1;
+    string description=2;
+    int32  points=3;
+    
+}
+ 
+message RewardResponse{
+    Reward reward=1;
+}
+message RewardRequest{
+    string customerId=1;
+}
+
+
+
+  
+service Service{
+    rpc RewardService(RewardRequest)returns (RewardResponse){};
+}
+
+
