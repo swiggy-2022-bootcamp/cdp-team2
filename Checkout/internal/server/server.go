@@ -12,7 +12,7 @@ import (
 // @version 1.0
 // @description This is checkout service.
 
-// @host localhost:7451
+// @host 35.84.28.237:30206
 // @BasePath /
 
 // @securityDefinitions.basic BasicAuth
@@ -21,7 +21,12 @@ import (
 // @in header
 // @name Authorization
 func Start() {
-	router := InitRouter()
+	router, err := InitRouter()
+
+	if err != nil {
+		log.Println("Error starting server")
+		return
+	}
 
 	endPoint := fmt.Sprintf(":%s", config.Config["PORT"])
 

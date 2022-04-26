@@ -1,7 +1,6 @@
 syntax = "proto3";
 
-package reward;
-option go_package = "github.com/swiggy-2022-bootcamp/cdp-team2/common/protos/reward";
+option go_package = "./;protos";
 
 message Reward {
     string customerId = 1;

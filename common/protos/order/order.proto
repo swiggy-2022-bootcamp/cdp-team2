@@ -1,8 +1,9 @@
 syntax = "proto3";
 
+package proto;
 
-package order;
-option go_package = "github.com/swiggy-2022-bootcamp/cdp-team2/common/protos/order";
+option go_package="/order";
+
 
 
 message ProductDesc{
@@ -30,6 +31,24 @@ message OrderStatusUpdateRequest{
 }
 
 message OrderStatusUpdateResponse{
+  bool response=1;
+}
+
+message OrderPayedPriceUpdateRequest{
+  string orderId =1;
+  float payedPrice=2;
+}
+
+message OrderPayedPriceUpdateResponse{
+  bool response=1;
+}
+
+message OrderAddressUpdateRequest{
+  string orderId =1;
+  int32 addressId=2;
+}
+
+message OrderAddressUpdateResponse{
   bool response=1;
 }
 
@@ -67,5 +86,7 @@ service Service{
 rpc OrderCreateService(OrderCreateRequest)returns (OrderCreateResponse){};
   rpc OrderStatusUpdateService(OrderStatusUpdateRequest)returns (OrderStatusUpdateResponse){};
   rpc GetOrderService(GetOrderRequest)returns (GetOrderResponse){};
+  rpc OrderAddressUpdateService(OrderAddressUpdateRequest)returns (OrderAddressUpdateResponse){};
+  rpc OrderPayedPriceUpdateService(OrderPayedPriceUpdateRequest)returns (OrderPayedPriceUpdateResponse){};
 
 }

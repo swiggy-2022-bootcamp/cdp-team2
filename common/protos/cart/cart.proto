@@ -1,7 +1,6 @@
 syntax = "proto3";
 
-package cart;
-option go_package = "github.com/swiggy-2022-bootcamp/cdp-team2/common/protos/cart";
+option go_package = "./;protos";
 
 message Product {
     string productId = 1;
