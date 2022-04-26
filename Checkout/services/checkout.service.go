@@ -185,7 +185,7 @@ func (cs *CheckoutService) ApplyReward(orderId string, points int) (*orderpb.Ord
 	}
 
 	//apply reward [Reward MS]
-	rewardResp, err := cs.rewardClient.RedeemReward(cs.rewardClient.CtxWithTimeOut(), &rewardpb.RedeemRewardRequest{})
+	rewardResp, err := cs.rewardClient.RedeemReward(cs.rewardClient.CtxWithTimeOut(), &rewardpb.RedeemRewardRequest{OrderId: iniorder.OrderId, Points: int32(points)})
 	log.Printf("[GRPC Call] rewardResp %+v", rewardResp)
 
 	if err != nil {
