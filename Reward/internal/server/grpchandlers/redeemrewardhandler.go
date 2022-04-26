@@ -19,7 +19,7 @@ func (s *Server) RedeemReward(ctx context.Context, reward *pb.RedeemRewardReques
 	}
 
 	// call to Order MS to get list of products
-	conn, grpcErr := grpc.Dial("0.tcp.in.ngrok.io:19361", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, grpcErr := grpc.Dial("35.84.28.237:30208", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if grpcErr != nil {
 		log.WithError(grpcErr).Error("unable to establish grpc connection")
 		return nil, errors.New("an internal error occurred")
