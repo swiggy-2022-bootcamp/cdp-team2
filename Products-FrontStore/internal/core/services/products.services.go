@@ -68,16 +68,18 @@ func (ps *ProductsServices) GetProductById(productID int64) (*domain.Product, *e
 	_product.ProductDescription = _productDesc
 	_product.ProductRelated = res.Product.ProductRelated
 
-	_product.ID = res.Product.ID
-	_product.ManufacturerID = int(res.Product.ManufacturerID)
-	_product.Rewards = uint(res.Product.Rewards)
-	_product.ShippingID = int(res.Product.ShippingID)
-	_product.ProductSeoUrl.StoreID = res.Product.ProductSeoUrl.StoreID
-	_product.ProductSeoUrl.LanguageID = res.Product.ProductSeoUrl.LanguageID
+	if res != nil && res.Product != nil && res.Product.ProductSeoUrl != nil && res.Product.ProductDescription != nil {
+		_product.ID = res.Product.ID
+		_product.ManufacturerID = int(res.Product.ManufacturerID)
+		_product.Rewards = uint(res.Product.Rewards)
+		_product.ShippingID = int(res.Product.ShippingID)
+		_product.ProductSeoUrl.StoreID = res.Product.ProductSeoUrl.StoreID
+		_product.ProductSeoUrl.LanguageID = res.Product.ProductSeoUrl.LanguageID
 
-	for i, des := range res.Product.ProductDescription {
-		if i < len(_product.ProductDescription) {
-			_product.ProductDescription[i].LanguageID = des.LanguageID
+		for i, des := range res.Product.ProductDescription {
+			if i < len(_product.ProductDescription) {
+				_product.ProductDescription[i].LanguageID = des.LanguageID
+			}
 		}
 	}
 
