@@ -86,7 +86,7 @@ This section contains the list of tools and technology stack used while developi
 
 ## Flow Diagram of Cart MS
 
-![Cart Service Diagram](./static/images/CartMS@2x.png)
+![Cart Service Diagram](./static/images/Cart MS@2x.png)
 
 ## Local Setup for Development
 
