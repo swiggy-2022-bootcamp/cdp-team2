@@ -36,9 +36,15 @@ func NewServer(config *config.WebServerConfig) *Server {
 // It starts the server and returns nil as error if server starts successfully otherwise
 // returns the error.
 func RunServer() error {
-	webServerConfig, err := config.FromEnv()
-	if err != nil {
-		return err
+	// webServerConfig, err := config.FromEnv()
+	// if err != nil {
+	// 	return err
+	// }
+
+	webServerConfig := &config.WebServerConfig{
+		Port:        "8000",
+		Db:          "reward",
+		RoutePrefix: "/reward",
 	}
 
 	routerConfigs := util.RouterConfig{
@@ -58,7 +64,7 @@ func RunServer() error {
 	go startGrpcServer()
 
 	log.Info("Starting Http Server on PORT: ", webServerConfig.Port)
-	err = http.ListenAndServe(":"+webServerConfig.Port, *server.Router)
+	err := http.ListenAndServe(":"+webServerConfig.Port, *server.Router)
 	if err != nil {
 		return err
 	}
