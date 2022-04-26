@@ -67,6 +67,23 @@ func (cs *CategoryService) DeleteByID(id int) error {
 func (cs *CategoryService) DeleteMultiple(ids []int) []error {
 	var errorList []error
 	for _, id := range ids {
+
+		prodres, err := cs.productClient.GetProductsByCategoryId(cs.productClient.CtxWithTimeOut(), &productpb.CategoryIDRequest{CategoryID: int64(id)})
+		if err != nil {
+			log.Printf("[Error] fetching product in category %d . error = %s", id, err.Error())
+			errorList = append(errorList, err)
+			continue
+		}
+
+		log.Printf("[GRPC call] product resp : %+v", prodres)
+
+		if len(prodres.Products) > 0 {
+			e := fmt.Errorf("Category %d has products in it, hence cannot be deleted", id)
+			log.Println(e)
+			errorList = append(errorList, err)
+			continue
+		}
+
 		if err := cs.Dao.DeleteByID(id); err != nil {
 			errorList = append(errorList, err)
 		}
