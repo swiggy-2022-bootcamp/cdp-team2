@@ -7,7 +7,7 @@ const (
 	HealthCheckEndpoint = APIVersion1 + "/healthcheck"
 
 	GetCartAPIName  = "Get Cart API"
-	GetCartEndpoint = APIVersion1 + "/cart"
+	GetCartEndpoint = APIVersion1 + "/cart/{customerId}"
 
 	AddCartAPIName      = "Add Cart API"
 	AddCartItemEndpoint = APIVersion1 + "/cart"
@@ -16,5 +16,5 @@ const (
 	UpdateCartItemEndpoint = APIVersion1 + "/cart"
 
 	DeleteCartItemAPIName  = "Delete Cart Item API"
-	DeleteCartItemEndpoint = APIVersion1 + "/cart/{key}"
+	DeleteCartItemEndpoint = APIVersion1 + "{customerId}/cart/{productId}"
 )

@@ -21,7 +21,7 @@ import (
 func GetCartHandler(config *util.RouterConfig) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		params := mux.Vars(req)
-		customerId := params["key"]
+		customerId := params["customerId"]
 
 		service := services.GetGetCartService()
 

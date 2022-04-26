@@ -19,9 +19,9 @@ import (
 func DeleteCartItemHandler(config *util.RouterConfig) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		params := mux.Vars(req)
-		productId := params["key"]
+		productId := params["productId"]
+		customerId := params["customerId"]
 
-		customerId := util.ExtractDetailsFromToken(req)
 		service := services.GetDeleteCartItemService()
 
 		// Process the request
