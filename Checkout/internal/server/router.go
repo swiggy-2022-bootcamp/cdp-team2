@@ -1,17 +1,18 @@
 package server
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	_ "github.com/swiggy-2022-bootcamp/cdp-team2/Checkout/docs"
-
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Checkout/internal/server/controllers"
 )
 
 func InitRouter() (*gin.Engine, error) {
 
 	r := gin.Default()
+	r.Use(cors.Default())
 	r.Use(gin.Recovery())
 
 	//health Check
