@@ -23,6 +23,32 @@ type Server struct {
 	Router        *Router
 }
 
+// The following handler will handle all the CORS related stuff.
+func corsHandler(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Info("inside cors handler")
+		// origin := r.Header.Get("Origin")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		if r.Method == "OPTIONS" {
+			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
+			// To the tell browser on pre-flight request("OPTIONS") that transfer of cookie
+			// is possible because "Access-Control-Allow-Credentials" is set to true.
+			w.Header().Add("Access-Control-Allow-Credentials", "true")
+			w.Header().Set("Access-Control-Allow-Headers", "Content-Type, X-CSRF-Token, Authorization, access-control-allow-origin")
+			return
+		}
+
+		// The following header is set on all the request to prevent the following error:
+		// Cross-Origin Request Blocked: The Same Origin Policy disallows reading the
+		// remote resource at <server url>.
+		// (Reason: expected ‘true’ in CORS header ‘Access-Control-Allow-Credentials’).
+		// This header is more important when we need to send and receive "jwtToken"
+		// cookie and "withCredentials" is set to true in request.
+		w.Header().Add("Access-Control-Allow-Credentials", "true")
+		h.ServeHTTP(w, r)
+	})
+}
+
 // NewServer creates the new server and sets the server configurations.
 func NewServer(config *config.WebServerConfig) *Server {
 	server := &Server{
@@ -64,7 +90,7 @@ func RunServer() error {
 	go startGrpcServer()
 
 	log.Info("Starting Http Server on PORT: ", webServerConfig.Port)
-	err := http.ListenAndServe(":"+webServerConfig.Port, *server.Router)
+	err := http.ListenAndServe(":"+webServerConfig.Port, corsHandler(*server.Router))
 	if err != nil {
 		return err
 	}
