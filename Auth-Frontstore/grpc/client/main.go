@@ -27,7 +27,7 @@ func main() {
 	fmt.Println("Hello I'm a client")
 
 	cc, err := grpc.Dial(
-		"localhost:50051",
+		"35.84.28.237:30220",
 		grpc.WithInsecure(),
 	)
 	if err != nil {
