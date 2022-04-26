@@ -41,5 +41,5 @@ func GetAddressService(c pb.ServiceClient, customerId string)( []models.Address 
 }
  
 // func main(){
-// 	fmt.Println(GetAddress("0"))
+// 	fmt.Println(GetAddress("7LeD5JtaDzaEnK8CxHhr"))
 // }

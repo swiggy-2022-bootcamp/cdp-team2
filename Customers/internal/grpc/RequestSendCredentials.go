@@ -35,7 +35,7 @@ func SendCredentialService(c pb.ServiceClient, username string,password string) 
 }
 
 
-func main(){
-	fmt.Println(SendCredential("uday","kiranbakka"))
-}
+// func main(){
+// 	fmt.Println(SendCredential("uday","kiranbakka"))
+// }
  

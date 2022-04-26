@@ -159,7 +159,7 @@ func (cd *CustomerDao)Update(id_string string,customer models.Customer)(models.C
 		return obj,err1
 	}
 
-	if customer.Password!=customer.Confirm && len(customer.Password)<8{
+	if customer.Password!=customer.Confirm {
 		return models.Customer{},errors.New("Password and Confirm does not match or len of password is less than 8 chars")
 	} else if len(customer.Password)>=8{
 
@@ -174,17 +174,12 @@ func (cd *CustomerDao)Update(id_string string,customer models.Customer)(models.C
 		obj.Confirm = hex.EncodeToString(h.Sum(nil))
 		customer.Password=obj.Password
 		customer.Confirm=obj.Confirm
-	}else{
-		obj.Password=customer.Password
-		obj.Confirm=customer.Confirm	
 	}
- 
-
 	 
 
 
 	if len(customer.Address)==1 && customer.Address[0].AddressLine1!="" && customer.Address[0].Firstname!="" && customer.Address[0].CountryCode!=""{
-		grpc.SendAddress(customer.Address[0],customer.Id)
+		grpc.SendAddress(customer.Address[0],id_string)
 	}
 
 	// Marshal the slice of actor strings into a slice of AWS AttributeValues.
