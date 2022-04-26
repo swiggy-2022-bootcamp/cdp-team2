@@ -51,7 +51,7 @@ func GetDynamoDAO() DynamoDAO {
 
 // AddProduct add product details to the cart of the user
 func (dao *dynamoDAO) AddCartItem(customerId string, product models.Product) *errors.ServerError {
-	cart, err := dao.GetCart("133")
+	cart, err := dao.GetCart(customerId)
 	if err != nil {
 		log.Info("cart not found for customer")
 	}
