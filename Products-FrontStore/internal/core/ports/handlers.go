@@ -2,6 +2,9 @@ package ports
 
 import "github.com/gin-gonic/gin"
 
-type IHandlers interface {
+type IProductsHandlers interface {
 	Health(*gin.Context)
+	GetProductList(*gin.Context)
+	GetProductById(*gin.Context)
+	GetProductListByCategoryId(*gin.Context)
 }

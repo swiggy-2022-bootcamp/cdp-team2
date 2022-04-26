@@ -1,5 +1,179 @@
-basePath: /products
-host: localhost:8000
+basePath: /api/rest_admin/products/
+definitions:
+  domain.Product:
+    properties:
+      _id:
+        type: integer
+      height:
+        type: integer
+      image:
+        type: string
+      length:
+        type: integer
+      manufacturer_id:
+        type: integer
+      minimum:
+        type: integer
+      model:
+        type: string
+      points:
+        type: integer
+      price:
+        type: string
+      product_category:
+        items:
+          type: integer
+        type: array
+      product_description:
+        items:
+          $ref: '#/definitions/domain.ProductDescription'
+        type: array
+      product_related:
+        items:
+          type: integer
+        type: array
+      product_seo_url:
+        $ref: '#/definitions/domain.ProductSeoUrl'
+      quantity:
+        type: integer
+      reward:
+        type: integer
+      shipping_id:
+        type: integer
+      sku:
+        type: string
+      weight:
+        type: integer
+      width:
+        type: integer
+    required:
+    - height
+    - image
+    - length
+    - manufacturer_id
+    - minimum
+    - model
+    - points
+    - price
+    - product_category
+    - product_description
+    - product_related
+    - product_seo_url
+    - quantity
+    - reward
+    - shipping_id
+    - sku
+    - weight
+    - width
+    type: object
+  domain.ProductDescription:
+    properties:
+      description:
+        type: string
+      language_id:
+        type: integer
+      meta_description:
+        type: string
+      meta_keyword:
+        type: string
+      meta_title:
+        type: string
+      name:
+        type: string
+      tag:
+        type: string
+    type: object
+  domain.ProductSeoUrl:
+    properties:
+      keyword:
+        type: string
+      language_id:
+        type: integer
+      store_id:
+        type: integer
+    type: object
+  requests.ProductIDRequest:
+    properties:
+      product:
+        $ref: '#/definitions/domain.Product'
+    type: object
+  requests.ProductRequest:
+    properties:
+      height:
+        type: integer
+      image:
+        type: string
+      length:
+        type: integer
+      manufacturer_id:
+        type: integer
+      minimum:
+        type: integer
+      model:
+        type: string
+      points:
+        type: integer
+      price:
+        type: string
+      product_category:
+        items:
+          type: integer
+        type: array
+      product_description:
+        items:
+          $ref: '#/definitions/domain.ProductDescription'
+        type: array
+      product_related:
+        items:
+          type: integer
+        type: array
+      product_seo_url:
+        $ref: '#/definitions/domain.ProductSeoUrl'
+      quantity:
+        type: integer
+      reward:
+        type: integer
+      shipping_id:
+        type: integer
+      sku:
+        type: string
+      weight:
+        type: integer
+      width:
+        type: integer
+    required:
+    - height
+    - image
+    - length
+    - manufacturer_id
+    - minimum
+    - model
+    - points
+    - price
+    - product_category
+    - product_description
+    - product_related
+    - product_seo_url
+    - quantity
+    - reward
+    - shipping_id
+    - sku
+    - weight
+    - width
+    type: object
+  responses.MessageResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  responses.ProductsMessage:
+    properties:
+      products:
+        items:
+          $ref: '#/definitions/domain.Product'
+        type: array
+    type: object
+host: 35.84.28.237:30201
 info:
   contact:
     email: support@swagger.io
@@ -17,15 +191,263 @@ paths:
     get:
       consumes:
       - application/json
-      description: API to check products-admin health
+      description: products get API
       produces:
-      - plain/text
+      - application/json
       responses:
         "200":
           description: OK
           schema:
-            type: string
-      summary: Health Check Route
+            $ref: '#/definitions/responses.ProductsMessage'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+      summary: Get All Products
       tags:
-      - Health
+      - Products
+    post:
+      consumes:
+      - application/json
+      description: product post API
+      parameters:
+      - description: product request structure
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/requests.ProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+      summary: Add Products
+      tags:
+      - Products
+  /{id}:
+    delete:
+      consumes:
+      - application/json
+      description: product delete API
+      parameters:
+      - description: produtID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+      summary: Delete Products
+      tags:
+      - Products
+    put:
+      consumes:
+      - application/json
+      description: product put API
+      parameters:
+      - description: produtID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: product request structure
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/requests.ProductIDRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+      summary: Update Products
+      tags:
+      - Products
+  /search/category/{id}:
+    get:
+      consumes:
+      - application/json
+      description: product search API
+      parameters:
+      - description: categoryID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ProductsMessage'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+      summary: Search Products by CategoryID
+      tags:
+      - Search
+  /search/keyword/{keyword}:
+    get:
+      consumes:
+      - application/json
+      description: product search API
+      parameters:
+      - description: search keyword
+        in: path
+        name: keyword
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ProductsMessage'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+      summary: Search Products by Keyword
+      tags:
+      - Search
+  /search/manufacturer/{id}:
+    get:
+      consumes:
+      - application/json
+      description: product search API
+      parameters:
+      - description: manufacturerID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ProductsMessage'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+      summary: Search Products by ManufacturerID
+      tags:
+      - Search
+  /search/start/{price}:
+    get:
+      consumes:
+      - application/json
+      description: product search API
+      parameters:
+      - description: Starting Price
+        in: path
+        name: price
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ProductsMessage'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/responses.MessageResponse'
+      summary: Search Products by Starting Price
+      tags:
+      - Search
 swagger: "2.0"

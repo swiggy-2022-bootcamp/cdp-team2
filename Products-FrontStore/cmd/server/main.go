@@ -1,19 +1,29 @@
 package main
 
 import (
-	"github.com/products-frontstore-service/internal/core/ports"
-	"github.com/products-frontstore-service/internal/handlers"
-	"github.com/products-frontstore-service/internal/server"
+	"context"
+
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-FrontStore/internal/client"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-FrontStore/internal/core/ports"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-FrontStore/internal/core/services"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-FrontStore/internal/handlers"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Products-FrontStore/internal/server"
 )
 
 var (
-	productsFrontStoreServer   ports.IServer
-	productsFrontStoreHandlers ports.IHandlers
+	productsFrontStoreServer     ports.IServer
+	productsFrontStoreHandlers   ports.IProductsHandlers
+	productsFrontStoreGrpcClient ports.IProductsGrpcClientServices
+	productsFrontStoreServices   ports.IProductsServices
 )
 
 func init() {
-	productsFrontStoreHandlers = handlers.NewHandlers()
+	ctx := context.TODO()
+	productsFrontStoreGrpcClient = client.NewProductsGRPCClient()
+	productsFrontStoreServices = services.NewProductsServices(ctx, productsFrontStoreGrpcClient)
+	productsFrontStoreHandlers = handlers.NewHandlers(productsFrontStoreServices)
 	productsFrontStoreServer = server.NewServer(productsFrontStoreHandlers)
+
 }
 
 func main() {

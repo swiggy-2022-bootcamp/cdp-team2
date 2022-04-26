@@ -27,23 +27,290 @@ const docTemplate = `{
     "paths": {
         "/": {
             "get": {
-                "description": "API to check products-admin health",
+                "description": "products get API",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
-                    "plain/text"
+                    "application/json"
                 ],
                 "tags": [
-                    "Health"
+                    "Products"
                 ],
-                "summary": "Health Check Route",
+                "summary": "Get All Products",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/responses.ProductsMessage"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responses.MessageResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.MessageResponse"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/responses.MessageResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/category/{id}": {
+            "get": {
+                "description": "product search API",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Search Products by CategoryID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "categoryID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ProductsMessage"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responses.MessageResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.MessageResponse"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/responses.MessageResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/{id}": {
+            "get": {
+                "description": "products get API",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Get Product By ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "productID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ProductMessage"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responses.MessageResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/responses.MessageResponse"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/responses.MessageResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "domain.Product": {
+            "type": "object",
+            "required": [
+                "manufacturer_id",
+                "model",
+                "price",
+                "product_category",
+                "product_description",
+                "quantity",
+                "sku"
+            ],
+            "properties": {
+                "_id": {
+                    "type": "integer"
+                },
+                "height": {
+                    "type": "integer"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "length": {
+                    "type": "integer"
+                },
+                "manufacturer_id": {
+                    "type": "integer"
+                },
+                "minimum": {
+                    "type": "integer"
+                },
+                "model": {
+                    "type": "string"
+                },
+                "points": {
+                    "type": "integer"
+                },
+                "price": {
+                    "type": "string"
+                },
+                "product_category": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "product_description": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.ProductDescription"
+                    }
+                },
+                "product_related": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "product_seo_url": {
+                    "$ref": "#/definitions/domain.ProductSeoUrl"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "reward": {
+                    "type": "integer"
+                },
+                "shipping_id": {
+                    "type": "integer"
+                },
+                "sku": {
+                    "type": "string"
+                },
+                "weight": {
+                    "type": "integer"
+                },
+                "width": {
+                    "type": "integer"
+                }
+            }
+        },
+        "domain.ProductDescription": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "language_id": {
+                    "type": "integer"
+                },
+                "meta_description": {
+                    "type": "string"
+                },
+                "meta_keyword": {
+                    "type": "string"
+                },
+                "meta_title": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "tag": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.ProductSeoUrl": {
+            "type": "object",
+            "properties": {
+                "keyword": {
+                    "type": "string"
+                },
+                "language_id": {
+                    "type": "integer"
+                },
+                "store_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "responses.MessageResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.ProductMessage": {
+            "type": "object",
+            "properties": {
+                "product": {
+                    "$ref": "#/definitions/domain.Product"
+                }
+            }
+        },
+        "responses.ProductsMessage": {
+            "type": "object",
+            "properties": {
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Product"
                     }
                 }
             }
@@ -54,7 +321,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8001",
+	Host:             "35.84.28.237:30203",
 	BasePath:         "/api/rest/products",
 	Schemes:          []string{},
 	Title:            "Swagger Products FrontStore Microservice",

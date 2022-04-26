@@ -1,0 +1,10 @@
+Command to mock product repository
+---------------------------------
+ mockgen -destination=./mocks/mockProductsRepository.go -package=mocks github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/core/ports IProductsRepository
+
+Command to mock products service
+---------------------------------
+ mockgen -destination=./mocks/mockProductsService.go -package=mocks github.com/swiggy-2022-bootcamp/cdp-team2/Products-Admin/internal/core/ports IProductsService
+
+Command to compile proto files
+------------------------------

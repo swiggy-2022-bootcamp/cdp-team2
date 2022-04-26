@@ -1,0 +1,6 @@
+projectKey=cdp-team2-Products-Admin
+serverUrl=http://localhost:9000
+serverVersion=9.4.0.54424
+dashboardUrl=http://localhost:9000/dashboard?id=cdp-team2-Products-Admin
+ceTaskId=AYBP2EHJF_GrTtQ38Xwq
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AYBP2EHJF_GrTtQ38Xwq
