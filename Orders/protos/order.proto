@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package="/order";
+
+
+
+message ProductDesc{
+  int32 productId=1;
+  int32 points=2;
+  int32 reward=3;
+  int32 quantity=4;
+  float price=5;
+}
+
+
+
+message Order{
+string customerId=1;
+int32 status=2;
+  int32 addressId=3;
+  float totalPrice=4;
+  float payedPrice=5;
+repeated ProductDesc productDesc=6;
+}
+
+message OrderStatusUpdateRequest{
+  string orderId =1;
+  int32 status=2;
+}
+
+message OrderStatusUpdateResponse{
+  bool response=1;
+}
+
+message OrderPayedPriceUpdateRequest{
+  string orderId =1;
+  float payedPrice=2;
+}
+
+message OrderPayedPriceUpdateResponse{
+  bool response=1;
+}
+
+message OrderAddressUpdateRequest{
+  string orderId =1;
+  int32 addressId=2;
+}
+
+message OrderAddressUpdateResponse{
+  bool response=1;
+}
+
+
+message OrderResponse{
+  string customerId=1;
+  int32 status=2;
+  int32 addressId=3;
+  float totalPrice=4;
+  float payedPrice=5;
+  repeated ProductDesc productDesc=6;
+  string orderId =7;
+}
+
+message OrderCreateRequest{
+Order order=1;
+}
+
+message OrderCreateResponse{
+OrderResponse order=1;
+}
+
+message GetOrderRequest{
+  string orderId = 1;
+}
+
+
+message GetOrderResponse{
+  OrderResponse order = 1;
+}
+
+
+
+service Service{
+rpc OrderCreateService(OrderCreateRequest)returns (OrderCreateResponse){};
+  rpc OrderStatusUpdateService(OrderStatusUpdateRequest)returns (OrderStatusUpdateResponse){};
+  rpc GetOrderService(GetOrderRequest)returns (GetOrderResponse){};
+  rpc OrderAddressUpdateService(OrderAddressUpdateRequest)returns (OrderAddressUpdateResponse){};
+  rpc OrderPayedPriceUpdateService(OrderPayedPriceUpdateRequest)returns (OrderPayedPriceUpdateResponse){};
+
+}

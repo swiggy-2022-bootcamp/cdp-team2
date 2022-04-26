@@ -1,0 +1,19 @@
+{
+  "TableName": "team-2-orders",
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "orderId",
+      "AttributeType": "S"
+    }
+  ],
+  "KeySchema": [
+    {
+      "AttributeName": "orderId",
+      "KeyType": "HASH"
+    }
+  ],
+  "ProvisionedThroughput": {
+    "ReadCapacityUnits": 5,
+    "WriteCapacityUnits": 5
+  }
+}

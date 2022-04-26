@@ -1,0 +1,134 @@
+definitions:
+  api.ApiResponseWithErr:
+    properties:
+      error:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /orders:
+    get:
+      responses:
+        "200":
+          description: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ApiResponseWithErr'
+      summary: Get All Orders
+      tags:
+      - Order
+    post:
+      parameters:
+      - description: order
+        in: body
+        name: order
+        required: true
+        schema:
+          type: object
+      responses:
+        "200":
+          description: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ApiResponseWithErr'
+      summary: Create new Order, id is auto-assigned uuid.
+      tags:
+      - Order
+  /orders/{orderId}:
+    delete:
+      parameters:
+      - description: orderId
+        in: path
+        name: orderId
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ApiResponseWithErr'
+      summary: Delete Single Order By Id
+      tags:
+      - Order
+    get:
+      parameters:
+      - description: orderId
+        in: path
+        name: orderId
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ApiResponseWithErr'
+      summary: Get a Order By Id
+      tags:
+      - Order
+    put:
+      parameters:
+      - description: orderId
+        in: path
+        name: orderId
+        required: true
+        type: string
+      - description: order
+        in: body
+        name: order
+        required: true
+        schema:
+          type: object
+      responses:
+        "200":
+          description: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ApiResponseWithErr'
+      summary: Update Order By Id
+      tags:
+      - Order
+  /orders/customer/{customerId}:
+    get:
+      parameters:
+      - description: customerId
+        in: path
+        name: customerId
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ApiResponseWithErr'
+      summary: Get a Order By CustomerId
+      tags:
+      - Order
+  /orders/status/{statusId}:
+    get:
+      parameters:
+      - description: statusId
+        in: path
+        name: statusId
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ApiResponseWithErr'
+      summary: Get a Order By Status
+      tags:
+      - Order
+swagger: "2.0"

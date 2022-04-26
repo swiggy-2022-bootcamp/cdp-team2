@@ -1,0 +1,55 @@
+info:
+  contact: {}
+paths:
+  /shipping-address/:
+    post:
+      operationId: Create
+      parameters:
+      - description: address
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: add shipping address to a customer
+  /shipping-address/customer/{customerId}:
+    get:
+      operationId: GetByCustomer
+      parameters:
+      - description: customerId
+        in: path
+        name: customerId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: get shipping address of a customer
+  /shipping-address/set/address:
+    post:
+      operationId: SetAddressToOrder
+      parameters:
+      - description: orderId
+        in: path
+        name: orderId
+        required: true
+        type: string
+      - description: addressId
+        in: path
+        name: addressId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: set shipping address to a order
+swagger: "2.0"

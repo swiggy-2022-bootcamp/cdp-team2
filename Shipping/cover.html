@@ -1,0 +1,436 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>dao: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/dao/shipping.dao.go (48.8%)</option>
+				
+				<option value="file1">github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/internal/server/controller/controller.go (0.0%)</option>
+				
+				<option value="file2">github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/internal/server/controller/health.go (100.0%)</option>
+				
+				<option value="file3">github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/internal/server/controller/shipping.controller.go (42.9%)</option>
+				
+				<option value="file4">github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/services/shippingAddress.service.go (50.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package dao
+
+import (
+        "errors"
+        "fmt"
+        "log"
+        "time"
+
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/dao/models"
+
+        "github.com/aws/aws-sdk-go/service/dynamodb/expression"
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/db"
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/internal/literals"
+
+        "github.com/aws/aws-sdk-go/aws"
+        "github.com/aws/aws-sdk-go/service/dynamodb"
+        "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+        "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbiface"
+)
+
+const (
+        customEpoch = 1300000000
+        tabelName   = "team-2-shippingAddress"
+)
+
+type ShippingDao struct {
+        db dynamodbiface.DynamoDBAPI
+}
+
+func GetShippingDao() IDao <span class="cov0" title="0">{
+        return &amp;ShippingDao{
+                db.GetInstance(),
+        }
+}</span>
+
+func ordersTableName() *string <span class="cov8" title="1">{
+        return aws.String(tabelName)
+}</span>
+
+func getKeyFilter(id int) map[string]*dynamodb.AttributeValue <span class="cov8" title="1">{
+        return map[string]*dynamodb.AttributeValue{
+                "addressId": {
+                        N: aws.String(fmt.Sprint(id)),
+                },
+        }
+}</span>
+
+func getKeyFilterStatus(status string) map[string]*dynamodb.AttributeValue <span class="cov0" title="0">{
+        return map[string]*dynamodb.AttributeValue{
+                "status": {
+                        S: aws.String(status),
+                },
+        }
+}</span>
+
+func getRandomKey() int <span class="cov8" title="1">{
+        return int(time.Now().Unix() - customEpoch)
+}</span>
+
+/**
+ * Get shipping address of a customer
+ * @param customerId int
+ */
+func (cd *ShippingDao) GetByCustomerId(customerId int) ([]models.ShippingAddress, error) <span class="cov0" title="0">{
+
+        filt := expression.Name("customerId").Equal(expression.Value(customerId))
+
+        expr, err := expression.NewBuilder().
+                WithFilter(filt).
+                Build()
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">input := &amp;dynamodb.ScanInput{
+                TableName:                 ordersTableName(),
+                ExpressionAttributeNames:  expr.Names(),
+                ExpressionAttributeValues: expr.Values(),
+                FilterExpression:          expr.Filter(),
+        }
+
+        res, err := cd.db.Scan(input)
+
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">var results []models.ShippingAddress
+
+        if len(res.Items) == 0 </span><span class="cov0" title="0">{
+                return nil, errors.New(literals.AddressNotFound)
+        }</span>
+
+        <span class="cov0" title="0">if err = dynamodbattribute.UnmarshalListOfMaps(res.Items, &amp;results); err != nil </span><span class="cov0" title="0">{
+                log.Printf("Error unMarshalling Address: %s", err)
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return results, nil</span>
+}
+
+/**
+ * Create a shipping address of a customer
+ * @parama ddress models.ShippingAddress
+ */
+func (cd *ShippingDao) Create(shippingAddress models.ShippingAddress) (*models.ShippingAddress, error) <span class="cov8" title="1">{
+
+        newId := getRandomKey()
+
+        var exp expression.UpdateBuilder
+        exp = exp.Set(expression.Name("firstName"), expression.Value(shippingAddress.FirstName))
+        exp = exp.Set(expression.Name("lastName"), expression.Value(shippingAddress.LastName))
+        exp = exp.Set(expression.Name("city"), expression.Value(shippingAddress.City))
+        exp = exp.Set(expression.Name("addressLine1"), expression.Value(shippingAddress.AddressLine1))
+        exp = exp.Set(expression.Name("addressLine2"), expression.Value(shippingAddress.AddressLine2))
+        exp = exp.Set(expression.Name("postCode"), expression.Value(shippingAddress.PostCode))
+        exp = exp.Set(expression.Name("countryCode"), expression.Value(shippingAddress.CountryCode))
+        exp = exp.Set(expression.Name("customerId"), expression.Value(shippingAddress.CustomerId))
+
+        express, _ := expression.NewBuilder().WithUpdate(exp).Build()
+
+        createItemIn := dynamodb.UpdateItemInput{
+                TableName:                 ordersTableName(),
+                Key:                       getKeyFilter(newId),
+                ExpressionAttributeNames:  express.Names(),
+                ExpressionAttributeValues: express.Values(),
+                UpdateExpression:          express.Update(),
+                ReturnValues:              aws.String("ALL_NEW"),
+        }
+
+        resp, err := cd.db.UpdateItem(&amp;createItemIn)
+
+        if err != nil </span><span class="cov0" title="0">{
+                log.Printf("error while creating cateogory %s", err.Error())
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">savedAddress := models.ShippingAddress{}
+        if err = dynamodbattribute.UnmarshalMap(resp.Attributes, &amp;savedAddress); err != nil </span><span class="cov0" title="0">{
+                log.Printf("error while creating cateogory %s", err.Error())
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">return &amp;savedAddress, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package controller
+
+import (
+        "fmt"
+        "net/http"
+        "strconv"
+
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/dao/models"
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/internal/api"
+
+        "github.com/gin-gonic/gin"
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/internal/literals"
+)
+
+func BindCustomer(c *gin.Context) <span class="cov0" title="0">{
+        idstr := c.Param(literals.CustomerIdKey)
+        if idstr == "" </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.AddressNotFound})
+                return
+        }</span>
+        <span class="cov0" title="0">id, err := strconv.Atoi(idstr)
+        if err != nil </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.AddressNotFound})
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.Set(literals.CustomerIdKey, id)
+        c.Next()</span>
+}
+
+func BindOrder(c *gin.Context) <span class="cov0" title="0">{
+        cat := models.ShippingAddress{}
+        if err := c.BindJSON(&amp;cat); err != nil </span><span class="cov0" title="0">{
+                fmt.Println(err)
+                c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.AddressBodyKey})
+                return
+        }</span>
+        <span class="cov0" title="0">c.Set(literals.AddressBodyKey, cat)
+        c.Next()</span>
+}
+
+func BindAddressOrder(c *gin.Context) <span class="cov0" title="0">{
+        cat := api.SetAddressToOrderRequest{}
+        if err := c.BindJSON(&amp;cat); err != nil </span><span class="cov0" title="0">{
+                fmt.Println(err)
+                c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.AddressBodyKey})
+                return
+        }</span>
+        <span class="cov0" title="0">c.Set(literals.OrderBodyKey, cat.OrderID)
+        c.Set(literals.AddressBodyKey, cat.AddressId)
+        c.Next()</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package controller
+
+import (
+        "net/http"
+
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/internal/literals"
+
+        "github.com/gin-gonic/gin"
+)
+
+func Health(c *gin.Context) <span class="cov8" title="1">{
+        c.String(http.StatusOK, literals.Health_OK)
+}</span>
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package controller
+
+import (
+        "net/http"
+
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/services"
+
+        "github.com/gin-gonic/gin"
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/dao/models"
+        _ "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/docs"
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/internal/api"
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/internal/literals"
+)
+
+type ShippingAddressController struct {
+        service services.IService
+}
+
+func NewOShippingAddressController() *ShippingAddressController <span class="cov0" title="0">{
+        return &amp;ShippingAddressController{
+                services.NewShippingAddressService(),
+        }
+}</span>
+
+// @Summary get shipping address of a customer
+// @ID GetByCustomer
+// @Param customerId path string true "customerId"
+// @Produce json
+// @Success 200
+// @Router /shipping-address/customer/{customerId} [get]
+func (cc *ShippingAddressController) GetByCustomer(c *gin.Context) <span class="cov8" title="1">{
+        customerId := c.GetInt(literals.CustomerIdKey)
+
+        cat, err := cc.service.GetByCustomerId(customerId)
+        if err != nil </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(api.ServerErr(err))
+                return
+        }</span>
+        <span class="cov8" title="1">c.JSON(http.StatusOK, cat)</span>
+}
+
+// @Summary add shipping address to a customer
+// @ID Create
+// @Param data body object true "address"
+// @Produce json
+// @Success 200
+// @Router /shipping-address/ [post]
+func (cc *ShippingAddressController) Create(c *gin.Context) <span class="cov8" title="1">{
+        nc, _ := c.Get(literals.AddressBodyKey)
+        newCat := nc.(models.ShippingAddress)
+        saved, err := cc.service.Create(newCat)
+        if err != nil </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(api.ServerErr(err))
+                return
+        }</span>
+        <span class="cov8" title="1">c.JSON(http.StatusOK, saved)</span>
+}
+
+// @Summary set shipping address to a order
+// @ID SetAddressToOrder
+// @Param orderId path string true "orderId"
+// @Param addressId path string true "addressId"
+// @Produce json
+// @Success 200
+// @Router /shipping-address/set/address [post]
+func (cc *ShippingAddressController) SetAddressToOrder(c *gin.Context) <span class="cov0" title="0">{
+        orderId := c.GetString(literals.OrderBodyKey)
+        addressId := c.GetInt(literals.AddressBodyKey)
+
+        res, err := cc.service.SetAddressToOrder(orderId, addressId)
+        if err != nil </span><span class="cov0" title="0">{
+                c.AbortWithStatusJSON(api.ServerErr(err))
+                return
+        }</span>
+        <span class="cov0" title="0">c.JSON(http.StatusOK, res)</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package services
+
+import (
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/dao"
+        "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/dao/models"
+        pb "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/protos/shipping"
+        grpc_client "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/services/grpc_client_services"
+)
+
+type ShippingAddressService struct {
+        Dao dao.IDao
+}
+
+func NewShippingAddressService() IService <span class="cov0" title="0">{
+        return &amp;ShippingAddressService{
+                dao.GetShippingDao(),
+        }
+}</span>
+
+func (cs *ShippingAddressService) GetByCustomerId(customerId int) ([]models.ShippingAddress, error) <span class="cov8" title="1">{
+        return cs.Dao.GetByCustomerId(customerId)
+}</span>
+
+//
+func (cs *ShippingAddressService) Create(cat models.ShippingAddress) (*models.ShippingAddress, error) <span class="cov8" title="1">{
+        return cs.Dao.Create(cat)
+}</span>
+
+func (cs *ShippingAddressService) SetAddressToOrder(orderId string, addressId int) (*pb.OrderAddressUpdateResponse, error) <span class="cov0" title="0">{
+        return grpc_client.SetAddress(orderId, addressId)
+}</span>
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>
