@@ -1,0 +1,82 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/reward/v1/healthcheck": {
+            "get": {
+                "description": "Returns json stating with pass status and http response code 200 OK, otherwise returns http response code 500 Internal Server Error.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "healthcheck"
+                ],
+                "summary": "Checks the health of the microservice",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.HealthCheck"
+                        }
+                    },
+                    "500": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/reward/v1/reward/{id}": {
+            "post": {
+                "description": "This API allows Admin to directly add reward points to the customer. It accepts reward points and description in the request body, and on successful insertion in database, it returns 200 OK.",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "healthcheck"
+                ],
+                "summary": "Add reward points to the customer",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Reward"
+                        }
+                    },
+                    "500": {
+                        "description": ""
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.HealthCheck": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string",
+                    "example": "UP"
+                }
+            }
+        },
+        "models.Reward": {
+            "type": "object",
+            "properties": {
+                "customerId": {
+                    "type": "string",
+                    "example": "1243"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "Reward points in celebration of 50 years of Company ABC"
+                },
+                "points": {
+                    "type": "integer",
+                    "example": 200
+                }
+            }
+        }
+    }
+}

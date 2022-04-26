@@ -1,0 +1,89 @@
+pipeline {
+    
+    agent any
+
+    tools {
+        go '1.18.1'
+    }
+
+    environment {
+		DOCKERHUB_CREDENTIALS=credentials('docker-hub')
+        PATH = "$PATH:/usr/local/bin"
+	}
+    
+    stages {
+
+        stage ("clone") {
+            steps {
+                git branch: 'reward-ms', url: "https://github.com/swiggy-2022-bootcamp/cdp-team2.git"
+            }
+        }
+
+        stage("build") {
+
+            steps {
+                echo 'building the application...'
+                sh 'ls'
+                sh script:'''
+                    #!/bin/bash
+                    cd ./Reward
+                    pwd
+                    go mod tidy
+                    cd ./cmd/server
+                    go build .
+                '''
+            }
+        }
+
+        stage("test") {
+
+            steps {
+                echo 'testing the application...'
+                sh script:'''
+                    pwd
+                    cd ./Reward
+                    go test -v ./...
+                '''
+            }
+        }
+
+        stage("image build") {
+
+			steps {
+                echo 'building the docker image...'
+				sh script:'''
+                    pwd
+                    cd ./Reward
+                    docker build -t swiggyteam2/reward:latest .
+                '''
+			}
+		}
+
+        stage("docker login") {
+
+			steps {
+                echo 'loging into docker...'
+                sh 'docker --version'
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+			}
+		}
+
+        stage("push image to dockerhub") {
+
+            steps {
+                sh 'docker --version'
+                echo 'pushing the image to docker hub...'
+                sh 'docker push swiggyteam2/reward:latest'
+            }
+        }
+    }
+
+    post {
+		always {
+		    sh 'docker logout'
+            mail to: 'team2.swiggy@gmail.com',
+            subject: "Status of pipeline: ${currentBuild.fullDisplayName}",
+            body: "${env.BUILD_URL} has result ${currentBuild.result}"
+		}
+	}
+}
