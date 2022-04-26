@@ -1,0 +1,86 @@
+pipeline {
+    
+    agent any
+
+    tools {
+        go '1.18.1'
+    }
+
+    environment {
+		DOCKERHUB_CREDENTIALS=credentials('docker-hub')
+        PATH = "$PATH:/usr/local/bin"
+	}
+    
+    stages {
+
+        stage ("clone") {
+            steps {
+                git branch: 'feature/admin-auth', url: "https://github.com/swiggy-2022-bootcamp/cdp-team2.git"
+            }
+        }
+
+        stage("build") {
+
+            steps {
+                echo 'building the application...auth-admin'
+                sh 'ls'
+                sh script:'''
+                    #!/bin/bash
+                    cd ./Auth-Admin
+                    pwd
+                    go mod tidy
+                    cd ./cmd
+                    go build .
+                '''
+            }
+        }
+
+        stage("test") {
+
+            steps {
+                echo 'testing the application...'
+                sh script:'''
+                    pwd
+                    cd ./Auth-Admin
+                    go test -v ./...
+                '''
+            }
+        }
+
+        stage("image build") {
+
+			steps {
+                echo 'building the docker image...'
+				sh script:'''
+                    pwd
+                    cd ./Auth-Admin
+                    docker build -t swiggyteam2/auth-admin:latest .
+                '''
+			}
+		}
+
+        stage("docker login") {
+
+			steps {
+                echo 'loging into docker...'
+                sh 'docker --version'
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+			}
+		}
+
+        stage("push image to dockerhub") {
+
+            steps {
+                sh 'docker --version'
+                echo 'pushing the image to docker hub...'
+                sh 'docker push swiggyteam2/auth-admin:latest'
+            }
+        }
+    }
+
+    post {
+		always {
+		    sh 'docker logout'
+		}
+	}
+}
