@@ -2,7 +2,7 @@
 
 ## Architecture
 
-![image](https://user-images.githubusercontent.com/42766421/164993173-588a7905-0898-491e-b0e5-7c08ca52beb5.png)
+![image] (https://user-images.githubusercontent.com/42766421/165332318-71d5f892-74bf-427b-a275-eadfbb054a32.png)
 
 ## Technologies/tools Used:
     Golang
