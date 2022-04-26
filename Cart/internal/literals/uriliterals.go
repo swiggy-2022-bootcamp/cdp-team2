@@ -16,5 +16,5 @@ const (
 	UpdateCartItemEndpoint = APIVersion1 + "/cart"
 
 	DeleteCartItemAPIName  = "Delete Cart Item API"
-	DeleteCartItemEndpoint = APIVersion1 + "{customerId}/cart/{productId}"
+	DeleteCartItemEndpoint = APIVersion1 + "/{customerId}/cart/{productId}"
 )
