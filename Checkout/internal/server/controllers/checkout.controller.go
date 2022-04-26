@@ -37,7 +37,7 @@ func (cc *CheckoutController) StartCheckout(c *gin.Context) {
 		return
 	}
 
-	log.Printf("Starting Checkout for cart : %d", idstr)
+	log.Printf("Starting Checkout for cart : %s", idstr)
 
 	order, err := cc.service.StartCheckout(idstr)
 	if err != nil {

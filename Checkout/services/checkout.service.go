@@ -98,7 +98,7 @@ func (cs *CheckoutService) StartCheckout(customerId string) (*orderpb.OrderRespo
 	for _, prod := range res.AvailableProducts {
 		prodresp, err := cs.productClient.GetProductById(cs.productClient.CtxWithTimeOut(), &productpb.ProductIDRequest{ProductID: prod.ProductID})
 		if err != nil {
-			log.Printf("[Error] couldn't find product = %s", prod.ProductID)
+			log.Printf("[Error] couldn't find product = %d", prod.ProductID)
 			return nil, err
 		}
 
@@ -196,7 +196,7 @@ func (cs *CheckoutService) ConfirmOrder(orderId string) (*orderpb.OrderResponse,
 	}
 
 	if iniorder.AddressId == 0 {
-		e := fmt.Errorf("Shipping address not set", orderId)
+		e := fmt.Errorf("Shipping address not set for order = %s", orderId)
 		log.Printf("[Info] %s", e.Error())
 		return nil, e
 	}
