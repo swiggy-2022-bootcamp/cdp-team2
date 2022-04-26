@@ -31,7 +31,7 @@ func NewCheckoutController() (*CheckoutController, error) {
 // @Router /checkout/{cart_id} [post]
 func (cc *CheckoutController) StartCheckout(c *gin.Context) {
 
-	idstr := c.Param(literals.CustIdKey)
+	idstr := c.GetString("CustomerId") //c.Param(literals.CustIdKey)
 	if idstr == "" {
 		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.CustIdNotFound})
 		return

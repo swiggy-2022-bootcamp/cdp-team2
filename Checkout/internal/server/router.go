@@ -23,10 +23,16 @@ func InitRouter() (*gin.Engine, error) {
 		return nil, err
 	}
 
-	r.POST("/checkout/:customer_id", cont.StartCheckout)
-	r.PUT("/rewards", cont.ApplyReward)
-	r.POST("/pay", cont.Pay)
-	r.GET("/order/:order_id", cont.GetOrder)
+	auth, err := controllers.NewAuthController()
+	if err != nil {
+		return nil, err
+	}
+
+	// r.GET("/test", auth.CheckAuth)
+	r.POST("/checkout/:customer_id", auth.CheckAuth, cont.StartCheckout)
+	r.PUT("/rewards", auth.CheckAuth, cont.ApplyReward)
+	r.POST("/pay", auth.CheckAuth, cont.Pay)
+	r.GET("/order/:order_id", auth.CheckAuth, cont.GetOrder)
 
 	//swagger
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
