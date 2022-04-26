@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-deployment
+  labels:
+    app: order
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order
+  template:
+    metadata:
+      labels:
+        app: order
+    spec:
+      containers:
+      - name: order
+        image: swiggyteam2/orders:latest
+        ports:
+        - containerPort: 8002
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-gprc-deployment
+  labels:
+    app: order-gprc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-gprc
+  template:
+    metadata:
+      labels:
+        app: order-gprc
+    spec:
+      containers:
+      - name: order-gprc
+        image: swiggyteam2/orders:latest
+        ports:
+        - containerPort: 9000

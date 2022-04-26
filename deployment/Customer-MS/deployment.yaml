@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-ms-deployment
+  labels:
+    app: customer-ms
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customer-ms
+  template:
+    metadata:
+      labels:
+        app: customer-ms
+    spec:
+      containers:
+      - name: customer-ms
+        image: swiggyteam2/customers-ms:latest
+        ports:
+        - containerPort: 8093
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-ms-gprc-deployment
+  labels:
+    app: customer-ms-grpc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customer-ms-grpc
+  template:
+    metadata:
+      labels:
+        app: customer-ms-grpc
+    spec:
+      containers:
+      - name: customer-ms-grpc
+        image: swiggyteam2/customers-ms:latest
+        ports:
+        - containerPort: 8094

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: products-admin-deployment
+  labels:
+    app: products-admin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: products-admin
+  template:
+    metadata:
+      labels:
+        app: products-admin
+    spec:
+      containers:
+      - name: products-admin
+        image: swiggyteam2/products-admin:latest
+        ports:
+        - containerPort: 8001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: products-admin-gprc-deployment
+  labels:
+    app: products-admin-grpc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: products-admin-grpc
+  template:
+    metadata:
+      labels:
+        app: products-admin-grpc
+    spec:
+      containers:
+      - name: products-admin
+        image: swiggyteam2/products-admin:latest
+        ports:
+        - containerPort: 8002

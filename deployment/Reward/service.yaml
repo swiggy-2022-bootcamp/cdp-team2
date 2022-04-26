@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: reward-service
+spec:
+  selector:
+    app: reward
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8001 # Need to update
+      targetPort: 8001 # need to update
+      nodePort: 30218
+---
+apiVersion: v1
+kind: Service
+metadata:  
+  name: reward-grpc-service
+spec:
+  selector:    
+    app: reward-grpc
+  type: NodePort
+  ports:  
+    - protocol: TCP
+      port: 8002 # TODO
+      targetPort: 8002 # TODO
+      nodePort: 30219

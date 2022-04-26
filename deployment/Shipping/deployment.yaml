@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shipping-deployment
+  labels:
+    app: shipping
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shipping
+  template:
+    metadata:
+      labels:
+        app: shipping
+    spec:
+      containers:
+      - name: shipping
+        image: swiggyteam2/shipping:latest
+        ports:
+        - containerPort: 8003
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shipping-gprc-deployment
+  labels:
+    app: shipping-gprc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shipping-gprc
+  template:
+    metadata:
+      labels:
+        app: shipping-gprc
+    spec:
+      containers:
+      - name: shipping-gprc
+        image: swiggyteam2/shipping:latest
+        ports:
+        - containerPort: 9001
