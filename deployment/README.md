@@ -19,3 +19,4 @@ Kubernetes NodePort For All Microservices
 17. Cart-Grpc: 30217
 18. Reward: 30218
 19. Reward-Grpc: 30219
+20. Auth-FrontStore-Grpc: 30220
