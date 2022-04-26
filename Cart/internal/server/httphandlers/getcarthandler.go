@@ -20,10 +20,11 @@ import (
 func GetCartHandler(config *util.RouterConfig) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 
+		customerId := util.ExtractDetailsFromToken(req)
 		service := services.GetGetCartService()
 
 		// Process the request
-		response, err := service.ProcessRequest("133")
+		response, err := service.ProcessRequest(customerId)
 		if err != nil {
 			http.Error(w, err.ErrorMessage, err.HttpResponseCode)
 			return

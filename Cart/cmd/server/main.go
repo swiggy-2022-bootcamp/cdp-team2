@@ -2,11 +2,14 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"runtime"
 	"strings"
 
+	"github.com/dgrijalva/jwt-go"
 	_ "github.com/swiggy-2022-bootcamp/cdp-team2/cart/cmd/server/docs"
 	_ "github.com/swiggy-2022-bootcamp/cdp-team2/cart/internal/server/httphandlers"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/util"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/internal/server"
@@ -33,6 +36,18 @@ func init() {
 		},
 	}
 	log.SetFormatter(formatter)
+
+	// read the key files before starting http handlers
+	verifyKeyByte, err := ioutil.ReadFile(util.PubKeyPath)
+	if err != nil {
+		log.Fatal("Error reading public key")
+		return
+	}
+	util.VerifyKey, err = jwt.ParseRSAPublicKeyFromPEM(verifyKeyByte)
+	if err != nil {
+		log.Fatal("Error reading public key")
+		return
+	}
 }
 
 func formatFilePath(path string) string {

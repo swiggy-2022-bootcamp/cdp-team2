@@ -21,10 +21,11 @@ func DeleteCartItemHandler(config *util.RouterConfig) http.HandlerFunc {
 		params := mux.Vars(req)
 		productId := params["key"]
 
+		customerId := util.ExtractDetailsFromToken(req)
 		service := services.GetDeleteCartItemService()
 
 		// Process the request
-		err := service.ProcessRequest("133", productId)
+		err := service.ProcessRequest(customerId, productId)
 		if err != nil {
 			http.Error(w, err.ErrorMessage, err.HttpResponseCode)
 

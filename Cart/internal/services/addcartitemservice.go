@@ -12,7 +12,7 @@ import (
 
 type AddCartItemService interface {
 	ValidateRequest(product models.Product) *errors.ServerError
-	ProcessRequest(product models.Product) *errors.ServerError
+	ProcessRequest(customerId string, product models.Product) *errors.ServerError
 }
 
 var addCartItemServiceStruct AddCartItemService
@@ -56,6 +56,6 @@ func (s *addCartItemService) ValidateRequest(product models.Product) *errors.Ser
 	return nil
 }
 
-func (s *addCartItemService) ProcessRequest(product models.Product) *errors.ServerError {
-	return s.dao.AddCartItem(product)
+func (s *addCartItemService) ProcessRequest(customerId string, product models.Product) *errors.ServerError {
+	return s.dao.AddCartItem(customerId, product)
 }
