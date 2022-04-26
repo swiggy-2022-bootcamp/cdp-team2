@@ -58,7 +58,7 @@ func (cs *CategoryService) DeleteByID(id int) error {
 	if len(prodres.Products) > 0 {
 		e := fmt.Errorf("Category %d has products in it, hence cannot be deleted", id)
 		log.Println(e)
-		return err
+		return e
 	}
 
 	return cs.Dao.DeleteByID(id)
@@ -80,7 +80,7 @@ func (cs *CategoryService) DeleteMultiple(ids []int) []error {
 		if len(prodres.Products) > 0 {
 			e := fmt.Errorf("Category %d has products in it, hence cannot be deleted", id)
 			log.Println(e)
-			errorList = append(errorList, err)
+			errorList = append(errorList, e)
 			continue
 		}
 
