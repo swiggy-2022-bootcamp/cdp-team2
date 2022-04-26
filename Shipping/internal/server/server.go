@@ -14,14 +14,13 @@ import (
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/config"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/docs"
 	pb "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/protos/shipping"
-	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/services/grpc_server_services"
 )
 
 // @title Shipping Address Microservice
 // @version 1.0
 // @description This is shipping address service.
 
-// @host localhost:8003
+// @host 35.84.28.237:30206
 // @BasePath /
 
 // @securityDefinitions.basic BasicAuth

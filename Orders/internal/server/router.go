@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Order/internal/server/controller"
 )
@@ -8,6 +9,7 @@ import (
 func InitRouter() *gin.Engine {
 
 	r := gin.Default()
+	r.Use(cors.Default())
 
 	//health Check
 	r.GET("/health", controller.Health)
