@@ -52,7 +52,7 @@ func (manager *jwtManager) Generate(user *domain.User) (string, error) {
 	claims := userClaims{
 		ID: user.CustomerId,
 	}
-
+	fmt.Println("Generating Acces Token for customer Id", user.CustomerId)
 	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(manager.privateKey))
 	if err != nil {
 		return "", fmt.Errorf("create: sign token: %w", err)

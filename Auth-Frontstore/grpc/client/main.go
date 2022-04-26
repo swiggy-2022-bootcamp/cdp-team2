@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjNjYjlmNTdjYmJlOTliZTMxOTMzNDEifQ.MFfCbN2yo0TgX23b1D5EuTDUoxxX-8SIwiY3f9mOScF_wBkErJUBn217_FpxYCCwbYPzRanPnvfg8k4TPwmE74vJIxztCBxLyUxtp8RTvU482bhM_jZ3NNyTdPAMrxn2U1vKkSC4PkSTfrcXua6i7aqk5-Nq5kb0Zt0Fz4TeoBo"
+	token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI3TGVENUp0YUR6YUVuSzhDeEhociJ9.pyxQmVf-L6tq5h_1-YtCqtEMyRshaAClMZiqx_gCcMM"
 )
 
 func verifyToken(c authpb.AuthServiceClient) {
