@@ -63,17 +63,22 @@ func NewServer(config *config.WebServerConfig) *Server {
 // It starts the server and returns nil as error if server starts successfully otherwise
 // returns the error.
 func RunServer() error {
-	webServerConfig, err := config.FromEnv()
-	if err != nil {
-		return err
+	// webServerConfig, err := config.FromEnv()
+	// if err != nil {
+	// 	return err
+	// }
+
+	webserverConfig := &config.WebServerConfig{
+		Port: "8001",
+		Db:   "cart",
 	}
 
 	routerConfigs := util.RouterConfig{
-		WebServerConfig: webServerConfig,
+		WebServerConfig: webserverConfig,
 	}
 
 	dynamoClient := createDynamoDbSession()
-	dynamodao := dao.InitDynamoDAO(dynamoClient, webServerConfig)
+	dynamodao := dao.InitDynamoDAO(dynamoClient, webserverConfig)
 
 	// Initialize services
 	services.InitHealthCheckService(&routerConfigs)
@@ -82,13 +87,13 @@ func RunServer() error {
 	services.InitUpdateCartItemService(&routerConfigs, dynamodao)
 	services.InitDeleteCartItemService(&routerConfigs, dynamodao)
 
-	server := NewServer(webServerConfig)
+	server := NewServer(webserverConfig)
 	server.Router.InitializeRouter(&routerConfigs)
 
 	go startGrpcServer()
 
 	log.Info("Server starting on PORT: ", 8001)
-	err = http.ListenAndServe(":8001", corsHandler(*server.Router))
+	err := http.ListenAndServe(":8001", corsHandler(*server.Router))
 	if err != nil {
 		return err
 	}
