@@ -43,11 +43,6 @@ func GetAddCartItemService() AddCartItemService {
 }
 
 func (s *addCartItemService) ValidateRequest(product models.Product) *errors.ServerError {
-	if product.CustomerId == "" {
-		log.Error("customer id can not be empty")
-		return &errors.ParametersMissingError
-	}
-
 	if product.ProductId == "" {
 		log.Error("product id can not be empty")
 		return &errors.ParametersMissingError
