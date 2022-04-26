@@ -12,7 +12,7 @@ import (
 // HealthCheck godoc
 // @Summary Checks the health of the microservice
 // @Description Returns json stating with pass status and http response code 200 OK, otherwise returns http response code 500 Internal Server Error.
-// @Tags Healthcheck
+// @Tags Cart
 // @Produce  json
 // @Success 200 {object} models.HealthCheck
 // @Failure 500

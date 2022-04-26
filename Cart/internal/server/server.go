@@ -4,6 +4,7 @@ import (
 	"net"
 	"net/http"
 
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/cart/config"
@@ -113,11 +114,9 @@ func createDynamoDbSession() *dynamodb.DynamoDB {
 	// Initialize a session that the SDK will use to load
 	// credentials from the shared credentials file ~/.aws/credentials
 	// and region from the shared configuration file ~/.aws/config.
-	sess := session.Must(session.NewSessionWithOptions(session.Options{
-		SharedConfigState: session.SharedConfigEnable,
-	}))
+	dbSession := session.New(&aws.Config{
+		Region: aws.String("us-west-2"),
+	})
 
-	// Create DynamoDB client
-	svc := dynamodb.New(sess)
-	return svc
+	return dynamodb.New(dbSession)
 }
