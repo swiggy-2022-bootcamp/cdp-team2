@@ -1,0 +1,21 @@
+syntax = "proto3";
+package  customer;
+option go_package ="protos/customerpb";
+ 
+message Credential{
+    string username=1;
+    string password=2;
+}
+message CredentialRequest{
+    Credential credential=1;
+}
+message CredentialResponse{
+    string customerid=1;
+    bool ispresent=2;
+}
+
+service Service{
+     rpc CredentialService(CredentialRequest)returns (CredentialResponse){};
+}
+
+
