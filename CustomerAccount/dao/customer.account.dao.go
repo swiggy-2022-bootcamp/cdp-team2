@@ -92,13 +92,14 @@ func (cd *CustomerDao) Update(id_string string, customer models.Account) (models
 	if obj.Id == "" {
 		return obj, errors.New("Invalid customer Id")
 	}
-	if customer.Password != customer.Confirm && len(customer.Password) < 8 {
+	if customer.Password != customer.Confirm  {
 		return models.Account{}, errors.New("Password and Confirm does not match or len of password is less than 8 chars")
 	} else if len(customer.Password) >= 8 {
 
 		if customer.Password != customer.Confirm {
 			return models.Account{}, errors.New("Password and Confirm does not match or len of password is less than 8 chars")
 		}
+		 
 		if id_string!="test"{
 			h := sha1.New()
 			h.Write([]byte(customer.Password))
@@ -110,10 +111,7 @@ func (cd *CustomerDao) Update(id_string string, customer models.Account) (models
 			customer.Confirm = obj.Confirm
 		}
 	
-	} else {
-		obj.Password = customer.Password
-		obj.Confirm = customer.Confirm
-	}
+	}  
 
 	if len(customer.Firstname) > 2 {
 		obj.Firstname = customer.Firstname

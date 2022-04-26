@@ -20,7 +20,7 @@ func GetCartByCustomerId(customer_id string)model.Cart{
 	c:=pb.NewCartServiceClient(conn)
 
 	cartRequest:=pb.CartRequest{
-			CustomerId:"133",
+			CustomerId:customer_id,
 	}
 	
 	res,err:=c.GetCart(context.Background(),&cartRequest)

@@ -23,7 +23,7 @@ func GetRewardByCustomerId(customer_id string)model.Reward{
 	client := protos.NewRewardServiceClient(conn)
 
 	req := &protos.RewardRequest{
-		CustomerId: "123",
+		CustomerId: customer_id,
 	}
 	res, err := client.GetReward(context.Background(), req)
 	if err != nil {
