@@ -2,8 +2,6 @@ package repository
 
 import (
 	"fmt"
-	"io/ioutil"
-	"log"
 	"time"
 
 	config "github.com/auth-frontstore-service/config"
@@ -12,8 +10,8 @@ import (
 )
 
 type jwtManager struct {
-	publicKey     []byte
-	privateKey    []byte
+	publicKey     string
+	privateKey    string
 	secretKey     string
 	tokenDuration time.Duration
 }
@@ -26,17 +24,9 @@ type userClaims struct {
 var JWTManager *jwtManager
 
 func init() {
-	prvKey, err := ioutil.ReadFile("keys/private-key")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	pubKey, err := ioutil.ReadFile("keys/public-key")
-	if err != nil {
-		log.Fatalln(err)
-	}
 	JWTManager = &jwtManager{
-		privateKey:    prvKey,
-		publicKey:     pubKey,
+		privateKey:    config.SecretKey,
+		publicKey:     config.SecretKey,
 		secretKey:     config.SecretKey,
 		tokenDuration: time.Minute * 5,
 	}
@@ -62,16 +52,11 @@ func (manager *jwtManager) Generate(user *domain.User) (string, error) {
 	claims := userClaims{
 		ID: user.CustomerId,
 	}
-	key, err := jwt.ParseRSAPrivateKeyFromPEM(manager.privateKey)
-	if err != nil {
-		return "", fmt.Errorf("create: parse key: %w", err)
-	}
-	token, err := jwt.NewWithClaims(jwt.SigningMethodRS256, claims).SignedString(key)
+	fmt.Println("Generating Acces Token for customer Id", user.CustomerId)
+	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(manager.privateKey))
 	if err != nil {
 		return "", fmt.Errorf("create: sign token: %w", err)
 	}
-
-	//	fmt.Println("Genrate CLaims", claims.ID)
 
 	return token, nil
 
@@ -105,20 +90,20 @@ func (manager *jwtManager) VerifyBasicToken(accessToken string) (*userClaims, er
 
 func (manager *jwtManager) Verify(accessToken string) (*userClaims, error) {
 
-	key, err := jwt.ParseRSAPublicKeyFromPEM(manager.publicKey)
-	if err != nil {
-		return nil, fmt.Errorf("validate: parse key: %w", err)
-	}
+	// key, err := jwt.ParseRSAPublicKeyFromPEM(manager.publicKey)
+	// if err != nil {
+	// 	return nil, fmt.Errorf("validate: parse key: %w", err)
+	// }
 
 	token, err := jwt.ParseWithClaims(
 		accessToken,
 		&userClaims{},
 		func(jwtToken *jwt.Token) (interface{}, error) {
-			if _, ok := jwtToken.Method.(*jwt.SigningMethodRSA); !ok {
+			if _, ok := jwtToken.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf("unexpected method: %s", jwtToken.Header["alg"])
 			}
 
-			return key, nil
+			return []byte(manager.publicKey), nil
 		},
 	)
 

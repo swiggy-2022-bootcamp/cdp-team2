@@ -9,7 +9,6 @@ import (
 	repo "github.com/auth-frontstore-service/internal/repository"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type MiddlewaresImpl struct {
@@ -64,7 +63,7 @@ func (h *MiddlewaresImpl) CheckAuthMiddleware(c *gin.Context) {
 			return
 		} else {
 			user := &domain.User{}
-			id, err := primitive.ObjectIDFromHex(ok.ID)
+			id := ok.ID
 			if err != nil {
 				c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Error while getting User Id"})
 				return
