@@ -14,6 +14,7 @@ import (
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/config"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/docs"
 	pb "github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/protos/shipping"
+	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/services/grpc_server_services"
 )
 
 // @title Shipping Address Microservice
