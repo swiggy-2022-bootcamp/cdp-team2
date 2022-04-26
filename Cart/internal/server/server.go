@@ -87,8 +87,8 @@ func RunServer() error {
 
 	go startGrpcServer()
 
-	log.Info("Server starting on PORT: ", webServerConfig.Port)
-	err = http.ListenAndServe(":"+webServerConfig.Port, corsHandler(*server.Router))
+	log.Info("Server starting on PORT: ", 8001)
+	err = http.ListenAndServe(":8001", corsHandler(*server.Router))
 	if err != nil {
 		return err
 	}
