@@ -69,8 +69,9 @@ func RunServer() error {
 	// }
 
 	webserverConfig := &config.WebServerConfig{
-		Port: "8001",
-		Db:   "cart",
+		Port:        "8001",
+		Db:          "cart",
+		RoutePrefix: "/cart",
 	}
 
 	routerConfigs := util.RouterConfig{

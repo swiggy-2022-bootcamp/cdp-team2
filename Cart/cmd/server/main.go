@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	_ "github.com/swiggy-2022-bootcamp/cdp-team2/cart/cmd/server/docs"
-	_ "github.com/swiggy-2022-bootcamp/cdp-team2/cart/internal/dao/models"
 	_ "github.com/swiggy-2022-bootcamp/cdp-team2/cart/internal/server/httphandlers"
 
 	log "github.com/sirupsen/logrus"
