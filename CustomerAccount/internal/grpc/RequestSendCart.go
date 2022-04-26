@@ -6,12 +6,11 @@ import (
 	grpc "google.golang.org/grpc"
 	"fmt"
 	"google.golang.org/grpc/credentials/insecure"
-	"customer-account/config"
 	// "customer-account/internal/literals"
 	// "strconv"
 )
 func GetCartByCustomerId(customer_id string)model.Cart{
-	conn,err:=grpc.Dial("localhost:"+config.Server["CART_PORT"],grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn,err:=grpc.Dial("http://35.84.28.237:30217",grpc.WithTransportCredentials(insecure.NewCredentials()))
 	// conn,err:=grpc.Dial("0.tcp.in.ngrok.io:11480",grpc.WithTransportCredentials(insecure.NewCredentials()))
  	if err!=nil{
 		fmt.Println(err)

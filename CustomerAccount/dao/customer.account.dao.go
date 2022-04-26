@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"strconv"
 	"time"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
@@ -45,6 +46,8 @@ func (cd *CustomerDao) Create(account models.Account) (models.Account, error) {
 	err := util.ValidateAccount(account, cd.Db)
 
 	if err != nil {
+		log.WithError(err).Error("error while creating table")
+
 		return models.Account{}, err
 	}
 	if account.Id!="test"{
@@ -61,6 +64,7 @@ func (cd *CustomerDao) Create(account models.Account) (models.Account, error) {
 	}
 	info, err := dynamodbattribute.MarshalMap(account)
 	if err != nil {
+		log.WithError(err).Error("error while creating customer")
 		panic(fmt.Sprintf("failed to marshal the movie, %v", err))
 		return models.Account{}, err
 	}
@@ -73,6 +77,8 @@ func (cd *CustomerDao) Create(account models.Account) (models.Account, error) {
 	_, err = cd.Db.PutItem(input)
 
 	if err != nil {
+		log.WithError(err).Error("error while creating customer")
+
 		return models.Account{}, err
 	}
 
@@ -184,7 +190,8 @@ func (cd *CustomerDao) Get(id_string string) (models.Account2, error) {
 
 	resp, err := cd.Db.GetItem(params)
 	if err != nil {
-		 
+		log.WithError(err).Error("error while getting account")
+
 		return models.Account2{}, err
 	}
 
