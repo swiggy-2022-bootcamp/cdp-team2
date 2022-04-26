@@ -1,11 +1,181 @@
 basePath: /
-host: localhost:7450
+definitions:
+  api.ApiResponseWithErr:
+    properties:
+      error:
+        type: string
+    type: object
+  api.ApiResponseWithErrors:
+    properties:
+      errors:
+        items:
+          type: string
+        type: array
+    type: object
+  models.Category:
+    description: Category Model
+    properties:
+      category_description:
+        $ref: '#/definitions/models.CategoryDesc'
+        x-omitempty: true
+      category_id:
+        type: integer
+        x-omitempty: true
+    type: object
+  models.CategoryDesc:
+    properties:
+      description:
+        type: string
+        x-omitempty: true
+      meta_description:
+        type: string
+        x-omitempty: true
+      meta_keyword:
+        type: string
+        x-omitempty: true
+      meta_title:
+        type: string
+        x-omitempty: true
+      name:
+        type: string
+        x-omitempty: true
+    type: object
+host: 35.84.28.237:30204
 info:
   contact: {}
   description: This is categories crud service.
   title: Categories Api
   version: "1.0"
-paths: {}
+paths:
+  /categories:
+    delete:
+      parameters:
+      - description: category_ids
+        in: body
+        name: category_ids
+        required: true
+        schema:
+          items:
+            type: integer
+          type: array
+      responses:
+        "200":
+          description: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ApiResponseWithErrors'
+      summary: Delete Multiple Categories
+      tags:
+      - Category
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Category'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ApiResponseWithErr'
+      summary: Get All Categories
+      tags:
+      - Category
+    post:
+      parameters:
+      - description: category
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/models.Category'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Category'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ApiResponseWithErr'
+      summary: Create new Category, id is auto-assigned based on timestamp.
+      tags:
+      - Category
+  /categories/{_id}:
+    delete:
+      parameters:
+      - description: category_id
+        in: path
+        name: _id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ApiResponseWithErr'
+      summary: Delete Single Category By Id
+      tags:
+      - Category
+    get:
+      parameters:
+      - description: category_id
+        in: path
+        name: _id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Category'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ApiResponseWithErr'
+      summary: Get Single Category By Id
+      tags:
+      - Category
+    put:
+      parameters:
+      - description: category_id
+        in: path
+        name: _id
+        required: true
+        type: string
+      - description: category
+        in: body
+        name: category
+        schema:
+          $ref: '#/definitions/models.Category'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Category'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ApiResponseWithErr'
+      summary: Update Category By Id, Updated Category is returned
+      tags:
+      - Category
+  /health:
+    get:
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "500":
+          description: ""
+      summary: Health Check
+      tags:
+      - Health
 securityDefinitions:
   ApiKeyAuth:
     in: header

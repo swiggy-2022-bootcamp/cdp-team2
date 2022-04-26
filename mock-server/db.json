@@ -35,5 +35,47 @@
       "points": 5,
       "id": 6
     }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "category_description": {
+        "name": "Electronics",
+        "description": "Electronics Gadgets & Appliances",
+        "meta_description": "Electronics",
+        "meta_keyword": "electronics, gadget",
+        "meta_title": "Electronics"
+      }
+    },
+    {
+      "id": 2,
+      "category_description": {
+        "name": "Fashion",
+        "description": "Fashion & Apparels",
+        "meta_description": "Fashion & Apparels",
+        "meta_keyword": "fashion, apparels",
+        "meta_title": "fashion"
+      }
+    },
+    {
+      "id": 3,
+      "category_description": {
+        "name": "Decor",
+        "description": "Home and Office Decor",
+        "meta_description": "Home and Office Decor",
+        "meta_keyword": "decor, decoration",
+        "meta_title": "decor"
+      }
+    },
+    {
+      "id": 4,
+      "category_description": {
+        "name": "books",
+        "description": "Books, E-Books, AudioBooks",
+        "meta_description": "Books, E-Books, AudioBooks",
+        "meta_keyword": "books, e-books, audiobooks",
+        "meta_title": "books"
+      }
+    }
   ]
 }

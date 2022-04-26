@@ -1,2 +1,4 @@
 *.md
 .git
+.html
+cover.out
