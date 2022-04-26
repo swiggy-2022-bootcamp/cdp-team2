@@ -2,11 +2,9 @@ package controller
 
 import (
 	"fmt"
-	"net/http"
-	"strconv"
-
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/dao/models"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/internal/api"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Shipping/internal/literals"
@@ -18,13 +16,8 @@ func BindCustomer(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.AddressNotFound})
 		return
 	}
-	id, err := strconv.Atoi(idstr)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, api.ApiResponseWithErr{literals.AddressNotFound})
-		return
-	}
-
-	c.Set(literals.CustomerIdKey, id)
+	
+	c.Set(literals.CustomerIdKey, idstr)
 	c.Next()
 }
 
