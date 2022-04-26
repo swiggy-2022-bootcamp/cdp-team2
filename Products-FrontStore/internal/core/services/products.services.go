@@ -46,6 +46,7 @@ func (ps *ProductsServices) GetProductById(productID int64) (*domain.Product, *e
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
+
 	// Temporary variables to store unmarshal structs
 	var _product *domain.Product
 	var _productDesc []*domain.ProductDescription
@@ -66,6 +67,17 @@ func (ps *ProductsServices) GetProductById(productID int64) (*domain.Product, *e
 	_product.ProductCategory = res.Product.ProductCategory
 	_product.ProductDescription = _productDesc
 	_product.ProductRelated = res.Product.ProductRelated
+
+	_product.ID = res.Product.ID
+	_product.ManufacturerID = int(res.Product.ManufacturerID)
+	_product.Rewards = uint(res.Product.Rewards)
+	_product.ShippingID = int(res.Product.ShippingID)
+	_product.ProductSeoUrl.StoreID = res.Product.ProductSeoUrl.StoreID
+	_product.ProductSeoUrl.LanguageID = res.Product.ProductSeoUrl.LanguageID
+
+	for i, des := range res.Product.ProductDescription {
+		_product.ProductDescription[i].LanguageID = des.LanguageID
+	}
 
 	return _product, nil
 }
