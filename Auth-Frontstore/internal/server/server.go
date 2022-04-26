@@ -36,7 +36,7 @@ func NewServer(handlers ports.IHandlers, middlewares ports.IMiddlewares) *Server
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host localhost:8088
+// @host 35.84.28.237:8088
 // @BasePath /auth
 func (s *Server) Initialize() {
 	server := gin.Default()
