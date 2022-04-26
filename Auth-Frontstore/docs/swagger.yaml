@@ -1,5 +1,5 @@
 basePath: /auth
-host: localhost:8088
+host: 35.84.28.237:30211
 info:
   contact:
     email: support@swagger.io
