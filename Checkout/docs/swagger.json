@@ -6,7 +6,7 @@
         "contact": {},
         "version": "1.0"
     },
-    "host": "localhost:7451",
+    "host": "35.84.28.237:30206",
     "basePath": "/",
     "paths": {
         "/checkout/{cart_id}": {
@@ -139,7 +139,7 @@
             "type": "object",
             "properties": {
                 "order_id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "rewards": {
                     "type": "integer"
@@ -150,7 +150,7 @@
             "type": "object",
             "properties": {
                 "order_id": {
-                    "type": "integer"
+                    "type": "string"
                 }
             }
         }

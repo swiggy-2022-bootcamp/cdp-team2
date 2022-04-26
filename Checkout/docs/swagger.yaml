@@ -8,16 +8,16 @@ definitions:
   api.ApplyRewardRequest:
     properties:
       order_id:
-        type: integer
+        type: string
       rewards:
         type: integer
     type: object
   api.PayRequest:
     properties:
       order_id:
-        type: integer
+        type: string
     type: object
-host: localhost:7451
+host: 35.84.28.237:30206
 info:
   contact: {}
   description: This is checkout service.

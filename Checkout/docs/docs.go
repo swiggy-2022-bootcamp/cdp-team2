@@ -146,7 +146,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "order_id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "rewards": {
                     "type": "integer"
@@ -157,7 +157,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "order_id": {
-                    "type": "integer"
+                    "type": "string"
                 }
             }
         }
@@ -177,7 +177,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:7451",
+	Host:             "35.84.28.237:30206",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Checkout Api",
