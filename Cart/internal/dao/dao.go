@@ -56,7 +56,7 @@ func (dao *dynamoDAO) AddCartItem(customerId string, product models.Product) *er
 		log.Info("cart not found for customer")
 	}
 
-	cart.CustomerId = customerId
+	cart.CustomerId = "23435"
 	cart.Products = append(cart.Products, product)
 
 	err = dao.addCartDetails(cart)
