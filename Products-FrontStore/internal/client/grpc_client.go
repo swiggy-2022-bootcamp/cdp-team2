@@ -14,7 +14,7 @@ func NewProductsGRPCClient() ProductsGRPCClient {
 	var opts []grpc.DialOption
 	opts = append(opts, grpc.WithInsecure())
 	opts = append(opts, grpc.WithBlock())
-	grpcConn, err := grpc.Dial("http://10.50.2.224:30202", opts...)
+	grpcConn, err := grpc.Dial("35.84.28.237:30202", opts...)
 	if err != nil {
 		log.Fatal(err)
 	}
