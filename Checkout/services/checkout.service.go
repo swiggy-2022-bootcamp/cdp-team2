@@ -217,9 +217,11 @@ func (cs *CheckoutService) ConfirmOrder(orderId string) (*orderpb.OrderResponse,
 func (cs *CheckoutService) GetOrder(orderId string) (*orderpb.OrderResponse, error) {
 	// get order from [Order MS]
 	orderResp, err := cs.orderClient.GetOrderService(cs.orderClient.CtxWithTimeOut(), &orderpb.GetOrderRequest{OrderId: orderId})
+
+	log.Printf("GRPC Order resp : %+v", orderResp)
 	if err != nil {
 		log.Printf("[Error] error getting order = %s", orderId)
-		return nil, err
+		return nil, fmt.Errorf("order not found")
 	}
 	return orderResp.Order, nil
 }
