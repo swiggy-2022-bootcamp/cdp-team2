@@ -10,5 +10,5 @@ var AWS = map[string]string{
 }
 
 var GrpcAdd = map[string]string{
-	"ORDER_SERVICE": "0.tcp.in.ngrok.io:12160",
+	"ORDER_SERVICE": "35.84.28.237:30208",
 }

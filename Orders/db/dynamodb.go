@@ -4,7 +4,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
-	"github.com/swiggy-2022-bootcamp/cdp-team2/Order/config"
 )
 
 var db *dynamodb.DynamoDB
@@ -15,9 +14,9 @@ var db *dynamodb.DynamoDB
 func GetInstance() *dynamodb.DynamoDB {
 	if db == nil {
 		db = dynamodb.New(session.New(&aws.Config{
-			Region: aws.String(config.AWS["region"]),
+			Region: aws.String("us-west-2"),
 			// Credentials: credentials.NewEnvCredentials(),
-			Endpoint: aws.String(config.AWS["endpoint"]),
+			//Endpoint: aws.String(config.AWS["endpoint"]),
 		}))
 	}
 

@@ -2,11 +2,12 @@ package server
 
 import (
 	"fmt"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 	"log"
 	"net"
 	"net/http"
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Order/config"
 	"github.com/swiggy-2022-bootcamp/cdp-team2/Order/docs"
@@ -19,7 +20,7 @@ import (
 // @version 1.0
 // @description This is for creating orders during checkout.
 
-// @host localhost:8002
+// @host 35.84.28.237:30206
 // @BasePath /
 
 // @securityDefinitions.basic BasicAuth
