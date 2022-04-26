@@ -3,6 +3,7 @@ package grpc_services
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	pb "github.com/swiggy-2022-bootcamp/cdp-team2/Order/protos/order"
 
@@ -87,6 +88,12 @@ func (s *Server) GetOrderService(ctx context.Context, order *pb.GetOrderRequest)
 	orderId := order.OrderId
 
 	orderResponse, err := dao.GetOrderDao().GetByID(orderId)
+
+	if err != nil {
+		return nil, errors.New("no such order!")
+	}
+
+	fmt.Println("orderResponse", orderId, orderResponse)
 
 	var productDescArray []*pb.ProductDesc
 
