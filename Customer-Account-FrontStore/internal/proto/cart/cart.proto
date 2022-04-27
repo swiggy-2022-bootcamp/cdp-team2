@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option go_package = "./;protos";
+
+message Product {
+    string productId = 1;
+    int32 quantity = 2;
+}
+
+message Cart {
+    string customerId = 1;
+    repeated Product products = 2;
+}
+
+message CartRequest {
+    string customerId = 1;
+}
+
+message CartResponse {
+    Cart cart = 1;
+}
+
+message EmptyCartResponse{
+}
+
+service CartService {
+    rpc GetCart(CartRequest) returns (CartResponse);
+    rpc EmptyCart(CartRequest) returns (EmptyCartResponse);
+}
