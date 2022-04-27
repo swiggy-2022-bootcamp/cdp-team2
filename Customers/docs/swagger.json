@@ -1,0 +1,331 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is customers CRUD service.",
+        "title": "Customers API",
+        "termsOfService": "demo.com",
+        "contact": {
+            "name": "API Support",
+            "url": "http://demo.com/support"
+        },
+        "license": {},
+        "version": "1.0"
+    },
+    "host": "35.84.28.237:30212",
+    "basePath": "/",
+    "paths": {
+        "/customers": {
+            "post": {
+                "description": "API to Create Customer-Admin's Customer",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Create"
+                ],
+                "summary": "Customer Create Route",
+                "parameters": [
+                    {
+                        "description": "Customer info",
+                        "name": "Customer",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/models.Customer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Customer"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/string"
+                        }
+                    }
+                }
+            }
+        },
+        "/customers/email/{email}": {
+            "get": {
+                "description": "API to Get Customer-Admin's Customer",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customer Get"
+                ],
+                "summary": "Customer Get By Email Route",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Customer email",
+                        "name": "email",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Customer"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/string"
+                        }
+                    }
+                }
+            }
+        },
+        "/customers/{id}": {
+            "get": {
+                "description": "API to Get Customer-Admin's Customer",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customer Get"
+                ],
+                "summary": "Customer Get Route",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Customer Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Customer"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "API to Update Customer-Admin's Customer",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customer Update"
+                ],
+                "summary": "Customer Update Route",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Customer Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Customer Update",
+                        "name": "customer",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/%7B%7D"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Customer"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "API to Delete Customer-Admin's Customer",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Delete"
+                ],
+                "summary": "Customer Delete Route",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Customer Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Customer"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/string"
+                        }
+                    }
+                }
+            }
+        },
+        "/health": {
+            "get": {
+                "description": "API to check Customer-Admin's health",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Health"
+                ],
+                "summary": "Health Check Route",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.Address": {
+            "type": "object",
+            "properties": {
+                "address_1": {
+                    "type": "string"
+                },
+                "address_2": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "country_id": {
+                    "type": "string"
+                },
+                "firstname": {
+                    "type": "string"
+                },
+                "lastname": {
+                    "type": "string"
+                },
+                "postcode": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.Customer": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Address"
+                    }
+                },
+                "approved": {
+                    "type": "string"
+                },
+                "confirm": {
+                    "type": "string"
+                },
+                "customer_group_id": {
+                    "type": "integer"
+                },
+                "customer_id": {
+                    "type": "string"
+                },
+                "date_added": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "fax": {
+                    "type": "string"
+                },
+                "firstname": {
+                    "type": "string"
+                },
+                "lastname": {
+                    "type": "string"
+                },
+                "newsletter": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "safe": {
+                    "type": "string"
+                },
+                "statuss": {
+                    "type": "string"
+                },
+                "telephone": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        },
+        "BasicAuth": {
+            "type": "basic"
+        }
+    }
+}
