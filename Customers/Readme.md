@@ -5,15 +5,15 @@ Architecture Diagram
 ====================
 </br>
 
- <img src="https://github.com/swiggy-2022-bootcamp/cdp-team2/blob/customers-admin-ms/Customers-Admin/images/arc1.PNG" width="800" height="500">
+ <img src="https://github.com/swiggy-2022-bootcamp/cdp-team2/blob/customers-admin-ms/Customers/images/arc1.PNG" width="800" height="500">
 </br>
 </br>
 
- <img src="https://github.com/swiggy-2022-bootcamp/cdp-team2/blob/customers-admin-ms/Customers-Admin/images/arc2.PNG" width="800" height="500">
+ <img src="https://github.com/swiggy-2022-bootcamp/cdp-team2/blob/customers-admin-ms/Customers/images/arc2.PNG" width="800" height="500">
 </br>
 </br>
 
- <img src="https://github.com/swiggy-2022-bootcamp/cdp-team2/blob/customers-admin-ms/Customers-Admin/images/arc3.PNG" width="800" height="500">
+ <img src="https://github.com/swiggy-2022-bootcamp/cdp-team2/blob/customers-admin-ms/Customers/images/arc3.PNG" width="800" height="500">
 </br>
 
 -------------------------------------------------------
