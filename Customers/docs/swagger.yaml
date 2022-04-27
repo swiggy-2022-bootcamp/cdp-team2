@@ -1,0 +1,220 @@
+basePath: /
+definitions:
+  models.Address:
+    properties:
+      address_1:
+        type: string
+      address_2:
+        type: string
+      city:
+        type: string
+      country_id:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string
+      postcode:
+        type: integer
+    type: object
+  models.Customer:
+    properties:
+      address:
+        items:
+          $ref: '#/definitions/models.Address'
+        type: array
+      approved:
+        type: string
+      confirm:
+        type: string
+      customer_group_id:
+        type: integer
+      customer_id:
+        type: string
+      date_added:
+        type: string
+      email:
+        type: string
+      fax:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string
+      newsletter:
+        type: string
+      password:
+        type: string
+      safe:
+        type: string
+      statuss:
+        type: string
+      telephone:
+        type: string
+    type: object
+host: 35.84.28.237:30212
+info:
+  contact:
+    name: API Support
+    url: http://demo.com/support
+  description: This is customers CRUD service.
+  license: {}
+  termsOfService: demo.com
+  title: Customers API
+  version: "1.0"
+paths:
+  /customers:
+    post:
+      consumes:
+      - application/json
+      description: API to Create Customer-Admin's Customer
+      parameters:
+      - description: Customer info
+        in: body
+        name: Customer
+        required: true
+        schema:
+          $ref: '#/definitions/models.Customer'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Customer'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/string'
+      summary: Customer Create Route
+      tags:
+      - Create
+  /customers/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: API to Delete Customer-Admin's Customer
+      parameters:
+      - description: Customer Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Customer'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/string'
+      summary: Customer Delete Route
+      tags:
+      - Delete
+    get:
+      consumes:
+      - application/json
+      description: API to Get Customer-Admin's Customer
+      parameters:
+      - description: Customer Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Customer'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/string'
+      summary: Customer Get Route
+      tags:
+      - Customer Get
+    put:
+      consumes:
+      - application/json
+      description: API to Update Customer-Admin's Customer
+      parameters:
+      - description: Customer Id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Customer Update
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/%7B%7D'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Customer'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/string'
+      summary: Customer Update Route
+      tags:
+      - Customer Update
+  /customers/email/{email}:
+    get:
+      consumes:
+      - application/json
+      description: API to Get Customer-Admin's Customer
+      parameters:
+      - description: Customer email
+        in: path
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Customer'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/string'
+      summary: Customer Get By Email Route
+      tags:
+      - Customer Get
+  /health:
+    get:
+      consumes:
+      - application/json
+      description: API to check Customer-Admin's health
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/string'
+      summary: Health Check Route
+      tags:
+      - Health
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+  BasicAuth:
+    type: basic
+swagger: "2.0"

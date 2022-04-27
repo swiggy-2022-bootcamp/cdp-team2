@@ -1,0 +1,100 @@
+syntax = "proto3";
+package proto;
+option go_package="/internal/proto";
+
+message Reward{
+    string customer_id=1;
+    string description=2;
+    int32  points=3;
+    int32  id=4;
+}
+ 
+
+message CustomerId{
+    string id=1;
+}
+
+message RewardResponse{
+    Reward reward=1;
+}
+message RewardRequest{
+    CustomerId customerId=1;
+}
+
+
+
+message Product{
+    int32 product_id=1;
+    int32 quantity=2;
+    int32  id=3;
+}
+
+message Cart{
+    repeated Product product=1;
+}
+
+
+
+message CartResponse{
+    Cart cart=1;
+}
+message CartRequest{
+    CustomerId customerId=1;
+}
+
+
+
+message Address{
+    string customerId=1;
+    string firstname=2;
+    string lastname=3;
+    string addressLine1=4;
+    string addressLine2=5;
+    string city=6;
+    int32  postCode=7;
+    string countryCode=8;
+}
+
+
+message AddressstuRequest{
+    string customerId=1;
+}
+message AddressstuResponse{
+    repeated Address address=1;
+}
+
+message AddressutsRequest{
+    Address address=1;
+}
+
+message AddressutsResponse{
+    bool response=1;
+}
+
+
+
+
+
+
+ 
+message Credential{
+    string username=1;
+    string password=2;
+}
+message CredentialRequest{
+    Credential credential=1;
+}
+message CredentialResponse{
+    string customerid=1;
+    bool ispresent=2;
+}
+
+service Service{
+    rpc RewardService(RewardRequest)returns (RewardResponse){};
+    rpc CartService(CartRequest)returns (CartResponse){};
+    rpc AddressutsService(AddressutsRequest)returns (AddressutsResponse){};
+    rpc AddressstuService(AddressstuRequest)returns (AddressstuResponse){}
+    rpc CredentialService(CredentialRequest)returns (CredentialResponse){};
+}
+
+
